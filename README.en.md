@@ -97,5 +97,5 @@ npm run build     # dist/module.zip and dist/module.json
 
 ## License
 
-You may use it in your games and modify it for your own table; you may not redistribute or sell it.
+You may use it in your games free of charge; you may not modify, sell or redistribute it.
 Full text in [LICENSE](LICENSE). The Alegreya fonts are under the SIL Open Font License.

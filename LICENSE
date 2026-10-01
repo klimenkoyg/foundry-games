@@ -5,15 +5,20 @@
 
 Модуль выложен открыто: скачать и поставить его может каждый.
 
-Разрешено: пользоваться модулем в своих играх — за столом, в сети, на записи
-и в прямой передаче, платных и бесплатных; хранить копию; изменять под свой стол.
+Разрешено: бесплатно пользоваться модулем в своих играх — за столом, в сети,
+на записи и в прямой передаче, в том числе если сама игра платная; хранить
+копию для себя.
 
-Не разрешено без письменного согласия автора: распространять модуль или его
-части, в том числе изменённые; продавать; включать в другие модули и сборки;
-выдавать за своё.
+Не разрешено без письменного согласия автора:
+- изменять модуль или его части и пользоваться изменённой версией;
+- продавать модуль или его части, сдавать в прокат, брать плату за доступ к нему;
+- распространять модуль или его части, в том числе включать в другие модули
+  и сборки;
+- выдавать модуль за своё, убирать имя автора и этот текст.
 
 Шрифты Alegreya, Alegreya SC и Alegreya Sans (папка fonts/) распространяются
-по лицензии SIL Open Font License 1.1 — см. fonts/OFL.txt.
+по лицензии SIL Open Font License 1.1 — см. fonts/OFL.txt. На них запреты выше
+не действуют.
 
 Модуль поставляется «как есть», без каких-либо гарантий.
 
@@ -25,15 +30,20 @@ its contents remain with the author.
 
 The module is published openly: anyone may download and install it.
 
-You may: use the module in your own games — at the table, online, recorded or
-streamed, paid or free; keep a copy; modify it for your own table.
+You may: use the module free of charge in your own games — at the table,
+online, recorded or streamed, including games you are paid to run; keep a copy
+for yourself.
 
-You may not, without the author's written consent: distribute the module or any
-part of it, modified or not; sell it; include it in other modules or
-compilations; present it as your own.
+You may not, without the author's written consent:
+- modify the module or any part of it, or use a modified version;
+- sell the module or any part of it, rent it out, or charge for access to it;
+- distribute the module or any part of it, including as part of other modules
+  or compilations;
+- present the module as your own, or remove the author's name or this notice.
 
 The Alegreya, Alegreya SC and Alegreya Sans fonts (the fonts/ folder) are
-licensed under the SIL Open Font License 1.1 — see fonts/OFL.txt.
+licensed under the SIL Open Font License 1.1 — see fonts/OFL.txt. The
+restrictions above do not apply to them.
 
 The module is provided “as is”, without warranty of any kind.
 
