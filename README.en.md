@@ -6,6 +6,10 @@ Dice games for Foundry VTT v14 that the whole table plays together. The GM seats
 straight from the scene, NPCs play on their own — each with a temperament — stakes come
 from character sheets, and everyone sees the same table.
 
+<p align="center">
+  <img src="docs/screens/en/farkle.webp" width="640" alt="The Dice table: seats with token portraits, dice on the felt, action buttons and the GM strip">
+</p>
+
 ## Installation
 
 In Foundry: **Add-on Modules → Install Module**, paste the manifest URL at the bottom:
@@ -28,6 +32,27 @@ https://github.com/klimenkoyg/foundry-games/releases/latest/download/module.json
 | **Knucklebones** | 2 | A duel on three-by-three boards: matching dice multiply and knock out the opponent's. |
 | **Twenty-One** | 2–6 | Dice from d4 to d20, each once per round. Players take turns until everyone stands. Don't go over the limit. |
 | **Ship, Captain and Crew** | 2–8 | Three rolls: collect 6, 5 and 4 in order; the rest is your cargo. |
+
+## What it looks like
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><img src="docs/screens/en/lobby.webp" alt="The Tavern window: game list, description, tables in play"><br><sub><b>The Tavern</b> — the GM picks a game and sees the tables in play</sub></td>
+    <td width="50%" valign="top"><img src="docs/screens/en/seating.webp" alt="Table setup window: players, scene tokens, seats and options"><br><sub><b>Setting up a table</b> — players and scene tokens, bot or GM, the stake</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><img src="docs/screens/en/liars.webp" alt="Liar's Dice table: opponents' cups, the bid and your own dice"><br><sub><b>Liar's Dice</b> — only the owner sees their dice</sub></td>
+    <td width="50%" valign="top"><img src="docs/screens/en/kb.webp" alt="Knucklebones table in the light theme: two three-by-three boards"><br><sub><b>Knucklebones</b> — the “Parchment and gold” theme</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><img src="docs/screens/en/poker.webp" alt="Dice Poker table: your hand, its rank and the opponents' hands"><br><sub><b>Dice Poker</b> — hands, a reroll and betting</sub></td>
+    <td width="50%" valign="top"><img src="docs/screens/en/tw.webp" alt="Twenty-One table: dice taken, the total and the dice left"><br><sub><b>Twenty-One</b> — d4 to d20, players take turns</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><img src="docs/screens/en/scc.webp" alt="Ship, Captain and Crew table: dice found and the cargo"><br><sub><b>Ship, Captain and Crew</b> — find 6, 5 and 4, the rest is cargo</sub></td>
+    <td width="50%" valign="top"><img src="docs/screens/en/rules.webp" alt="The Dice rules sheet with scoring combinations"><br><sub><b>Rules sheet</b> — every game has one; combinations are drawn as dice</sub></td>
+  </tr>
+</table>
 
 ## How to play
 
@@ -94,6 +119,7 @@ npm run build     # dist/module.zip and dist/module.json
 - `scripts/foundry/` — windows, the GM host, stakes, rolls.
 - `dev/harness/` — a Foundry mock that runs the real module code in a plain browser.
 - `dev/spikes.md` — checks that can only be done inside Foundry itself.
+- `python3 scripts-dev/screens.py` — window screenshots for this file (`docs/screens/`), taken from the harness.
 
 ## License
 

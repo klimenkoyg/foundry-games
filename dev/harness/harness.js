@@ -128,13 +128,13 @@ Object.assign(window.__tavern, {
     };
   },
   /** Убрать все столы и собрать новый. */
-  async make(gameId, seats, { options = {}, theme = "tavern", stake = 5 } = {}) {
+  async make(gameId, seats, { options = {}, theme = "tavern", stake = 5, title = "Трактир" } = {}) {
     const { Host, Store } = window.__tavern;
     setUser(users[0]);
     for (const table of Store.list()) await Host.removeTable(table.id);
     const res = await Host.createTable({
       gameId,
-      title: "Трактир",
+      title,
       theme,
       seats,
       options,
