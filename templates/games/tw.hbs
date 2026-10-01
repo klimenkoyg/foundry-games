@@ -1,0 +1,19 @@
+<section class="tg-board">
+  <div class="tg-table">
+    <div class="tg-felt tg-21">
+      <div class="tg-21__hand">
+        <div>
+          <span class="tg-felt__label">{{handLabel}}</span>
+          <div class="tg-21__rolled">{{{rolled}}}</div>
+        </div>
+        <div class="tg-21__total">
+          <span class="tg-felt__big">{{total}} <small>/ {{limit}}</small></span>
+          <span class="tg-track{{#if bust}} is-bust{{/if}}"><i style="--p: {{track}}"></i></span>
+          <span class="tg-felt__label">{{note}}</span>
+        </div>
+      </div>
+      <div class="tg-21__pool">{{{pool}}}</div>
+    </div>
+  </div>
+  {{> tavern-games.actionbar}}
+</section>

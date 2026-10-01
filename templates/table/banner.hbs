@@ -1,0 +1,12 @@
+<div class="tg-banner"{{#unless banner}} hidden{{/unless}}>
+  {{#if banner}}
+  <i class="fa-solid fa-trophy"></i>
+  <div class="tg-banner__text">
+    <b>{{banner.text}}</b>
+    {{#if banner.sub}}<span>{{banner.sub}}</span>{{/if}}
+  </div>
+  {{#if banner.canRematch}}
+  <button type="button" class="tg-btn tg-btn--primary" data-action="gmRematch"><i class="fa-solid fa-rotate"></i><span>{{localize "TAVERN.Banner.rematch"}}</span></button>
+  {{/if}}
+  {{/if}}
+</div>

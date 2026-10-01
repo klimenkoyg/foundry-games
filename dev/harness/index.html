@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Таверна · стенд</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/styles/fonts.css">
+  <link rel="stylesheet" href="/styles/tavern-games.css">
+  <link rel="stylesheet" href="harness.css">
+</head>
+<body>
+  <header class="hbar">
+    <b><i class="fa-solid fa-flask"></i> Стенд «Таверны»</b>
+    <span class="hgroup" id="users"><span>Смотрит:</span></span>
+    <button type="button" id="open-panel"><i class="fa-solid fa-beer-mug-empty"></i> Открыть «Таверну»</button>
+    <details id="more">
+      <summary>Ещё</summary>
+      <div class="hmore">
+        <small>Имитация Foundry: здесь работает настоящий код модуля. Токены, кошельки и игроки — тестовые.</small>
+        <span class="hgroup" id="tokens"><span>Выделены на карте:</span></span>
+        <span class="hgroup"><span>Меню токена «За стол»:</span><select id="hud-token"></select><button type="button" id="hud"><i class="fa-solid fa-chair"></i></button></span>
+        <span class="hgroup"><button type="button" id="reload">Перезайти в мир</button><button type="button" id="reset">Сбросить всё</button></span>
+      </div>
+    </details>
+  </header>
+  <div id="stage">
+    <div id="windows"></div>
+    <aside id="side">
+      <h3>Кошельки (dnd5e)</h3>
+      <div id="wallets"></div>
+      <h3>Чат</h3>
+      <div id="chat-log"></div>
+    </aside>
+  </div>
+  <div id="toasts"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
+  <script src="foundry-mock.js"></script>
+  <script type="module" src="harness.js"></script>
+</body>
+</html>

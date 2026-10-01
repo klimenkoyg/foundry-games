@@ -1,0 +1,137 @@
+<div class="tg-seating-body">
+  <div class="tg-seating__top">
+    <label class="tg-field">
+      <span>{{localize "TAVERN.Seating.game"}}</span>
+      <select class="tg-select" name="gameId">
+        {{#each games}}<option value="{{id}}"{{#if selected}} selected{{/if}}>{{name}}</option>{{/each}}
+      </select>
+    </label>
+    <label class="tg-field">
+      <span>{{localize "TAVERN.Seating.tableName"}}</span>
+      <input class="tg-input" type="text" name="title" value="{{tableTitle}}" placeholder="{{titlePlaceholder}}">
+    </label>
+  </div>
+
+  <div class="tg-seating">
+    <div class="tg-pane">
+      <h2 class="tg-pane__title">{{localize "TAVERN.Seating.players"}}</h2>
+      {{#if users.length}}
+      <ul class="tg-pick">
+        {{#each users}}
+        <li class="tg-pick__item{{#if seated}} is-seated{{/if}}" data-user-id="{{id}}"{{#unless seated}} data-action="addUser" role="button" tabindex="0"{{/unless}}>
+          <span class="tg-portrait"><img src="{{img}}" alt=""></span>
+          <span class="tg-pick__text"><b>{{name}}</b><span>{{sub}}</span></span>
+          <span class="tg-pick__add"><i class="fa-solid {{#if seated}}fa-check{{else}}fa-plus{{/if}}"></i></span>
+        </li>
+        {{/each}}
+      </ul>
+      {{else}}
+      <div class="tg-empty">{{localize "TAVERN.Seating.noPlayers"}}</div>
+      {{/if}}
+
+      <h2 class="tg-pane__title">{{localize "TAVERN.Seating.tokens"}}{{#if sceneName}} <span class="tg-chip">{{sceneName}}</span>{{/if}}</h2>
+      <div class="tg-searchrow">
+        <input class="tg-input" type="search" name="search" value="{{search}}" placeholder="{{localize "TAVERN.Seating.search"}}" aria-label="{{localize "TAVERN.Seating.search"}}">
+        <button type="button" class="tg-btn tg-btn--sm" data-action="takeSelected"{{#unless selectedFree}} disabled{{/unless}}><i class="fa-solid fa-object-group"></i><span>{{localize "TAVERN.Seating.takeSelected"}} · {{selectedFree}}</span></button>
+      </div>
+      {{#if tokens.length}}
+      <ul class="tg-pick">
+        {{#each tokens}}
+        <li class="tg-pick__item{{#if seated}} is-seated{{/if}}{{#if selected}} is-selected-token{{/if}}" data-token-uuid="{{uuid}}" data-token-key="{{key}}"{{#unless seated}} data-action="addToken" role="button" tabindex="0"{{/unless}}>
+          <span class="tg-portrait"><img src="{{img}}" alt=""></span>
+          <span class="tg-pick__text"><b>{{name}}</b><span>{{sub}}</span></span>
+          <span class="tg-pick__add"><i class="fa-solid {{#if seated}}fa-check{{else}}fa-plus{{/if}}"></i></span>
+        </li>
+        {{/each}}
+      </ul>
+      {{else}}
+      <div class="tg-empty">{{localize "TAVERN.Seating.noTokens"}}</div>
+      {{/if}}
+      <div class="tg-dropzone"><i class="fa-solid fa-hand"></i> {{localize "TAVERN.Seating.drop"}}</div>
+    </div>
+
+    <div class="tg-pane">
+      <h2 class="tg-pane__title">{{localize "TAVERN.Seating.atTable"}} <span class="tg-chip">{{seatCount}}</span></h2>
+      {{#if seats.length}}
+      <ol class="tg-seatlist">
+        {{#each seats}}
+        <li class="tg-seatrow" draggable="true" data-seat-id="{{id}}">
+          <span class="tg-seatrow__grip" data-tooltip="{{localize "TAVERN.Seating.dragHint"}}"><i class="fa-solid fa-grip-vertical"></i></span>
+          <span class="tg-portrait"><img src="{{img}}" alt=""></span>
+          <div class="tg-seatrow__main">
+            <span class="tg-seatrow__name">
+              <input class="tg-seatrow__input" type="text" data-seat-name="{{id}}" value="{{name}}" aria-label="{{localize "TAVERN.Seating.seatName"}}">
+              {{#if owner}}<span class="tg-chip tg-chip--accent"><i class="fa-solid fa-user"></i>{{owner}}</span>{{else}}<span class="tg-chip">{{localize "TAVERN.Seating.npc"}}</span>{{/if}}
+            </span>
+            {{#if isNpc}}
+            <div class="tg-seatrow__controls">
+              <div class="tg-seg">
+                <button type="button" data-action="setControl" data-value="bot" aria-pressed="{{#if isBot}}true{{else}}false{{/if}}"><i class="fa-solid fa-robot"></i>{{localize "TAVERN.Seating.bot"}}</button>
+                <button type="button" data-action="setControl" data-value="gm" aria-pressed="{{#if isBot}}false{{else}}true{{/if}}"><i class="fa-solid fa-crown"></i>{{localize "TAVERN.Seating.gm"}}</button>
+              </div>
+              {{#if isBot}}
+              <select class="tg-select" data-seat-temper="{{id}}" aria-label="{{localize "TAVERN.Seating.temper"}}">
+                {{#each tempers}}<option value="{{id}}"{{#if selected}} selected{{/if}}>{{label}}</option>{{/each}}
+              </select>
+              {{/if}}
+            </div>
+            {{/if}}
+          </div>
+          <button type="button" class="tg-seatrow__remove" data-action="removeSeat" aria-label="{{localize "TAVERN.Seating.removeSeat"}}"><i class="fa-solid fa-xmark"></i></button>
+        </li>
+        {{/each}}
+      </ol>
+      {{else}}
+      <div class="tg-empty">{{localize "TAVERN.Seating.emptySeats"}}</div>
+      {{/if}}
+
+      <div class="tg-settings">
+        {{#each options}}
+        {{#if isNumber}}
+        <label class="tg-field"><span>{{label}}</span><input class="tg-input" type="number" name="opt.{{key}}" value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}"></label>
+        {{/if}}
+        {{/each}}
+        <label class="tg-field">
+          <span>{{localize "TAVERN.Seating.stake"}}</span>
+          <span class="tg-row">
+            <input class="tg-input" type="number" name="stake.amount" value="{{stake.amount}}" min="0" step="1" style="width: 72px">
+            <select class="tg-select" name="stake.coin"{{#unless dnd5e}} disabled{{/unless}}>
+              {{#each coins}}<option value="{{id}}"{{#if selected}} selected{{/if}}>{{label}}</option>{{/each}}
+            </select>
+          </span>
+        </label>
+        {{#each options}}
+        {{#if isBool}}
+        <label class="tg-check"><input type="checkbox" name="opt.{{key}}" {{checked value}}> {{label}}</label>
+        {{/if}}
+        {{/each}}
+        {{#if dnd5e}}
+        <label class="tg-check"><input type="checkbox" name="stake.fromSheets" {{checked stake.fromSheets}}> {{localize "TAVERN.Seating.fromSheets"}}</label>
+        {{#if stake.fromSheets}}
+        <div class="tg-field tg-field--wide">
+          <span>{{localize "TAVERN.Seating.npcPays"}}</span>
+          <div class="tg-seg">
+            <button type="button" data-action="setNpcPays" data-value="house" aria-pressed="{{#if npcSheet}}false{{else}}true{{/if}}">{{localize "TAVERN.Seating.npcHouse"}}</button>
+            <button type="button" data-action="setNpcPays" data-value="sheet" aria-pressed="{{#if npcSheet}}true{{else}}false{{/if}}">{{localize "TAVERN.Seating.npcSheet"}}</button>
+          </div>
+        </div>
+        {{/if}}
+        {{/if}}
+        <div class="tg-field tg-field--wide">
+          <span>{{localize "TAVERN.Seating.theme"}}</span>
+          <div class="tg-seg">
+            {{#each themes}}<button type="button" data-action="setTheme" data-value="{{id}}" aria-pressed="{{#if selected}}true{{else}}false{{/if}}"><i class="fa-solid {{icon}}"></i>{{label}}</button>{{/each}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tg-footer">
+    <span class="tg-muted">{{summary}}</span>
+    {{#if problem}}<span class="tg-chip tg-chip--danger"><i class="fa-solid fa-circle-exclamation"></i>{{problem}}</span>{{/if}}
+    <span class="tg-spacer"></span>
+    <button type="button" class="tg-btn" data-action="cancel">{{localize "TAVERN.Common.cancel"}}</button>
+    <button type="button" class="tg-btn tg-btn--primary" data-action="start"{{#unless canStart}} disabled{{/unless}}><i class="fa-solid fa-dice"></i><span>{{localize "TAVERN.Seating.start"}}</span></button>
+  </div>
+</div>

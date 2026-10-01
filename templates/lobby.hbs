@@ -1,0 +1,55 @@
+<div class="tg-lobby-body">
+  <div class="tg-lobby">
+    <ul class="tg-gamelist" role="listbox">
+      {{#each games}}
+      <li>
+        <button type="button" data-action="pick" data-game="{{id}}" role="option" aria-selected="{{#if selected}}true{{else}}false{{/if}}">
+          <span class="tg-gamelist__icon"><i class="{{icon}}"></i></span>
+          <span class="tg-gamelist__name">{{name}}</span>
+          <span class="tg-gamelist__meta">{{meta}}</span>
+        </button>
+      </li>
+      {{/each}}
+    </ul>
+
+    <div class="tg-detail">
+      <div class="tg-table"><div class="tg-felt"><div class="tg-dice">{{{detail.preview}}}</div></div></div>
+      <h2 class="tg-lobby__section-title">{{detail.name}}</h2>
+      <p class="tg-detail__text">{{detail.text}}</p>
+      <div class="tg-facts">
+        {{#each detail.facts}}<span class="tg-chip"><i class="fa-solid {{icon}}"></i>{{text}}</span>{{/each}}
+      </div>
+      <div class="tg-row">
+        {{#if isGM}}<button type="button" class="tg-btn tg-btn--primary" data-action="seat"><i class="fa-solid fa-chair"></i><span>{{localize "TAVERN.Lobby.seat"}}</span></button>{{/if}}
+        <button type="button" class="tg-btn" data-action="rules"><i class="fa-solid fa-book-open"></i><span>{{localize "TAVERN.Head.rules"}}</span></button>
+      </div>
+    </div>
+  </div>
+
+  <hr class="tg-sep">
+
+  <div>
+    <h2 class="tg-lobby__section-title">{{localize "TAVERN.Lobby.live"}}</h2>
+    {{#if tables.length}}
+    <div class="tg-live">
+      {{#each tables}}
+      <div class="tg-live__row" data-table="{{id}}">
+        <span class="tg-live__faces">{{#each faces}}<span class="tg-portrait"><img src="{{this}}" alt=""></span>{{/each}}</span>
+        <span class="tg-live__info">
+          <b>{{title}}</b>
+          <span>{{status}}{{#if hidden}} <span class="tg-chip"><i class="fa-solid fa-eye-slash"></i>{{localize "TAVERN.Head.hidden"}}</span>{{/if}}</span>
+        </span>
+        <button type="button" class="tg-btn tg-btn--sm" data-action="tableOpen"><i class="fa-solid fa-up-right-from-square"></i><span>{{localize "TAVERN.Lobby.open"}}</span></button>
+        {{#if ../isGM}}
+        <button type="button" class="tg-btn tg-btn--sm" data-action="tableHide">{{#if hidden}}<i class="fa-solid fa-eye"></i><span>{{localize "TAVERN.Gm.show"}}</span>{{else}}<i class="fa-solid fa-eye-slash"></i><span>{{localize "TAVERN.Gm.hide"}}</span>{{/if}}</button>
+        <button type="button" class="tg-btn tg-btn--sm" data-action="tableSummon" data-tooltip="{{localize "TAVERN.Lobby.summonHint"}}"><i class="fa-solid fa-window-restore"></i><span>{{localize "TAVERN.Lobby.summon"}}</span></button>
+        <button type="button" class="tg-btn tg-btn--sm tg-btn--danger" data-action="tableRemove"><i class="fa-solid fa-xmark"></i><span>{{localize "TAVERN.Gm.remove"}}</span></button>
+        {{/if}}
+      </div>
+      {{/each}}
+    </div>
+    {{else}}
+    <div class="tg-empty">{{localize "TAVERN.Lobby.empty"}}</div>
+    {{/if}}
+  </div>
+</div>

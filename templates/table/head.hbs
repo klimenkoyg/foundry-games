@@ -1,0 +1,19 @@
+<header class="tg-head">
+  {{#unless missing}}
+  <div class="tg-head__title">
+    <h2 class="tg-head__game">{{gameName}}</h2>
+    <span class="tg-head__sub">{{{subtitle}}}</span>
+  </div>
+  {{#if hidden}}<span class="tg-chip"><i class="fa-solid fa-eye-slash"></i>{{localize "TAVERN.Head.hidden"}}</span>{{/if}}
+  {{#if pot}}
+  <div class="tg-pot">
+    <span class="tg-pot__stack">{{#each pot.coins}}<i></i>{{/each}}</span>
+    <span class="tg-pot__label"><span class="tg-pot__sum">{{pot.sum}}</span><span class="tg-pot__cap">{{pot.cap}}</span></span>
+  </div>
+  {{/if}}
+  {{#if canLeave}}
+  <button type="button" class="tg-iconbtn" data-action="leave" data-tooltip="{{localize "TAVERN.Head.leave"}}" aria-label="{{localize "TAVERN.Head.leave"}}"><i class="fa-solid fa-person-walking-arrow-right"></i></button>
+  {{/if}}
+  <button type="button" class="tg-iconbtn" data-action="rules" data-tooltip="{{localize "TAVERN.Head.rules"}}" aria-label="{{localize "TAVERN.Head.rules"}}"><i class="fa-solid fa-book-open"></i></button>
+  {{/unless}}
+</header>

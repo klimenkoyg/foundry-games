@@ -1,0 +1,20 @@
+<div class="tg-actionbar">
+  <div class="tg-actionbar__me">
+    {{#if me}}{{> tavern-games.seat me}}{{/if}}
+    {{#if status}}
+    <div class="tg-status">
+      <span class="tg-status__main">{{{status}}}</span>
+      {{#if statusSub}}<span class="tg-status__sub">{{{statusSub}}}</span>{{/if}}
+    </div>
+    {{/if}}
+  </div>
+  {{#if buttons.length}}
+  <div class="tg-actionbar__buttons">
+    {{#each buttons}}
+    <button type="button" class="tg-btn {{cls}}" data-action="game" data-op="{{op}}"{{#if arg}} data-arg="{{arg}}"{{/if}}{{#if tip}} data-tooltip="{{tip}}"{{/if}}{{#if disabled}} disabled{{/if}}>
+      {{#if icon}}<i class="fa-solid {{icon}}"></i>{{/if}}<span>{{label}}</span>{{#if sub}}<span class="tg-btn__sub">{{sub}}</span>{{/if}}
+    </button>
+    {{/each}}
+  </div>
+  {{/if}}
+</div>

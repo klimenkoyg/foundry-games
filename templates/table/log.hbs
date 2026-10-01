@@ -1,0 +1,11 @@
+<details class="tg-log"{{#unless log.lines.length}} hidden{{/unless}}>
+  <summary>
+    <i class="fa-solid fa-scroll"></i>
+    <span class="tg-log__last">{{{log.last}}}</span>
+    <span class="tg-log__count">{{localize "TAVERN.Log.title"}} · {{log.count}}</span>
+    <i class="fa-solid fa-chevron-down"></i>
+  </summary>
+  <ol>
+    {{#each log.lines}}<li>{{{this}}}</li>{{/each}}
+  </ol>
+</details>

@@ -1,0 +1,27 @@
+<section class="tg-board">
+  <div class="tg-table">
+    <div class="tg-felt tg-scc">
+      <div class="tg-row tg-scc__top">
+        <span class="tg-rolls">{{localize "TAVERN.Scc.rolls"}} <span class="tg-pips">{{#each rollPips}}<i class="{{#if this}}on{{/if}}"></i>{{/each}}</span></span>
+        <span class="tg-spacer"></span>
+        <span class="tg-felt__label">{{need}}</span>
+      </div>
+      <div class="tg-scc__slots">
+        {{#each slots}}
+        <div class="tg-slot{{#if filled}} is-filled{{/if}}">
+          <div class="tg-well">{{#if filled}}{{{die}}}{{else}}<span class="tg-slot__need"><i class="fa-solid {{icon}}"></i></span>{{/if}}</div>
+          <span class="tg-slot__name">{{name}}</span>
+        </div>
+        {{/each}}
+        <div class="tg-scc__cargo{{#unless crew}} is-locked{{/unless}}">
+          <span class="tg-felt__label">{{localize "TAVERN.Scc.cargo"}}</span>
+          <span class="tg-dice">{{{cargoDice}}}</span>
+          <span class="tg-felt__big">{{cargoSum}}</span>
+        </div>
+      </div>
+      <div class="tg-dice tg-dice--scatter">{{{freeDice}}}</div>
+      {{#if prev}}<div class="tg-felt__hint">{{prev}}</div>{{/if}}
+    </div>
+  </div>
+  {{> tavern-games.actionbar}}
+</section>

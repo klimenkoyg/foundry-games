@@ -1,0 +1,53 @@
+<section class="tg-board">
+  <div class="tg-table">
+    <div class="tg-felt">
+      <div class="tg-kb">
+        <div class="tg-kb__boards">
+          <div class="tg-kb__colscores">
+            {{#each top.cols}}<span>{{score}}{{#if mult}}<small class="{{#if x3}}x3{{/if}}">×{{mult}}</small>{{/if}}</span>{{/each}}
+          </div>
+          <div class="tg-kb__board tg-kb__board--opp">
+            {{#each top.cols}}
+            {{#if interactive}}
+            <button type="button" class="tg-kb__col" data-action="game" data-op="place" data-arg="{{index}}"{{#if full}} disabled{{/if}}>{{#each wells}}<span class="tg-well">{{{this}}}</span>{{/each}}</button>
+            {{else}}
+            <div class="tg-kb__col" data-col="{{index}}">{{#each wells}}<span class="tg-well">{{{this}}}</span>{{/each}}</div>
+            {{/if}}
+            {{/each}}
+          </div>
+          <div class="tg-kb__divider">{{divider}}</div>
+          <div class="tg-kb__board">
+            {{#each bottom.cols}}
+            {{#if interactive}}
+            <button type="button" class="tg-kb__col" data-action="game" data-op="place" data-arg="{{index}}"{{#if full}} disabled{{/if}}>{{#each wells}}<span class="tg-well">{{{this}}}</span>{{/each}}</button>
+            {{else}}
+            <div class="tg-kb__col" data-col="{{index}}">{{#each wells}}<span class="tg-well">{{{this}}}</span>{{/each}}</div>
+            {{/if}}
+            {{/each}}
+          </div>
+          <div class="tg-kb__colscores">
+            {{#each bottom.cols}}<span>{{score}}{{#if mult}}<small class="{{#if x3}}x3{{/if}}">×{{mult}}</small>{{/if}}</span>{{/each}}
+          </div>
+        </div>
+        <div class="tg-kb__side">
+          <div class="tg-kb__total{{#if top.isTurn}} is-turn{{/if}}">
+            <span class="tg-portrait"><img src="{{top.img}}" alt=""></span>
+            <span class="tg-seat__name">{{top.name}}</span>
+            <span class="tg-felt__big">{{top.total}}</span>
+            {{#if top.thinking}}<span class="tg-thinking"><i></i><i></i><i></i></span>{{/if}}
+          </div>
+          <div class="tg-kb__plate">
+            <span class="tg-felt__label">{{plateLabel}}</span>
+            {{{die}}}
+          </div>
+          <div class="tg-kb__total{{#if bottom.isTurn}} is-turn{{/if}}">
+            {{#if bottom.thinking}}<span class="tg-thinking"><i></i><i></i><i></i></span>{{/if}}
+            <span class="tg-felt__big">{{bottom.total}}</span>
+            <span class="tg-seat__name">{{bottom.name}}</span>
+            <span class="tg-portrait"><img src="{{bottom.img}}" alt=""></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

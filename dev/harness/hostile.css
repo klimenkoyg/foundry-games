@@ -1,0 +1,22 @@
+/* «Враждебные» стили в слое — как у Foundry: кнопки на всю ширину, рамки у заголовков и картинок.
+   Если окно модуля от этого ломается, значит, стили модуля чего-то не перекрывают. */
+@layer foundry {
+  .application button {
+    display: flex; align-items: center; justify-content: center; width: 100%; height: 32px; min-height: 32px;
+    padding: 0 8px; margin: 2px 0; border: 2px solid magenta; border-radius: 3px; background: #777; color: lime;
+    font-family: monospace; font-size: 13px; text-shadow: 0 0 2px red; box-shadow: 0 0 6px magenta;
+  }
+  .application h1, .application h2, .application h3 { border-bottom: 2px solid magenta; padding-bottom: 6px; margin: 0 0 8px; }
+  .application img { border: 2px solid magenta; }
+  .application input, .application select { width: 100%; height: 26px; border: 1px solid magenta; background: #555; color: lime; }
+  .application input[type="checkbox"] { width: 20px; height: 20px; }
+  .application ol, .application ul { margin: 12px; padding-left: 30px; list-style: disc; }
+  .application p { margin: 8px 0; }
+  .application table { border: 2px solid magenta; background: #333; }
+  .application tr:nth-child(odd) { background: #444; }
+  .application hr { border: 2px dashed magenta; height: 6px; }
+  .application details summary { list-style: square; }
+  .application label { line-height: 26px; }
+  .application .window-content { padding: 30px; background: #222; color: lime; }
+  .application .window-header { background: #000; color: lime; }
+}

@@ -1,0 +1,18 @@
+<section class="tg-board">
+  <div class="tg-table">
+    <div class="tg-felt">
+      <div class="tg-farkle__field">
+        <div class="tg-farkle__throw">
+          <div class="tg-dice tg-dice--scatter">{{{dice}}}</div>
+          <div class="tg-selection{{#if invalid}} is-invalid{{/if}}{{#if bust}} is-bust{{/if}}">{{{hint}}}</div>
+        </div>
+        <div class="tg-tray">
+          <span class="tg-tray__label">{{localize "TAVERN.Farkle.tray"}}</span>
+          <div class="tg-tray__dice">{{{kept}}}</div>
+          <div class="tg-tray__sum"><span>{{localize "TAVERN.Farkle.turn"}}</span><b>{{points}}</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{> tavern-games.actionbar}}
+</section>

@@ -1,0 +1,60 @@
+<section class="tg-board tg-liars{{#if revealing}} is-reveal{{/if}}">
+  <div class="tg-table">
+    <div class="tg-felt">
+      <div class="tg-liars__opps">
+        {{#each opps}}
+        <div class="tg-cupseat{{#if isTurn}} is-turn{{/if}}{{#if out}} is-out{{/if}}{{#if peek}} is-peek{{/if}}">
+          <span class="tg-bid-bubble{{#if bubble.old}} tg-bid-bubble--old{{/if}}"{{#unless bubble}} style="visibility: hidden"{{/unless}}>{{#if bubble}}{{bubble.q}} × {{{bubble.die}}}{{else}}—{{/if}}</span>
+          <div class="tg-cup"><span class="tg-cup__count"><i class="fa-solid fa-dice"></i> {{count}}</span></div>
+          {{#if shown}}<div class="tg-reveal-dice">{{{shown}}}</div>{{/if}}
+          <span class="tg-cupseat__name"><span class="tg-portrait"><img src="{{img}}" alt=""></span> {{name}}{{#if thinking}} <span class="tg-thinking"><i></i><i></i><i></i></span>{{/if}}</span>
+          <span class="tg-cupseat__dice-left">{{#each pips}}<i class="{{#unless this}}lost{{/unless}}"></i>{{/each}}</span>
+        </div>
+        {{/each}}
+      </div>
+
+      <div class="tg-liars__center">
+        <span class="tg-felt__label">{{centerLabel}}</span>
+        {{#if bid}}<span class="tg-liars__bid">{{bid.q}} × {{{bid.die}}}</span>{{/if}}
+        {{#if verdict}}<span class="tg-verdict">{{{verdict}}}</span>{{/if}}
+      </div>
+
+      {{#if mine}}
+      <div class="tg-liars__mine">
+        <div class="tg-cup"></div>
+        <div>
+          <div class="tg-liars__mine-dice">{{{mine}}}</div>
+          <div class="tg-private">{{#if revealing}}{{myName}}{{else}}<i class="fa-solid fa-eye"></i> {{myName}} · {{localize "TAVERN.Liars.onlyYou"}}{{/if}}</div>
+        </div>
+      </div>
+      {{else}}{{#if mineOut}}
+      <div class="tg-felt__hint">{{localize "TAVERN.Liars.youOut"}}</div>
+      {{/if}}{{/if}}
+    </div>
+  </div>
+
+  {{#if controls}}
+  <div class="tg-liars__controls">
+    <span class="tg-bidbar__label{{#if controls.invalid}} is-invalid{{/if}}">{{controls.caption}}</span>
+    <div class="tg-bidbar">
+      <div class="tg-stepper">
+        <button type="button" data-action="game" data-op="stepQ" data-arg="-1" aria-label="−"><i class="fa-solid fa-minus"></i></button>
+        <output>{{controls.q}}</output>
+        <button type="button" data-action="game" data-op="stepQ" data-arg="1" aria-label="+"><i class="fa-solid fa-plus"></i></button>
+      </div>
+      <span class="tg-muted">×</span>
+      <div class="tg-facepick">{{{controls.faces}}}</div>
+      <button type="button" class="tg-btn tg-btn--primary" data-action="game" data-op="bid"{{#if controls.bidDisabled}} disabled{{/if}}><i class="fa-solid fa-comment-dots"></i><span>{{controls.bidLabel}}</span></button>
+    </div>
+    {{#if controls.canCall}}
+    <div class="tg-bidbar tg-bidbar--answer">
+      <span class="tg-bidbar__hint">{{{controls.answer}}}</span>
+      {{#if controls.spotOn}}<button type="button" class="tg-btn" data-action="game" data-op="spotOn" data-tooltip="{{localize "TAVERN.Liars.spotOnHint"}}"><i class="fa-solid fa-bullseye"></i><span>{{localize "TAVERN.Liars.spotOn"}}</span></button>{{/if}}
+      <button type="button" class="tg-btn tg-btn--danger" data-action="game" data-op="challenge"><i class="fa-solid fa-hand"></i><span>{{localize "TAVERN.Liars.challenge"}}</span></button>
+    </div>
+    {{/if}}
+  </div>
+  {{else}}
+  {{> tavern-games.actionbar me=null}}
+  {{/if}}
+</section>

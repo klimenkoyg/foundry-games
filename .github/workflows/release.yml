@@ -1,0 +1,30 @@
+name: Release
+
+# Тег вида v0.1.0 → тесты → архив модуля и манифест в релизе.
+# Ставится в Foundry по ссылке:
+# https://github.com/klimenkoyg/foundry-games/releases/latest/download/module.json
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm test
+      - run: npm run check
+      - run: node scripts-dev/build.mjs "${GITHUB_REF_NAME}"
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/module.zip
+            dist/module.json
+          generate_release_notes: true

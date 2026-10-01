@@ -1,0 +1,16 @@
+<article class="tg-seat{{#if isTurn}} is-turn{{/if}}{{#if isMe}} is-me{{/if}}{{#if isOut}} is-out{{/if}}{{#if isWinner}} is-winner{{/if}}" data-seat="{{id}}">
+  <span class="tg-turn-flag">{{localize "TAVERN.Seat.turn"}}</span>
+  <span class="tg-portrait{{#if large}} tg-portrait--lg{{/if}}"><img src="{{img}}" alt=""></span>
+  <div class="tg-seat__body">
+    <span class="tg-seat__name">{{name}}</span>
+    <span class="tg-seat__meta">
+      {{#if pips}}<span class="tg-pips">{{#each pips}}<i class="{{#if this}}on{{/if}}"></i>{{/each}}</span>{{/if}}
+      {{#each chips}}<span class="tg-chip {{cls}}">{{#if icon}}<i class="fa-solid {{icon}}"></i>{{/if}}{{text}}</span>{{/each}}
+      {{#if wallet}}<span><i class="fa-solid fa-coins"></i> {{wallet}}</span>{{/if}}
+      {{#if thinking}}<span class="tg-thinking"><i></i><i></i><i></i></span>{{/if}}
+    </span>
+  </div>
+  {{#if hasScore}}<span class="tg-seat__score{{#if scoreStruck}} is-struck{{/if}}">{{score}}{{#if scoreSub}}<small>{{scoreSub}}</small>{{/if}}</span>{{/if}}
+  {{#if hasProgress}}<span class="tg-progress"><i style="--p: {{progress}}"></i></span>{{/if}}
+  {{#if extra}}<div class="tg-seat__extra">{{{extra}}}</div>{{/if}}
+</article>

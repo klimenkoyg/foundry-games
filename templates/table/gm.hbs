@@ -1,0 +1,17 @@
+<footer class="tg-gm"{{#unless isGM}} hidden{{/unless}}>
+  {{#if isGM}}
+  <span class="tg-gm__label"><i class="fa-solid fa-crown"></i>{{localize "TAVERN.Gm.label"}}</span>
+  {{#if playing}}
+  <button type="button" class="tg-btn" data-action="gmAuto" data-tooltip="{{localize "TAVERN.Gm.autoHint"}}"><i class="fa-solid fa-forward"></i><span>{{localize "TAVERN.Gm.auto"}}</span></button>
+  {{#each gmButtons}}
+  <button type="button" class="tg-btn" data-action="game" data-op="{{op}}"{{#if pressed}} aria-pressed="true"{{/if}}><i class="fa-solid {{icon}}"></i><span>{{label}}</span></button>
+  {{/each}}
+  <button type="button" class="tg-btn" data-action="gmKick"><i class="fa-solid fa-person-walking-arrow-right"></i><span>{{localize "TAVERN.Gm.kick"}}</span></button>
+  {{/if}}
+  <button type="button" class="tg-btn" data-action="gmHide">
+    {{#if hidden}}<i class="fa-solid fa-eye"></i><span>{{localize "TAVERN.Gm.show"}}</span>{{else}}<i class="fa-solid fa-eye-slash"></i><span>{{localize "TAVERN.Gm.hide"}}</span>{{/if}}
+  </button>
+  <span class="tg-spacer"></span>
+  <button type="button" class="tg-btn tg-btn--danger" data-action="gmRemove"><i class="fa-solid fa-xmark"></i><span>{{localize "TAVERN.Gm.remove"}}</span></button>
+  {{/if}}
+</footer>

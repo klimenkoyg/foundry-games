@@ -1,0 +1,75 @@
+/* Оформление стенда и имитация рамки окна Foundry. */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: "Alegreya Sans", system-ui, sans-serif;
+  color: oklch(0.9 0.01 270);
+  background:
+    linear-gradient(oklch(1 0 0 / 0.035) 1px, transparent 1px) 0 0 / 100px 100px,
+    linear-gradient(90deg, oklch(1 0 0 / 0.035) 1px, transparent 1px) 0 0 / 100px 100px,
+    oklch(0.17 0.012 270);
+  overflow: hidden;
+}
+.hbar {
+  position: fixed; inset: 0 0 auto 0; z-index: 10000; min-height: 48px;
+  display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap; padding: 8px 14px;
+  background: oklch(0.14 0.012 270 / 0.96); border-bottom: 1px solid oklch(1 0 0 / 0.1); font-size: 13px;
+}
+.hbar b { font-size: 15px; }
+.hbar small { color: oklch(0.7 0.015 270); }
+.hbar button, .hbar select {
+  height: 28px; padding: 0 10px; border-radius: 6px; border: 1px solid oklch(1 0 0 / 0.15);
+  background: oklch(0.24 0.015 270); color: inherit; font: inherit; cursor: pointer;
+}
+.hbar button[aria-pressed="true"] { background: oklch(0.8 0.115 84); color: oklch(0.2 0.03 60); font-weight: 700; }
+.hgroup { display: inline-flex; align-items: center; gap: 6px; }
+.hgroup > span { color: oklch(0.7 0.015 270); }
+.hspace { flex: 1; }
+#more { margin-left: auto; }
+#more summary { cursor: pointer; padding: 5px 10px; border-radius: 6px; border: 1px solid oklch(1 0 0 / 0.15); list-style: none; }
+#more summary::-webkit-details-marker { display: none; }
+#more[open] summary { background: oklch(0.3 0.02 270); }
+.hmore { position: absolute; right: 8px; top: 100%; width: min(520px, calc(100vw - 16px)); padding: 12px; display: flex; flex-direction: column; gap: 10px;
+  background: oklch(0.17 0.012 270); border: 1px solid oklch(1 0 0 / 0.15); border-radius: 0 0 10px 10px; box-shadow: 0 12px 30px oklch(0 0 0 / 0.6); }
+.hmore .hgroup { flex-wrap: wrap; }
+#stage { position: absolute; inset: 0; }
+#windows { position: absolute; inset: var(--bar-h, 48px) 300px 0 0; overflow: auto; }
+#side {
+  position: absolute; inset: var(--bar-h, 48px) 0 0 auto; width: 300px; padding: 10px 12px; overflow-y: auto;
+  background: oklch(0.15 0.012 270); border-left: 1px solid oklch(1 0 0 / 0.1); font-size: 13px;
+}
+#side h3 { margin: 10px 0 6px; font-size: 13px; color: oklch(0.7 0.015 270); font-weight: 700; }
+#wallets div { display: flex; justify-content: space-between; padding: 2px 0; }
+#chat-log { display: flex; flex-direction: column; gap: 8px; }
+#chat-log .msg { padding: 8px; border-radius: 8px; background: oklch(0.21 0.013 270); }
+#chat-log .msg p { margin: 0; }
+#chat-log .msg > header { font-size: 11px; color: oklch(0.7 0.015 270); margin-bottom: 4px; }
+#toasts { position: fixed; top: 64px; left: 50%; translate: -50% 0; z-index: 20000; display: flex; flex-direction: column; gap: 6px; }
+.toast { padding: 8px 14px; border-radius: 8px; font-size: 14px; background: oklch(0.3 0.03 250); box-shadow: 0 6px 20px oklch(0 0 0 / 0.5); }
+.toast.warn { background: oklch(0.45 0.12 70); }
+.toast.error { background: oklch(0.42 0.15 27); }
+
+.application {
+  position: absolute; display: flex; flex-direction: column; max-width: calc(100% - 16px); max-height: calc(100% - 16px);
+  border-radius: 8px; overflow: hidden;
+  box-shadow: 0 0 0 1px oklch(0 0 0 / 0.6), 0 20px 50px -12px oklch(0 0 0 / 0.7);
+}
+.application .window-header { display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 8px 0 14px; flex: none; cursor: grab; user-select: none; }
+.application .window-title { flex: 1; margin: 0; font: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.application .header-control { width: 26px; height: 26px; border: 0; padding: 0; background: transparent; color: inherit; opacity: 0.75; cursor: pointer; }
+.application .window-content { overflow-y: auto; }
+[hidden] { display: none !important; }
+
+.mock-dialog { position: fixed; inset: 0; z-index: 30000; display: grid; place-items: center; background: oklch(0 0 0 / 0.5); }
+.mock-dialog form { width: 380px; padding: 16px; border-radius: 10px; background: oklch(0.22 0.015 270); display: flex; flex-direction: column; gap: 12px; }
+.mock-dialog h3 { margin: 0; }
+.mock-dialog footer { display: flex; gap: 8px; justify-content: flex-end; }
+.mock-dialog button, .mock-dialog select { height: 30px; padding: 0 12px; border-radius: 6px; border: 1px solid oklch(1 0 0 / 0.2); background: oklch(0.3 0.02 270); color: inherit; font: inherit; }
+.mock-dialog .form-group { display: flex; gap: 8px; align-items: center; }
+
+/* узкая панель: без боковой колонки, окно стола во всю ширину */
+@media (max-width: 900px) {
+  #side { display: none; }
+  #windows { right: 0; }
+  .application { left: 8px !important; }
+}

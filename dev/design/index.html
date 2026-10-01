@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Таверна · макет окон</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+SC:wght@500;700&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="../../styles/tavern-games.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+<header class="board-bar">
+  <h1 class="board-bar__brand"><i class="fa-solid fa-dice"></i> Таверна <small>макет окон модуля</small></h1>
+  <div class="board-switch" role="group" aria-label="Тема">
+    <button type="button" data-theme-btn="tavern" aria-pressed="true"><i class="fa-solid fa-beer-mug-empty"></i> Трактирный стол</button>
+    <button type="button" data-theme-btn="parchment" aria-pressed="false"><i class="fa-solid fa-scroll"></i> Пергамент и золото</button>
+  </div>
+  <div class="board-switch" role="group" aria-label="Анимации">
+    <button type="button" data-motion-btn="on" aria-pressed="true">Анимации</button>
+    <button type="button" data-motion-btn="off" aria-pressed="false">Без анимаций</button>
+  </div>
+  <nav class="board-nav">
+    <a href="#lobby">Лобби</a><a href="#seating">Посадка</a><a href="#farkle">Кости</a><a href="#liars">Кости лжеца</a>
+    <a href="#kb">Кнаклбоунс</a><a href="#poker">Покер</a><a href="#tw">Двадцать одно</a><a href="#scc">Корабль</a>
+  </nav>
+</header>
+
+<main class="board">
+
+  <section class="board-intro">
+    <h2>Как будут выглядеть окна «Таверны»</h2>
+    <p>Все окна — настоящие стили модуля, не картинки. Переключатель сверху меняет тему у всех окон разом.
+      Кости можно щёлкать, бросать и ставить — это черновое поведение, чтобы почувствовать анимации.</p>
+    <p>Портреты — заглушки: в модуле здесь будут <b>ваши токены с карты</b>. Шрифты — Alegreya (свободная лицензия, с кириллицей), в модуль они едут внутри.</p>
+  </section>
+
+  <!-- ===================== ЛОББИ ===================== -->
+  <section class="board-section" id="lobby">
+    <div class="board-note">
+      <h3>Панель ведущего</h3>
+      <p>Открывается кнопкой на панели токенов слева. Список игр — слева, справа — описание выбранной и кнопка «Собрать стол».</p>
+      <ul>
+        <li><b>Сейчас на столе</b> — все идущие партии: кто сидит, чей ход, банк. Отсюда прячут, возвращают окно и убирают стол.</li>
+        <li>Вкладка «Загадки» появится на следующем этапе.</li>
+      </ul>
+      <span class="try"><i class="fa-solid fa-hand-pointer"></i> выберите игру в списке</span>
+    </div>
+
+    <div class="application tavern-games tg-window" data-tg-theme="tavern" style="width: 760px">
+      <header class="window-header">
+        <i class="window-icon fa-solid fa-beer-mug-empty"></i>
+        <h1 class="window-title">Таверна</h1>
+        <button class="header-control fa-solid fa-xmark" aria-label="Закрыть"></button>
+      </header>
+      <section class="window-content">
+        <div class="tg-row">
+          <div class="tg-seg" role="tablist">
+            <button type="button" aria-pressed="true"><i class="fa-solid fa-dice"></i> Игры</button>
+            <button type="button" aria-pressed="false" disabled title="Следующий этап"><i class="fa-solid fa-puzzle-piece"></i> Загадки · скоро</button>
+          </div>
+        </div>
+
+        <div class="tg-lobby">
+          <ul class="tg-gamelist" id="lobby-list" role="listbox" aria-label="Игры">
+            <li><button type="button" data-game="farkle" aria-selected="true"><span class="tg-gamelist__icon"><i class="fa-solid fa-dice-five"></i></span><span class="tg-gamelist__name">Кости</span><span class="tg-gamelist__meta">2–6 · ~15 мин · очки и риск</span></button></li>
+            <li><button type="button" data-game="liars" aria-selected="false"><span class="tg-gamelist__icon"><i class="fa-solid fa-mask"></i></span><span class="tg-gamelist__name">Кости лжеца</span><span class="tg-gamelist__meta">2–6 · ~15 мин · блеф</span></button></li>
+            <li><button type="button" data-game="poker" aria-selected="false"><span class="tg-gamelist__icon"><i class="fa-solid fa-crown"></i></span><span class="tg-gamelist__name">Покер на костях</span><span class="tg-gamelist__meta">2–4 · ~10 мин · ставки</span></button></li>
+            <li><button type="button" data-game="kb" aria-selected="false"><span class="tg-gamelist__icon"><i class="fa-solid fa-bone"></i></span><span class="tg-gamelist__name">Кнаклбоунс</span><span class="tg-gamelist__meta">дуэль · ~5 мин</span></button></li>
+            <li><button type="button" data-game="tw" aria-selected="false"><span class="tg-gamelist__icon"><i class="fa-solid fa-dice-d20"></i></span><span class="tg-gamelist__name">Двадцать одно</span><span class="tg-gamelist__meta">2–6 · ~10 мин · к4…к20</span></button></li>
+            <li><button type="button" data-game="scc" aria-selected="false"><span class="tg-gamelist__icon"><i class="fa-solid fa-anchor"></i></span><span class="tg-gamelist__name">Корабль, капитан, команда</span><span class="tg-gamelist__meta">2–8 · ~5 мин · три броска</span></button></li>
+          </ul>
+
+          <div class="tg-detail" id="lobby-detail">
+            <div class="tg-table"><div class="tg-felt"><div class="tg-dice tg-dice--scatter" id="lobby-preview"></div></div></div>
+            <h2 class="tg-lobby__section-title" id="lobby-title">Кости</h2>
+            <p class="tg-detail__text" id="lobby-text">Шесть костей: бросаешь, откладываешь то, что даёт очки, и решаешь — рискнуть оставшимися или записать набранное. Не выпало ничего — всё за ход сгорает. Первый, кто наберёт цель, забирает банк.</p>
+            <div class="tg-facts" id="lobby-facts">
+              <span class="tg-chip"><i class="fa-solid fa-users"></i> 2–6 мест</span>
+              <span class="tg-chip"><i class="fa-solid fa-robot"></i> боты с нравом</span>
+              <span class="tg-chip"><i class="fa-solid fa-coins"></i> ставки с листов</span>
+              <span class="tg-chip"><i class="fa-solid fa-hand-sparkles"></i> шулерство (dnd5e)</span>
+            </div>
+            <div class="tg-row">
+              <button type="button" class="tg-btn tg-btn--primary"><i class="fa-solid fa-chair"></i> Собрать стол</button>
+              <button type="button" class="tg-btn"><i class="fa-solid fa-book-open"></i> Правила</button>
+            </div>
+          </div>
+        </div>
+
+        <hr class="tg-sep">
+
+        <div>
+          <h2 class="tg-lobby__section-title">Сейчас на столе</h2>
+          <div class="tg-live">
+            <div class="tg-live__row">
+              <span class="tg-live__faces">
+                <span class="tg-portrait"><img src="portraits/mira.svg" alt=""></span>
+                <span class="tg-portrait"><img src="portraits/martin.svg" alt=""></span>
+                <span class="tg-portrait"><img src="portraits/brenna.svg" alt=""></span>
+              </span>
+              <span class="tg-live__info"><b>Кости · «Сломанное колесо»</b><span>ходит Мира · банк 15 зм · до 2000</span></span>
+              <button type="button" class="tg-btn tg-btn--sm"><i class="fa-solid fa-eye-slash"></i> Скрыть</button>
+              <button type="button" class="tg-btn tg-btn--sm"><i class="fa-solid fa-window-restore"></i> Вернуть окно</button>
+              <button type="button" class="tg-btn tg-btn--sm tg-btn--danger"><i class="fa-solid fa-xmark"></i> Убрать</button>
+            </div>
+            <div class="tg-live__row">
+              <span class="tg-live__faces">
+                <span class="tg-portrait"><img src="portraits/hale.svg" alt=""></span>
+                <span class="tg-portrait"><img src="portraits/bram.svg" alt=""></span>
+              </span>
+              <span class="tg-live__info"><b>Кнаклбоунс · Пристань</b><span><span class="tg-chip"><i class="fa-solid fa-eye-slash"></i> скрыт от игроков</span></span></span>
+              <button type="button" class="tg-btn tg-btn--sm"><i class="fa-solid fa-eye"></i> Показать</button>
+              <button type="button" class="tg-btn tg-btn--sm tg-btn--danger"><i class="fa-solid fa-xmark"></i> Убрать</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ===================== ПОСАДКА ===================== -->
+  <section class="board-section" id="seating">
+    <div class="board-note">
+      <h3>Посадка: токены с карты</h3>
+      <p>Главная переделка. Пула соперников больше нет — за стол садятся <b>токены текущей сцены</b>.</p>
+      <ul>
+        <li><b>«Взять выделенные»</b> — выделили токены на карте, нажали, они за столом.</li>
+        <li>Токен игрока садит самого игрока, под именем персонажа.</li>
+        <li>У NPC переключатель <b>Бот / Ведущий</b>; у бота — нрав.</li>
+        <li>Ещё способы: кнопка «За стол» в меню токена и перетаскивание актёра из сайдбара.</li>
+        <li>Номер слева — порядок ходов, места можно двигать за ручку.</li>
+      </ul>
+      <span class="try"><i class="fa-solid fa-hand-pointer"></i> добавьте токены из списка</span>
+    </div>
+
+    <div class="application tavern-games tg-window" data-tg-theme="tavern" style="width: 800px">
+      <header class="window-header">
+        <i class="window-icon fa-solid fa-chair"></i>
+        <h1 class="window-title">Собрать стол · Кости</h1>
+        <button class="header-control fa-solid fa-xmark" aria-label="Закрыть"></button>
+      </header>
+      <section class="window-content">
+        <div class="tg-seating">
+          <div class="tg-pane">
+            <h2 class="tg-pane__title">Игроки <span class="tg-chip">в сети: 2</span></h2>
+            <ul class="tg-pick" id="pick-users">
+              <li class="tg-pick__item is-seated" data-pick="mira"><span class="tg-portrait"><img src="portraits/mira.svg" alt=""></span><span class="tg-pick__text"><b>Мира</b><span>игрок Юра · за столом</span></span><span class="tg-pick__add"><i class="fa-solid fa-check"></i></span></li>
+              <li class="tg-pick__item" data-pick="ilva"><span class="tg-portrait"><img src="portraits/ilva.svg" alt=""></span><span class="tg-pick__text"><b>Ильва</b><span>игрок Катя</span></span><span class="tg-pick__add"><i class="fa-solid fa-plus"></i></span></li>
+            </ul>
+
+            <h2 class="tg-pane__title">Токены сцены <span class="tg-chip">Трактир</span></h2>
+            <div class="tg-searchrow">
+              <input class="tg-input" type="search" placeholder="Найти по имени…" id="token-search" aria-label="Поиск токена">
+              <button type="button" class="tg-btn tg-btn--sm" id="take-selected"><i class="fa-solid fa-object-group"></i> Взять выделенные · 2</button>
+            </div>
+            <ul class="tg-pick" id="pick-tokens">
+              <li class="tg-pick__item is-seated" data-pick="martin"><span class="tg-portrait"><img src="portraits/martin.svg" alt=""></span><span class="tg-pick__text"><b>Старый Мартин</b><span>NPC · трактирщик · за столом</span></span><span class="tg-pick__add"><i class="fa-solid fa-check"></i></span></li>
+              <li class="tg-pick__item is-seated" data-pick="brenna"><span class="tg-portrait"><img src="portraits/brenna.svg" alt=""></span><span class="tg-pick__text"><b>Бренна</b><span>NPC · наёмница · за столом</span></span><span class="tg-pick__add"><i class="fa-solid fa-check"></i></span></li>
+              <li class="tg-pick__item is-selected-token" data-pick="hale"><span class="tg-portrait"><img src="portraits/hale.svg" alt=""></span><span class="tg-pick__text"><b>Хейл «Два медяка»</b><span>NPC · выделен на карте</span></span><span class="tg-pick__add"><i class="fa-solid fa-plus"></i></span></li>
+              <li class="tg-pick__item is-selected-token" data-pick="bram"><span class="tg-portrait"><img src="portraits/bram.svg" alt=""></span><span class="tg-pick__text"><b>Брам Счетовод</b><span>NPC · выделен на карте</span></span><span class="tg-pick__add"><i class="fa-solid fa-plus"></i></span></li>
+              <li class="tg-pick__item" data-pick="tobias"><span class="tg-portrait"><img src="portraits/tobias.svg" alt=""></span><span class="tg-pick__text"><b>Староста Тобиас</b><span>NPC</span></span><span class="tg-pick__add"><i class="fa-solid fa-plus"></i></span></li>
+            </ul>
+            <div class="tg-dropzone"><i class="fa-solid fa-hand"></i> Перетащите актёра из сайдбара</div>
+          </div>
+
+          <div class="tg-pane">
+            <h2 class="tg-pane__title">За столом <span class="tg-chip" id="seat-count">3 места</span></h2>
+            <ol class="tg-seatlist" id="seatlist"></ol>
+
+            <div class="tg-settings">
+              <label class="tg-field"><span>Играем до</span><input class="tg-input" type="number" value="2000" step="500"></label>
+              <label class="tg-field"><span>Порог входа</span><input class="tg-input" type="number" value="350" step="50"></label>
+              <label class="tg-field"><span>Ставка с каждого</span>
+                <span class="tg-row"><input class="tg-input" type="number" value="5" style="width: 64px"><select class="tg-select"><option>зм</option><option>см</option><option>мм</option><option>эм</option><option>пм</option></select></span>
+              </label>
+              <label class="tg-check"><input type="checkbox" checked> Списывать с листов персонажей <span class="tg-chip">dnd5e</span></label>
+              <div class="tg-field tg-field--wide"><span>NPC ставят</span>
+                <div class="tg-seg" data-seg><button type="button" aria-pressed="true">Из кошелька на листе</button><button type="button" aria-pressed="false">За счёт заведения</button></div>
+              </div>
+              <label class="tg-check"><input type="checkbox"> Три пары считаются (750)</label>
+              <div class="tg-field tg-field--wide"><span>Оформление стола</span>
+                <div class="tg-seg" data-seg><button type="button" aria-pressed="true"><i class="fa-solid fa-beer-mug-empty"></i> Трактирный стол</button><button type="button" aria-pressed="false"><i class="fa-solid fa-scroll"></i> Пергамент</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tg-footer">
+          <span class="tg-muted" id="seat-summary">3 места · банк 15 зм</span>
+          <span class="tg-spacer"></span>
+          <button type="button" class="tg-btn">Отмена</button>
+          <button type="button" class="tg-btn tg-btn--primary"><i class="fa-solid fa-dice"></i> Начать игру</button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ===================== КОСТИ (FARKLE) ===================== -->
+  <section class="board-section" id="farkle">
+    <div class="board-note">
+      <h3>Кости</h3>
+      <p>Общий каркас всех игр: соперники сверху, стол посередине, <b>ваше место и действия внизу</b>, журнал свёрнут в одну строку, полоса ведущего отдельно.</p>
+      <ul>
+        <li>Кости брошены «как попало», а не выстроены в ряд.</li>
+        <li>Выбранная кость приподнята и помечена галочкой — это видно и без цвета.</li>
+        <li>Отложенное за ход лежит в деревянном лотке справа.</li>
+        <li>Чей ход — кольцо вокруг портрета плюс флажок «ходит».</li>
+      </ul>
+      <span class="try"><i class="fa-solid fa-hand-pointer"></i> выберите кости и бросьте</span>
+    </div>
+
+    <div class="board-stack">
+      <div class="application tavern-games tg-window" data-tg-theme="tavern" style="width: 640px" id="farkle-win">
+        <header class="window-header">
+          <i class="window-icon fa-solid fa-dice-five"></i>
+          <h1 class="window-title">Кости · Трактир «Сломанное колесо»</h1>
+          <button class="header-control fa-solid fa-ellipsis-vertical" aria-label="Меню"></button>
+          <button class="header-control fa-solid fa-xmark" aria-label="Закрыть"></button>
+        </header>
+        <section class="window-content">
+          <div class="tg-head">
+            <div class="tg-head__title">
+              <h2 class="tg-head__game">Кости</h2>
+              <span class="tg-head__sub">играем до <b>2000</b> · порог входа 350</span>
+            </div>
+            <div class="tg-pot" id="farkle-pot"><span class="tg-pot__stack"><i></i><i></i><i></i><i></i></span><span class="tg-pot__label"><span class="tg-pot__sum">15 зм</span><span class="tg-pot__cap">банк · по 5 с места</span></span></div>
+            <button type="button" class="tg-iconbtn" aria-label="Правила"><i class="fa-solid fa-book-open"></i></button>
+          </div>
+
+          <div class="tg-seats">
+            <article class="tg-seat" id="seat-martin">
+              <span class="tg-turn-flag">ходит</span>
+              <span class="tg-portrait"><img src="portraits/martin.svg" alt=""></span>
+              <div class="tg-seat__body">
+                <span class="tg-seat__name">Старый Мартин</span>
+                <span class="tg-seat__meta"><span class="tg-chip"><i class="fa-solid fa-shield-halved"></i> осторожный</span><span class="tg-thinking" hidden><i></i><i></i><i></i></span></span>
+              </div>
+              <span class="tg-seat__score" data-score>900<small>из 2000</small></span>
+              <span class="tg-progress"><i style="--p: .45"></i></span>
+            </article>
+            <article class="tg-seat">
+              <span class="tg-turn-flag">ходит</span>
+              <span class="tg-portrait"><img src="portraits/brenna.svg" alt=""></span>
+              <div class="tg-seat__body">
+                <span class="tg-seat__name">Бренна</span>
+                <span class="tg-seat__meta"><span class="tg-chip"><i class="fa-solid fa-fire"></i> безрассудная</span></span>
+              </div>
+              <span class="tg-seat__score">1250<small>из 2000</small></span>
+              <span class="tg-progress"><i style="--p: .625"></i></span>
+            </article>
+          </div>
+
+          <div class="tg-table">
+            <div class="tg-felt">
+              <div class="tg-farkle__field">
+                <div class="tg-farkle__throw">
+                  <div class="tg-dice tg-dice--scatter" id="farkle-dice"></div>
+                  <div class="tg-selection" id="farkle-selection"></div>
+                </div>
+                <div class="tg-tray">
+                  <span class="tg-tray__label">Отложено за ход</span>
+                  <div class="tg-tray__dice" id="farkle-tray"></div>
+                  <div class="tg-tray__sum"><span>за ход</span><b id="farkle-turn">500</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tg-actionbar">
+            <div class="tg-actionbar__me">
+              <article class="tg-seat is-me is-turn" id="seat-mira" style="flex: 1 1 auto; max-width: 250px">
+                <span class="tg-turn-flag">ходит</span>
+                <span class="tg-portrait tg-portrait--lg"><img src="portraits/mira.svg" alt=""></span>
+                <div class="tg-seat__body">
+                  <span class="tg-seat__name">Мира</span>
+                  <span class="tg-seat__meta"><span class="tg-chip tg-chip--accent">это вы</span><span><i class="fa-solid fa-coins"></i> 37 зм</span></span>
+                </div>
+                <span class="tg-seat__score" id="mira-score">650<small>из 2000</small></span>
+                <span class="tg-progress"><i id="mira-progress" style="--p: .325"></i></span>
+              </article>
+            </div>
+            <div class="tg-actionbar__buttons">
+              <button type="button" class="tg-btn" id="farkle-bank"><i class="fa-solid fa-feather-pointed"></i> Записать <span class="tg-btn__sub" data-bank>600</span></button>
+              <button type="button" class="tg-btn tg-btn--primary" id="farkle-roll"><i class="fa-solid fa-dice"></i> <span data-roll-label>Отложить и бросить 2</span></button>
+            </div>
+          </div>
+
+          <details class="tg-log">
+            <summary><i class="fa-solid fa-scroll"></i><span class="tg-log__last" id="farkle-last"><b>Мира</b> откладывает три пятёрки — 500</span><span class="tg-log__count">журнал · 14</span><i class="fa-solid fa-chevron-down"></i></summary>
+            <ol id="farkle-log">
+              <li><b>Мира</b> откладывает <span class="tg-die" data-face="5"></span><span class="tg-die" data-face="5"></span><span class="tg-die" data-face="5"></span> — 500 <time>сейчас</time></li>
+              <li><b>Бренна</b> записывает 450 — всего 1250 <time>1 мин</time></li>
+              <li><b>Старый Мартин</b>: пусто, 300 сгорает <time>2 мин</time></li>
+              <li><b>Бренна</b> откладывает <span class="tg-die" data-face="1"></span><span class="tg-die" data-face="1"></span> — 200 <time>2 мин</time></li>
+            </ol>
+          </details>
+
+          <div class="tg-gm">
+            <span class="tg-gm__label"><i class="fa-solid fa-crown"></i> Ведущий</span>
+            <button type="button" class="tg-btn"><i class="fa-solid fa-forward"></i> Передать ход</button>
+            <button type="button" class="tg-btn"><i class="fa-solid fa-hand-sparkles"></i> Подменные кости</button>
+            <button type="button" class="tg-btn"><i class="fa-solid fa-person-walking-arrow-right"></i> Выставить</button>
+            <span class="tg-spacer"></span>
+            <button type="button" class="tg-btn tg-btn--danger"><i class="fa-solid fa-xmark"></i> Убрать стол</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="application tavern-games tg-window" data-tg-theme="tavern" style="width: 340px">
+        <header class="window-header"><i class="window-icon fa-solid fa-comments"></i><h1 class="window-title">Чат · итог партии</h1></header>
+        <section class="window-content">
+          <div class="tg-chatcard">
+            <div class="tg-chatcard__head">
+              <span class="tg-portrait tg-portrait--sm"><img src="portraits/mira.svg" alt=""></span>
+              <div><b>Мира выигрывает «Кости»</b><span>«Сломанное колесо» · 3 места</span></div>
+            </div>
+            <div class="tg-chatcard__body">
+              <div><span>Банк</span><b>15 зм → Мира</b></div>
+              <div><span>Мира</span><b>2050</b></div>
+              <div><span>Бренна</span><b>1650</b></div>
+              <div><span>Старый Мартин</span><b>900</b></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== КОСТИ ЛЖЕЦА ===================== -->
+  <section class="board-section" id="liars">
+    <div class="board-note">
+      <h3>Кости лжеца</h3>
+      <p>У каждого стаканчик с костями, которые видит только он. Ставка «столько-то граней X на всём столе» — либо выше, либо «Не верю!».</p>
+      <ul>
+        <li>Соперники — стаканчики на сукне; под именем точками видно, сколько костей осталось.</li>
+        <li>Последняя ставка висит пузырём над тем, кто её сделал.</li>
+        <li>Ваш стаканчик приподнят, кости видны только вам.</li>
+        <li>При вскрытии подсвечиваются совпавшие кости.</li>
+      </ul>
+      <span class="try"><i class="fa-solid fa-hand-pointer"></i> поднимите ставку или скажите «Не верю!»</span>
+    </div>
+
+    <div class="application tavern-games tg-window" data-tg-theme="tavern" style="width: 640px">
+      <header class="window-header">
+        <i class="window-icon fa-solid fa-mask"></i>
+        <h1 class="window-title">Кости лжеца · Пристань</h1>
+        <button class="header-control fa-solid fa-xmark" aria-label="Закрыть"></button>
+      </header>
+      <section class="window-content tg-liars" id="liars">
+        <div class="tg-head">
+          <div class="tg-head__title">
+            <h2 class="tg-head__game">Кости лжеца</h2>
+            <span class="tg-head__sub">раунд 3 · на столе <b>17 костей</b> · единицы — любые</span>
+          </div>
+          <div class="tg-pot"><span class="tg-pot__stack"><i></i><i></i><i></i><i></i><i></i></span><span class="tg-pot__label"><span class="tg-pot__sum">40 зм</span><span class="tg-pot__cap">банк</span></span></div>
+          <button type="button" class="tg-iconbtn" aria-label="Правила"><i class="fa-solid fa-book-open"></i></button>
+        </div>
+
+        <div class="tg-table">
+          <div class="tg-felt">
+            <div class="tg-liars__opps">
+              <div class="tg-cupseat">
+                <span class="tg-bid-bubble tg-bid-bubble--old">3 × <span class="tg-die" data-face="5"></span></span>
+                <div class="tg-cup"><span class="tg-cup__count"><i class="fa-solid fa-dice"></i> 4</span></div>
+                <div class="tg-reveal-dice" data-reveal="4,5,1,2"></div>
+                <span class="tg-cupseat__name"><span class="tg-portrait"><img src="portraits/hale.svg" alt=""></span> Хейл</span>
+                <span class="tg-cupseat__dice-left"><i></i><i></i><i></i><i></i><i class="lost"></i></span>
+              </div>
+              <div class="tg-cupseat is-turn">
+                <span class="tg-bid-bubble">4 × <span class="tg-die" data-face="5"></span></span>
+                <div class="tg-cup"><span class="tg-cup__count"><i class="fa-solid fa-dice"></i> 5</span></div>
+                <div class="tg-reveal-dice" data-reveal="5,3,3,6,5"></div>
+                <span class="tg-cupseat__name"><span class="tg-portrait"><img src="portraits/brenna.svg" alt=""></span> Бренна</span>
+                <span class="tg-cupseat__dice-left"><i></i><i></i><i></i><i></i><i></i></span>
+              </div>
+              <div class="tg-cupseat">
+                <span class="tg-bid-bubble" style="visibility: hidden">—</span>
+                <div class="tg-cup"><span class="tg-cup__count"><i class="fa-solid fa-dice"></i> 3</span></div>
+                <div class="tg-reveal-dice" data-reveal="2,6,4"></div>
+                <span class="tg-cupseat__name"><span class="tg-portrait"><img src="portraits/bram.svg" alt=""></span> Брам</span>
+                <span class="tg-cupseat__dice-left"><i></i><i></i><i></i><i class="lost"></i><i class="lost"></i></span>
+              </div>
+            </div>
+
+            <div class="tg-liars__center">
+              <span class="tg-felt__label">Ставка Бренны</span>
+              <span class="tg-liars__bid">4 × <span class="tg-die" data-face="5"></span></span>
+              <span class="tg-verdict" id="liars-verdict"></span>
+            </div>
+
+            <div class="tg-liars__mine">
+              <div class="tg-cup"></div>
+              <div>
+                <div class="tg-liars__mine-dice" id="liars-mine"></div>
+                <div class="tg-private" style="justify-content: center; margin-top: 6px"><i class="fa-solid fa-eye"></i> видите только вы</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tg-liars__controls">
+          <span class="tg-bidbar__label" id="liars-caption">Ваша ставка — выше, чем «четыре пятёрки»</span>
+          <div class="tg-bidbar">
+            <div class="tg-stepper" aria-label="Сколько">
+              <button type="button" data-q="-1" aria-label="Меньше"><i class="fa-solid fa-minus"></i></button>
+              <output id="liars-q">5</output>
+              <button type="button" data-q="1" aria-label="Больше"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <span class="tg-muted">×</span>
+            <div class="tg-facepick" id="liars-faces"></div>
+            <button type="button" class="tg-btn tg-btn--primary" id="liars-bid"><i class="fa-solid fa-comment-dots"></i> <span>Пять пятёрок</span></button>
+          </div>
+          <div class="tg-bidbar tg-bidbar--answer">
+            <span class="tg-bidbar__hint">…или ответьте на ставку Бренны</span>
+            <button type="button" class="tg-btn" id="liars-spot" title="Ровно столько — ни больше, ни меньше"><i class="fa-solid fa-bullseye"></i> В точку!</button>
+            <button type="button" class="tg-btn tg-btn--danger" id="liars-call"><i class="fa-solid fa-hand"></i> Не верю!</button>
+          </div>
+        </div>
+
+        <div class="tg-actionbar" id="liars-again" hidden>
+          <span class="tg-spacer"></span>
+          <button type="button" class="tg-btn tg-btn--primary"><i class="fa-solid fa-rotate"></i> Следующий раунд</button>
+        </div>
+
+        <div class="tg-gm">
+          <span class="tg-gm__label"><i class="fa-solid fa-crown"></i> Ведущий</span>
+          <button type="button" class="tg-btn"><i class="fa-solid fa-eye"></i> Заглянуть под стаканчики</button>
+          <button type="button" class="tg-btn"><i class="fa-solid fa-magnifying-glass"></i> Проницательность</button>
+          <span class="tg-spacer"></span>
+          <button type="button" class="tg-btn tg-btn--danger"><i class="fa-solid fa-xmark"></i> Убрать стол</button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ===================== КНАКЛБОУНС ===================== -->
+  <section class="board-section" id="kb">
+    <div class="board-note">
+      <h3>Кнаклбоунс</h3>
+      <p>Дуэль. Выпавшую кость кладёте в одну из своих колонок. Одинаковые в колонке множатся, а у соперника в той же колонке <b>такие же кости сбиваются</b>.</p>
+      <ul>
+        <li>Наведите на колонку: появится призрак кости, а кости соперника под угрозой задрожат.</li>
+        <li>Множители подписаны ×2 и ×3 — не только цветом.</li>
+        <li>Соперник-бот отвечает сам.</li>
+      </ul>
+      <span class="try"><i class="fa-solid fa-hand-pointer"></i> нажмите на свою колонку</span>
+    </div>
+
+    <div class="application tavern-games tg-window" data-tg-theme="tavern" style="width: 560px">
+      <header class="window-header">
+        <i class="window-icon fa-solid fa-bone"></i>
+        <h1 class="window-title">Кнаклбоунс · Пристань</h1>
+        <button class="header-control fa-solid fa-xmark" aria-label="Закрыть"></button>
+      </header>
+      <section class="window-content">
+        <div class="tg-head">
+          <div class="tg-head__title">
+            <h2 class="tg-head__game">Кнаклбоунс</h2>
+            <span class="tg-head__sub">дуэль · кто больше, когда чьё-то поле заполнится</span>
+          </div>
+          <div class="tg-pot"><span class="tg-pot__stack"><i></i><i></i><i></i></span><span class="tg-pot__label"><span class="tg-pot__sum">10 зм</span><span class="tg-pot__cap">банк</span></span></div>
+        </div>
+
+        <div class="tg-table">
+          <div class="tg-felt">
+            <div class="tg-kb">
+              <div class="tg-kb__boards">
+                <div class="tg-kb__colscores" id="kb-opp-scores"></div>
+                <div class="tg-kb__board tg-kb__board--opp" id="kb-opp"></div>
+                <div class="tg-kb__divider" id="kb-divider">ваш ход</div>
+                <div class="tg-kb__board" id="kb-me"></div>
+                <div class="tg-kb__colscores" id="kb-me-scores"></div>
+              </div>
+              <div class="tg-kb__side">
+                <div class="tg-kb__total">
+                  <span class="tg-portrait"><img src="portraits/hale.svg" alt=""></span>
+                  <span class="tg-seat__name">Хейл</span>
+                  <span class="tg-felt__big" id="kb-opp-total">0</span>
+                  <span class="tg-thinking" id="kb-thinking" hidden><i></i><i></i><i></i></span>
+                </div>
+                <div class="tg-kb__plate">
+                  <span class="tg-felt__label" id="kb-plate-label">ваш кубик</span>
+                  <span class="tg-die" data-face="3" id="kb-die"></span>
+                </div>
+                <div class="tg-kb__total">
+                  <span class="tg-felt__big" id="kb-me-total">0</span>
+                  <span class="tg-seat__name">Мира</span>
+                  <span class="tg-portrait"><img src="portraits/mira.svg" alt=""></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <details class="tg-log">
+          <summary><i class="fa-solid fa-scroll"></i><span class="tg-log__last" id="kb-last"><b>Хейл</b> кладёт <span class="tg-die" data-face="5"></span> во вторую колонку</span><span class="tg-log__count">журнал · 7</span><i class="fa-solid fa-chevron-down"></i></summary>
+          <ol><li><b>Хейл</b> кладёт 5 во вторую колонку <time>сейчас</time></li></ol>
+        </details>
+      </section>
+    </div>
+  </section>
+
+  <!-- ===================== ПОКЕР НА КОСТЯХ ===================== -->
+  <section class="board-section" id="poker">
+    <div class="board-note">
+      <h3>Покер на костях</h3>
+      <p>Пять костей, один переброс выбранных, покерные комбинации. Как в «Ведьмаке»: ставка до переброса и после.</p>
+      <ul>
+        <li>Руки соперников открыты, у каждой подписана комбинация.</li>
+        <li>Кости для переброса помечены стрелкой ↻.</li>
+        <li>Шкала комбинаций под рукой показывает, где вы сейчас.</li>
+      </ul>
+      <span class="try"><i class="fa-solid fa-hand-pointer"></i> выберите кости и перебросьте</span>
+    </div>
+
+    <div class="application tavern-games tg-window" data-tg-theme="tavern" style="width: 640px">
+      <header class="window-header">
+        <i class="window-icon fa-solid fa-crown"></i>
+        <h1 class="window-title">Покер на костях · «Сломанное колесо»</h1>
+        <button class="header-control fa-solid fa-xmark" aria-label="Закрыть"></button>
+      </header>
+      <section class="window-content">
+        <div class="tg-head">
+          <div class="tg-head__title">
+            <h2 class="tg-head__game">Покер на костях</h2>
+            <span class="tg-head__sub">рука 2 из 3 · <b>Мира 1 : 0 Бренна</b></span>
+          </div>
+          <div class="tg-pot" id="poker-pot"><span class="tg-pot__stack"><i></i><i></i><i></i><i></i><i></i></span><span class="tg-pot__label"><span class="tg-pot__sum">30 зм</span><span class="tg-pot__cap">банк руки</span></span></div>
+        </div>
+
+        <div class="tg-seats">
+          <article class="tg-seat">
+            <span class="tg-turn-flag">ходит</span>
+            <span class="tg-portrait"><img src="portraits/brenna.svg" alt=""></span>
+            <div class="tg-seat__body">
+              <span class="tg-seat__name">Бренна</span>
+              <span class="tg-poker__opp-hand"><span class="tg-die" data-face="3"></span><span class="tg-die" data-face="3"></span><span class="tg-die" data-face="5"></span><span class="tg-die" data-face="5"></span><span class="tg-die" data-face="1"></span></span>
+            </div>
+            <span class="tg-chip tg-chip--accent">Две пары</span>
+          </article>
+          <article class="tg-seat">
+            <span class="tg-turn-flag">ходит</span>
+            <span class="tg-portrait"><img src="portraits/tobias.svg" alt=""></span>
+            <div class="tg-seat__body">
+              <span class="tg-seat__name">Тобиас</span>
+              <span class="tg-poker__opp-hand"><span class="tg-die" data-face="2"></span><span class="tg-die" data-face="2"></span><span class="tg-die" data-face="6"></span><span class="tg-die" data-face="1"></span><span class="tg-die" data-face="3"></span></span>
+            </div>
+            <span class="tg-chip">Пара · пас</span>
+          </article>
+        </div>
+
+        <div class="tg-table">
+          <div class="tg-felt" style="display: flex; flex-direction: column; gap: 12px; align-items: center">
+            <div class="tg-dice tg-dice--scatter" id="poker-dice"></div>
+            <div class="tg-poker__hand-name" id="poker-hand">Тройка<small>ваша рука</small></div>
+            <div class="tg-ladder" id="poker-ladder"></div>
+          </div>
+        </div>
+
+        <div class="tg-betline" id="poker-betline">
+          <span class="tg-betline__text" id="poker-bettext">Ставки уравнены: <b>по 15 зм</b>. Выберите кости для переброса — или оставьте руку как есть.</span>
+          <span class="tg-actionbar__buttons" id="poker-actions">
+            <button type="button" class="tg-btn" id="poker-keep">Оставить как есть</button>
+            <button type="button" class="tg-btn tg-btn--primary" id="poker-reroll"><i class="fa-solid fa-rotate-right"></i> <span>Перебросить 2</span></button>
+          </span>
+        </div>
+
+        <div class="tg-gm">
+          <span class="tg-gm__label"><i class="fa-solid fa-crown"></i> Ведущий</span>
+          <button type="button" class="tg-btn"><i class="fa-solid fa-forward"></i> Передать ход</button>
+          <button type="button" class="tg-btn"><i class="fa-solid fa-hand-sparkles"></i> Подменные кости</button>
+          <span class="tg-spacer"></span>
+          <button type="button" class="tg-btn tg-btn--danger"><i class="fa-solid fa-xmark"></i> Убрать стол</button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ===================== ДВАДЦАТЬ ОДНО ===================== -->
+  <section class="board-section" id="tw">
+    <div class="board-note">
+      <h3>Двадцать одно</h3>
+      <p>Шесть кубиков от к4 до к20, каждый берётся раз за раунд. Перевалил за 21 — раунд проигран.</p>
+      <ul>
+        <li>Кубики — многогранники своей формы, а не текстовые кнопки.</li>
+        <li>Взятый кубик гаснет в запасе и ложится в руку со значением.</li>
+        <li>Полоска до 21; перебор — красная полоса и штамп.</li>
+        <li>Взятые раунды — кружками: заполненный или пустой.</li>
+      </ul>
+      <span class="try"><i class="fa-solid fa-hand-pointer"></i> нажмите кубик, чтобы бросить</span>
+    </div>
+
+    <div class="application tavern-games tg-window" data-tg-theme="tavern" style="width: 640px">
+      <header class="window-header">
+        <i class="window-icon fa-solid fa-dice-d20"></i>
+        <h1 class="window-title">Двадцать одно · У очага</h1>
+        <button class="header-control fa-solid fa-xmark" aria-label="Закрыть"></button>
+      </header>
+      <section class="window-content">
+        <div class="tg-head">
+          <div class="tg-head__title">
+            <h2 class="tg-head__game">Двадцать одно</h2>
+            <span class="tg-head__sub">раунд 2 · до <b>3 побед</b> · предел 21</span>
+          </div>
+          <div class="tg-pot"><span class="tg-pot__stack"><i></i><i></i><i></i><i></i></span><span class="tg-pot__label"><span class="tg-pot__sum">15 зм</span><span class="tg-pot__cap">банк</span></span></div>
+        </div>
+
+        <div class="tg-seats">
+          <article class="tg-seat">
+            <span class="tg-turn-flag">ходит</span>
+            <span class="tg-portrait"><img src="portraits/bram.svg" alt=""></span>
+            <div class="tg-seat__body">
+              <span class="tg-seat__name">Брам</span>
+              <span class="tg-seat__meta"><span class="tg-pips" aria-label="побед: 1 из 3"><i class="on"></i><i></i><i></i></span><span class="tg-chip tg-chip--success"><i class="fa-solid fa-hand"></i> хватит</span></span>
+            </div>
+            <span class="tg-seat__score">18</span>
+            <div class="tg-seat__extra tg-21__opp-dice" data-mini="d20:12,d6:6"></div>
+          </article>
+          <article class="tg-seat">
+            <span class="tg-turn-flag">ходит</span>
+            <span class="tg-portrait"><img src="portraits/tobias.svg" alt=""></span>
+            <div class="tg-seat__body">
+              <span class="tg-seat__name">Тобиас</span>
+              <span class="tg-seat__meta"><span class="tg-pips" aria-label="побед: 0 из 3"><i></i><i></i><i></i></span><span class="tg-bust-stamp"><i class="fa-solid fa-xmark"></i> перебор</span></span>
+            </div>
+            <span class="tg-seat__score" style="text-decoration: line-through; opacity: .6">23</span>
+            <div class="tg-seat__extra tg-21__opp-dice" data-mini="d12:9,d8:7,d10:7"></div>
+          </article>
+        </div>
+
+        <div class="tg-table">
+          <div class="tg-felt" style="display: flex; flex-direction: column; gap: 14px">
+            <div class="tg-21__hand">
+              <div>
+                <span class="tg-felt__label">Ваша рука</span>
+                <div class="tg-21__rolled" id="tw-rolled"></div>
+              </div>
+              <div class="tg-21__total">
+                <span class="tg-felt__big" id="tw-total">11 <small>/ 21</small></span>
+                <span class="tg-track" id="tw-track"><i style="--p: .52"></i></span>
+                <span class="tg-felt__label" id="tw-note">у Брама 18</span>
+              </div>
+            </div>
+            <div class="tg-21__pool" id="tw-pool"></div>
+          </div>
+        </div>
+
+        <div class="tg-actionbar">
+          <div class="tg-actionbar__me">
+            <article class="tg-seat is-me is-turn" style="flex: 1 1 auto; max-width: 260px">
+              <span class="tg-turn-flag">ходит</span>
+              <span class="tg-portrait tg-portrait--lg"><img src="portraits/mira.svg" alt=""></span>
+              <div class="tg-seat__body">
+                <span class="tg-seat__name">Мира</span>
+                <span class="tg-seat__meta"><span class="tg-pips" aria-label="побед: 1 из 3"><i class="on"></i><i></i><i></i></span><span class="tg-chip tg-chip--accent">это вы</span></span>
+              </div>
+            </article>
+            <div class="tg-status"><span class="tg-status__main" id="tw-status">Бросайте кубик или остановитесь</span><span class="tg-status__sub">ходить последним выгодно: первый ход переходит по кругу</span></div>
+          </div>
+          <div class="tg-actionbar__buttons">
+            <button type="button" class="tg-btn tg-btn--primary" id="tw-stand"><i class="fa-solid fa-hand"></i> Хватит</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ===================== КОРАБЛЬ, КАПИТАН, КОМАНДА ===================== -->
+  <section class="board-section" id="scc">
+    <div class="board-note">
+      <h3>Корабль, капитан и команда</h3>
+      <p>Пять костей, три броска. Сначала нужна шестёрка (корабль), потом пятёрка (капитан), потом четвёрка (команда). Оставшиеся две кости — груз, его очки и решают.</p>
+      <ul>
+        <li>Пустые гнёзда показывают, что нужно; найденная кость встаёт в гнездо сама.</li>
+        <li>Броски — тремя кружками на сукне.</li>
+        <li>Как только команда в сборе, груз можно перебросить или оставить.</li>
+      </ul>
+      <span class="try"><i class="fa-solid fa-hand-pointer"></i> бросьте кости</span>
+    </div>
+
+    <div class="application tavern-games tg-window" data-tg-theme="tavern" style="width: 620px">
+      <header class="window-header">
+        <i class="window-icon fa-solid fa-anchor"></i>
+        <h1 class="window-title">Корабль, капитан и команда · Пристань</h1>
+        <button class="header-control fa-solid fa-xmark" aria-label="Закрыть"></button>
+      </header>
+      <section class="window-content">
+        <div class="tg-head">
+          <div class="tg-head__title">
+            <h2 class="tg-head__game">Корабль, капитан и команда</h2>
+            <span class="tg-head__sub">у каждого три броска · лучший груз забирает банк</span>
+          </div>
+          <div class="tg-pot"><span class="tg-pot__stack"><i></i><i></i><i></i></span><span class="tg-pot__label"><span class="tg-pot__sum">9 зм</span><span class="tg-pot__cap">банк</span></span></div>
+        </div>
+
+        <div class="tg-seats">
+          <article class="tg-seat">
+            <span class="tg-portrait"><img src="portraits/bram.svg" alt=""></span>
+            <div class="tg-seat__body">
+              <span class="tg-seat__name">Брам</span>
+              <span class="tg-seat__meta"><span class="tg-chip"><i class="fa-solid fa-scale-balanced"></i> счетовод</span></span>
+            </div>
+            <span class="tg-seat__score">9<small>груз</small></span>
+          </article>
+          <article class="tg-seat is-out">
+            <span class="tg-portrait"><img src="portraits/martin.svg" alt=""></span>
+            <div class="tg-seat__body">
+              <span class="tg-seat__name">Старый Мартин</span>
+              <span class="tg-seat__meta"><span class="tg-chip tg-chip--danger"><i class="fa-solid fa-water"></i> без корабля</span></span>
+            </div>
+            <span class="tg-seat__score">—</span>
+          </article>
+        </div>
+
+        <div class="tg-table">
+          <div class="tg-felt" style="display: flex; flex-direction: column; gap: 16px">
+            <div class="tg-row" style="justify-content: space-between">
+              <span class="tg-rolls" id="scc-rolls"></span>
+              <span class="tg-felt__label" id="scc-need">ищем четвёрку — команду</span>
+            </div>
+            <div class="tg-scc__slots">
+              <div class="tg-slot" data-slot="6"><div class="tg-well"><span class="tg-slot__need"><i class="fa-solid fa-sailboat"></i></span></div><span class="tg-slot__name">Корабль · 6</span></div>
+              <div class="tg-slot" data-slot="5"><div class="tg-well"><span class="tg-slot__need"><i class="fa-solid fa-user-tie"></i></span></div><span class="tg-slot__name">Капитан · 5</span></div>
+              <div class="tg-slot" data-slot="4"><div class="tg-well"><span class="tg-slot__need"><i class="fa-solid fa-people-group"></i></span></div><span class="tg-slot__name">Команда · 4</span></div>
+              <div class="tg-scc__cargo is-locked" id="scc-cargo"><span class="tg-felt__label">Груз</span><span class="tg-dice" id="scc-cargo-dice" style="min-height: 0; gap: 8px"></span><span class="tg-felt__big" id="scc-cargo-sum" style="font-size: 26px">—</span></div>
+            </div>
+            <div class="tg-dice tg-dice--scatter" id="scc-free"></div>
+          </div>
+        </div>
+
+        <div class="tg-actionbar">
+          <div class="tg-actionbar__me">
+            <article class="tg-seat is-me is-turn" style="flex: 1 1 auto; max-width: 240px">
+              <span class="tg-turn-flag">ходит</span>
+              <span class="tg-portrait tg-portrait--lg"><img src="portraits/mira.svg" alt=""></span>
+              <div class="tg-seat__body">
+                <span class="tg-seat__name">Мира</span>
+                <span class="tg-seat__meta"><span class="tg-chip tg-chip--accent">это вы</span></span>
+              </div>
+            </article>
+          </div>
+          <div class="tg-actionbar__buttons">
+            <button type="button" class="tg-btn" id="scc-stop" disabled><i class="fa-solid fa-box"></i> <span>Оставить груз</span></button>
+            <button type="button" class="tg-btn tg-btn--primary" id="scc-roll"><i class="fa-solid fa-dice"></i> <span>Бросить 3 кости</span></button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+</main>
+
+<script src="board.js"></script>
+</body>
+</html>

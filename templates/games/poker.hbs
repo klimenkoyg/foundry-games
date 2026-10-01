@@ -1,0 +1,25 @@
+<section class="tg-board">
+  <div class="tg-table">
+    <div class="tg-felt tg-poker{{#if folded}} is-folded{{/if}}">
+      <span class="tg-felt__label">{{handLabel}}</span>
+      <div class="tg-dice tg-dice--scatter">{{{dice}}}</div>
+      <div class="tg-poker__hand-name">{{handName}}</div>
+      <div class="tg-ladder">
+        {{#each ladder}}<span class="{{#if on}}on{{/if}}">{{name}}</span>{{/each}}
+      </div>
+    </div>
+  </div>
+  <div class="tg-betline">
+    {{#if me}}{{> tavern-games.seat me}}{{/if}}
+    <span class="tg-betline__text">{{{text}}}{{#if lastText}}<small>{{{lastText}}}</small>{{/if}}</span>
+    {{#if buttons.length}}
+    <span class="tg-actionbar__buttons">
+      {{#each buttons}}
+      <button type="button" class="tg-btn {{cls}}" data-action="game" data-op="{{op}}"{{#if tip}} data-tooltip="{{tip}}"{{/if}}{{#if disabled}} disabled{{/if}}>
+        {{#if icon}}<i class="fa-solid {{icon}}"></i>{{/if}}<span>{{label}}</span>
+      </button>
+      {{/each}}
+    </span>
+    {{/if}}
+  </div>
+</section>

@@ -1,0 +1,3210 @@
+/* =========================================================================
+   Таверна · Tavern Games — стили модуля
+   Корень любого окна: .tavern-games[data-tg-theme="tavern" | "parchment"]
+   Разметка окна повторяет ApplicationV2: .window-header + .window-content
+   ========================================================================= */
+
+/* ---------- 1. Общие токены (не зависят от темы) ---------- */
+
+.tavern-games {
+  --tg-font-ui: "Alegreya Sans", "Signika", system-ui, sans-serif;
+  --tg-font-display: "Alegreya SC", "Alegreya", Georgia, serif;
+  --tg-font-prose: "Alegreya", Georgia, serif;
+
+  --tg-fs-11: 11px;
+  --tg-fs-12: 12.5px;
+  --tg-fs-14: 14px;
+  --tg-fs-15: 15px;
+  --tg-fs-17: 17px;
+  --tg-fs-20: 20px;
+  --tg-fs-24: 24px;
+  --tg-fs-32: 32px;
+
+  --tg-s1: 4px;
+  --tg-s2: 8px;
+  --tg-s3: 12px;
+  --tg-s4: 16px;
+  --tg-s5: 20px;
+  --tg-s6: 28px;
+
+  --tg-r-s: 6px;
+  --tg-r-m: 10px;
+  --tg-r-l: 16px;
+
+  --tg-dur-fast: 140ms;
+  --tg-dur: 220ms;
+  --tg-dur-slow: 480ms;
+  --tg-ease: cubic-bezier(0.22, 1, 0.36, 1); /* ease-out-quint */
+  --tg-ease-in: cubic-bezier(0.64, 0, 0.78, 0);
+
+  --tg-die: 52px;
+  --tg-portrait: 46px;
+
+  /* z-index шкала внутри окна */
+  --tg-z-raised: 1;
+  --tg-z-float: 5;
+  --tg-z-pop: 10;
+
+  /* Фактура: шум для сукна и пергамента (SVG feTurbulence) */
+  --tg-noise: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --tg-fibers: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.011' numOctaves='4' seed='11' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .1 0 0 0 .32 0'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>");
+  --tg-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='140'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.0035 .22' numOctaves='4' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .1 0 0 0 0 .05 0 0 0 0 .015 2.2 0 0 0 -.78'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+
+  font-family: var(--tg-font-ui);
+  font-size: var(--tg-fs-14);
+  line-height: 1.4;
+  color: var(--tg-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 2. Тема «Трактирный стол» ---------- */
+
+.tavern-games[data-tg-theme="tavern"] {
+  color-scheme: dark;
+
+  --tg-bg: oklch(0.205 0.02 55);
+  --tg-bg-deep: oklch(0.16 0.016 55);
+  --tg-surface: oklch(0.255 0.024 58);
+  --tg-surface-2: oklch(0.3 0.028 60);
+  --tg-surface-hover: oklch(0.335 0.032 62);
+  --tg-line: oklch(0.46 0.035 68 / 0.65);
+  --tg-line-soft: oklch(0.46 0.035 68 / 0.3);
+
+  --tg-ink: oklch(0.94 0.024 85);
+  --tg-ink-2: oklch(0.83 0.03 80);
+  --tg-ink-3: oklch(0.72 0.03 76);
+
+  --tg-accent: oklch(0.8 0.115 84);        /* латунь */
+  --tg-accent-strong: oklch(0.87 0.125 88);
+  --tg-accent-soft: oklch(0.8 0.115 84 / 0.16);
+  --tg-accent-glow: oklch(0.82 0.14 84 / 0.5);
+
+  --tg-primary-top: oklch(0.86 0.12 87);
+  --tg-primary-bottom: oklch(0.7 0.12 73);
+  --tg-primary-edge: oklch(0.5 0.09 62);
+  --tg-primary-ink: oklch(0.21 0.035 55);
+
+  --tg-danger: oklch(0.64 0.16 28);
+  --tg-danger-soft: oklch(0.64 0.16 28 / 0.18);
+  --tg-success: oklch(0.78 0.13 150);
+  --tg-success-soft: oklch(0.78 0.13 150 / 0.18);
+  --tg-mult-2: oklch(0.82 0.13 86);
+  --tg-mult-3: oklch(0.72 0.17 45);
+
+  --tg-felt: oklch(0.45 0.085 157);
+  --tg-felt-edge: oklch(0.27 0.06 160);
+  --tg-felt-ink: oklch(0.95 0.03 110);
+  --tg-felt-ink-2: oklch(0.86 0.045 130);
+  --tg-felt-well: oklch(0.3 0.06 160 / 0.55);
+
+  --tg-rim-1: oklch(0.37 0.065 50);
+  --tg-rim-2: oklch(0.3 0.058 45);
+  --tg-rim-3: oklch(0.44 0.07 54);
+
+  --tg-die-face: oklch(0.96 0.018 88);
+  --tg-die-shade: oklch(0.8 0.032 78);
+  --tg-die-edge: oklch(0.62 0.035 70);
+  --tg-pip: oklch(0.24 0.03 40);
+  --tg-pip-one: oklch(0.5 0.18 27);
+
+  --tg-ring: oklch(0.8 0.115 84);
+  --tg-ring-dark: oklch(0.14 0.015 55);
+
+  --tg-coin-1: oklch(0.9 0.13 92);
+  --tg-coin-2: oklch(0.72 0.13 78);
+  --tg-coin-edge: oklch(0.52 0.1 65);
+}
+
+/* ---------- 3. Тема «Пергамент и золото» ---------- */
+
+.tavern-games[data-tg-theme="parchment"] {
+  color-scheme: light;
+
+  --tg-bg: oklch(0.85 0.06 80);
+  --tg-bg-deep: oklch(0.74 0.075 70);
+  --tg-surface: oklch(0.89 0.045 84);
+  --tg-surface-2: oklch(0.82 0.055 78);
+  --tg-surface-hover: oklch(0.79 0.062 76);
+  --tg-line: oklch(0.36 0.06 50 / 0.7);
+  --tg-line-soft: oklch(0.36 0.06 50 / 0.28);
+
+  --tg-ink: oklch(0.23 0.045 42);          /* железо-галловые чернила */
+  --tg-ink-2: oklch(0.33 0.05 45);
+  --tg-ink-3: oklch(0.42 0.055 50);
+
+  --tg-accent: oklch(0.6 0.12 76);         /* позолота: рамки, кольца */
+  --tg-accent-strong: oklch(0.5 0.115 70);
+  --tg-accent-soft: oklch(0.6 0.12 76 / 0.2);
+  --tg-accent-glow: oklch(0.72 0.14 80 / 0.55);
+
+  --tg-primary-top: oklch(0.5 0.155 29);   /* киноварь / сургуч */
+  --tg-primary-bottom: oklch(0.4 0.14 26);
+  --tg-primary-edge: oklch(0.3 0.1 25);
+  --tg-primary-ink: oklch(0.96 0.03 85);
+
+  --tg-danger: oklch(0.45 0.16 28);
+  --tg-danger-soft: oklch(0.45 0.16 28 / 0.14);
+  --tg-success: oklch(0.42 0.1 150);
+  --tg-success-soft: oklch(0.42 0.1 150 / 0.14);
+  --tg-mult-2: oklch(0.58 0.13 76);
+  --tg-mult-3: oklch(0.47 0.16 32);
+
+  --tg-felt: oklch(0.9 0.04 85);           /* поле: светлый велен */
+  --tg-felt-edge: oklch(0.8 0.06 76);
+  --tg-felt-ink: var(--tg-ink);
+  --tg-felt-ink-2: var(--tg-ink-2);
+  --tg-felt-well: oklch(0.36 0.06 50 / 0.1);
+
+  --tg-rim-1: oklch(0.36 0.06 50);
+  --tg-rim-2: oklch(0.3 0.055 45);
+  --tg-rim-3: oklch(0.6 0.12 76);
+
+  --tg-die-face: oklch(0.975 0.012 90);
+  --tg-die-shade: oklch(0.85 0.028 80);
+  --tg-die-edge: oklch(0.36 0.06 50);
+  --tg-pip: oklch(0.22 0.045 42);
+  --tg-pip-one: oklch(0.44 0.16 28);
+
+  --tg-ring: oklch(0.6 0.12 76);
+  --tg-ring-dark: oklch(0.3 0.055 45);
+
+  --tg-coin-1: oklch(0.86 0.12 90);
+  --tg-coin-2: oklch(0.64 0.12 76);
+  --tg-coin-edge: oklch(0.45 0.09 62);
+}
+
+/* ---------- 4. Окно: шапка и фон ---------- */
+
+/* Foundry красит кнопки, заголовки и поля по-своему — внутри наших окон начинаем с чистого. */
+.tavern-games :where(.window-content) :where(button) {
+  width: auto;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  flex: none;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  text-shadow: none;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.tavern-games :where(.window-content) :where(button:disabled) {
+  cursor: default;
+}
+
+.tavern-games :where(.window-content) :where(img) {
+  border: 0;
+}
+
+.tavern-games :where(.window-content) :where(p) {
+  margin: 0;
+}
+
+.tavern-games :where(.window-content) :where(label) {
+  line-height: 1.3;
+}
+
+.tavern-games :where(.window-content) :where(h1, h2, h3) {
+  border: 0;
+  padding: 0;
+}
+
+.tavern-games :where(.window-content) :where(ol, ul) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tavern-games :where(.window-content) :where(input, select) {
+  box-sizing: border-box;
+}
+
+.tavern-games .window-header {
+  font-family: var(--tg-font-display);
+  font-size: var(--tg-fs-17);
+  letter-spacing: 0.01em;
+}
+
+.tavern-games[data-tg-theme="tavern"] .window-header {
+  color: var(--tg-ink);
+  background:
+    linear-gradient(180deg, oklch(1 0 0 / 0.07), transparent 55%, oklch(0 0 0 / 0.18)),
+    var(--tg-grain) 0 0 / 600px 140px,
+    linear-gradient(180deg, var(--tg-rim-1), var(--tg-rim-2));
+  border-bottom: 1px solid oklch(0.62 0.1 78 / 0.7);
+  box-shadow: 0 1px 0 oklch(0 0 0 / 0.5);
+}
+
+.tavern-games[data-tg-theme="parchment"] .window-header {
+  color: oklch(0.88 0.1 86);
+  background:
+    var(--tg-noise),
+    linear-gradient(180deg, oklch(0.36 0.07 35), oklch(0.27 0.06 32));
+  background-blend-mode: soft-light, normal;
+  border-bottom: 2px solid var(--tg-accent);
+  box-shadow: inset 0 -4px 0 -2px oklch(0.27 0.06 32);
+}
+
+.tavern-games .window-content {
+  padding: var(--tg-s4);
+  gap: var(--tg-s3);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  /* Foundry задаёт окну свои цвет и шрифт — возвращаем свои. */
+  color: var(--tg-ink);
+  font-family: var(--tg-font-ui);
+  font-size: var(--tg-fs-14);
+  line-height: 1.4;
+}
+
+.tavern-games :where(.window-content) :where(h1, h2, h3, b, strong, label, li, span, p) {
+  color: inherit;
+}
+
+.tavern-games[data-tg-theme="tavern"] .window-content {
+  background:
+    radial-gradient(120% 80% at 50% 0%, oklch(0.26 0.025 60 / 0.9), transparent 70%),
+    var(--tg-noise),
+    var(--tg-bg);
+  background-blend-mode: normal, overlay, normal;
+}
+
+.tavern-games[data-tg-theme="parchment"] .window-content {
+  background:
+    radial-gradient(140% 110% at 50% 45%, transparent 55%, oklch(0.62 0.09 62 / 0.5) 100%),
+    var(--tg-fibers),
+    var(--tg-noise),
+    var(--tg-bg);
+  background-blend-mode: multiply, multiply, soft-light, normal;
+}
+
+/* ---------- 5. Шапка стола ---------- */
+
+.tg-head {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s3);
+  min-height: 44px;
+}
+
+.tg-head__title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.tg-head__game {
+  font-family: var(--tg-font-display);
+  font-size: var(--tg-fs-24);
+  line-height: 1.05;
+  font-weight: 700;
+  color: var(--tg-ink);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.tg-head__sub {
+  color: var(--tg-ink-3);
+  font-size: var(--tg-fs-12);
+}
+
+.tg-head__sub b {
+  color: var(--tg-ink-2);
+  font-weight: 700;
+}
+
+[data-tg-theme="parchment"] .tg-head__game::first-letter {
+  color: var(--tg-primary-top);
+}
+
+/* ---------- 6. Банк: стопка монет ---------- */
+
+.tg-pot {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--tg-s2);
+  padding: var(--tg-s1) var(--tg-s3) var(--tg-s1) var(--tg-s2);
+  border-radius: 999px;
+  background: var(--tg-surface);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+}
+
+.tg-pot__stack {
+  position: relative;
+  width: 28px;
+  height: 30px;
+}
+
+.tg-pot__stack i {
+  position: absolute;
+  left: 1px;
+  width: 26px;
+  height: 9px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--tg-coin-1), var(--tg-coin-2));
+  box-shadow: 0 2px 0 var(--tg-coin-edge), 0 3px 3px oklch(0 0 0 / 0.3);
+}
+
+.tg-pot__stack i:nth-child(1) { bottom: 0; }
+.tg-pot__stack i:nth-child(2) { bottom: 5px; left: 2px; }
+.tg-pot__stack i:nth-child(3) { bottom: 10px; left: 0; }
+.tg-pot__stack i:nth-child(4) { bottom: 15px; left: 1.5px; }
+.tg-pot__stack i:nth-child(5) { bottom: 20px; left: 0.5px; }
+
+.tg-pot__label {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.tg-pot__sum {
+  font-weight: 700;
+  font-size: var(--tg-fs-17);
+  color: var(--tg-ink);
+}
+
+.tg-pot__cap {
+  font-size: var(--tg-fs-11);
+  color: var(--tg-ink-3);
+}
+
+.tg-pot.is-bump .tg-pot__sum {
+  animation: tg-bump var(--tg-dur-slow) var(--tg-ease);
+}
+
+/* ---------- 7. Места за столом ---------- */
+
+.tg-seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tg-s2);
+}
+
+.tg-seats > .tg-seat {
+  flex: 1 1 180px;
+}
+
+.tg-seat {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: var(--tg-s3);
+  row-gap: 2px;
+  padding: var(--tg-s2) var(--tg-s3) var(--tg-s2) var(--tg-s2);
+  border-radius: var(--tg-r-m);
+  background: var(--tg-surface);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+  transition: box-shadow var(--tg-dur) var(--tg-ease), background-color var(--tg-dur) var(--tg-ease);
+  min-width: 0;
+}
+
+[data-tg-theme="tavern"] .tg-seat {
+  background:
+    linear-gradient(180deg, oklch(1 0 0 / 0.04), transparent),
+    var(--tg-surface);
+}
+
+[data-tg-theme="parchment"] .tg-seat {
+  background: oklch(0.9 0.04 84 / 0.7);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft), inset 0 0 0 3px oklch(0.9 0.04 84 / 0.7), inset 0 0 0 4px var(--tg-line-soft);
+}
+
+.tg-seat__body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tg-seat__name {
+  font-family: var(--tg-font-display);
+  font-weight: 700;
+  font-size: var(--tg-fs-15);
+  line-height: 1.15;
+  color: var(--tg-ink);
+  /* длинное имя переносится на вторую строку, а не обрезается */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.tg-seat__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tg-s1) var(--tg-s2);
+  font-size: var(--tg-fs-12);
+  color: var(--tg-ink-3);
+}
+
+.tg-seat__score {
+  font-size: var(--tg-fs-24);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--tg-ink);
+  text-align: right;
+}
+
+.tg-seat__score small {
+  display: block;
+  font-size: var(--tg-fs-11);
+  font-weight: 500;
+  color: var(--tg-ink-3);
+  margin-top: 2px;
+}
+
+.tg-seat__extra {
+  grid-column: 1 / -1;
+}
+
+/* полоска до цели */
+.tg-progress {
+  grid-column: 2 / -1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--tg-line-soft);
+  overflow: hidden;
+}
+
+.tg-progress i {
+  display: block;
+  height: 100%;
+  width: calc(var(--p, 0) * 100%);
+  background: var(--tg-accent);
+  border-radius: inherit;
+  transition: width var(--tg-dur-slow) var(--tg-ease);
+}
+
+/* Ход: кольцо + подпись «ходит» (не только цвет) */
+.tg-seat.is-turn {
+  box-shadow: inset 0 0 0 1.5px var(--tg-accent), 0 0 0 3px var(--tg-accent-soft);
+}
+
+.tg-seat.is-turn .tg-portrait::after {
+  opacity: 1;
+}
+
+.tg-turn-flag {
+  display: none;
+  position: absolute;
+  top: -9px;
+  left: 50px;
+  padding: 1px 8px 2px;
+  border-radius: 4px;
+  font-size: var(--tg-fs-11);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: var(--tg-accent);
+  color: var(--tg-primary-ink);
+  box-shadow: 0 2px 4px oklch(0 0 0 / 0.25);
+}
+
+[data-tg-theme="parchment"] .tg-turn-flag {
+  background: var(--tg-primary-top);
+  color: var(--tg-primary-ink);
+}
+
+.tg-seat.is-turn .tg-turn-flag {
+  display: block;
+}
+
+.tg-seat.is-me {
+  background: var(--tg-surface-2);
+}
+
+.tg-seat.is-out {
+  opacity: 0.55;
+}
+
+.tg-seat.is-out .tg-portrait img {
+  filter: grayscale(1);
+}
+
+.tg-seat.is-winner {
+  box-shadow: inset 0 0 0 1.5px var(--tg-success), 0 0 0 3px var(--tg-success-soft);
+}
+
+/* Портрет токена */
+.tg-portrait {
+  position: relative;
+  width: var(--tg-portrait);
+  height: var(--tg-portrait);
+  border-radius: 50%;
+  flex: none;
+  box-shadow:
+    0 0 0 2px var(--tg-ring),
+    0 0 0 4px var(--tg-ring-dark),
+    0 3px 8px 3px oklch(0 0 0 / 0.3);
+}
+
+[data-tg-theme="parchment"] .tg-portrait {
+  box-shadow:
+    0 0 0 1.5px var(--tg-ring),
+    0 0 0 3.5px var(--tg-surface),
+    0 0 0 4.5px var(--tg-ring),
+    0 2px 6px 4px oklch(0.3 0.05 45 / 0.25);
+}
+
+.tg-portrait img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  border: 0;
+}
+
+.tg-portrait::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 2px dashed var(--tg-accent);
+  opacity: 0;
+  transition: opacity var(--tg-dur) var(--tg-ease);
+  animation: tg-spin 9s linear infinite;
+}
+
+.tg-portrait--lg {
+  --tg-portrait: 58px;
+}
+
+.tg-portrait--sm {
+  --tg-portrait: 32px;
+}
+
+/* Метки: нрав бота, ведущий, «это вы» */
+.tg-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px 1px 6px;
+  border-radius: 999px;
+  font-size: var(--tg-fs-11);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--tg-ink-2);
+  background: var(--tg-line-soft);
+  white-space: nowrap;
+}
+
+.tg-chip i {
+  font-size: 10px;
+  opacity: 0.85;
+}
+
+.tg-chip--accent {
+  background: var(--tg-accent-soft);
+  color: var(--tg-ink);
+}
+
+.tg-chip--danger {
+  background: var(--tg-danger-soft);
+  color: var(--tg-danger);
+}
+
+.tg-chip--success {
+  background: var(--tg-success-soft);
+  color: var(--tg-success);
+}
+
+.tg-thinking {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.tg-thinking i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: tg-think 1.2s var(--tg-ease) infinite;
+}
+
+.tg-thinking i:nth-child(2) { animation-delay: 0.15s; }
+.tg-thinking i:nth-child(3) { animation-delay: 0.3s; }
+
+/* победы кружками: заполненный / пустой — различимы без цвета */
+.tg-pips {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.tg-pips i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--tg-ink-3);
+}
+
+.tg-pips i.on {
+  background: var(--tg-accent);
+  box-shadow: inset 0 0 0 1.5px var(--tg-accent);
+}
+
+/* ---------- 8. Стол: борт и сукно / велен ---------- */
+
+.tg-table {
+  position: relative;
+  border-radius: var(--tg-r-l);
+  padding: 9px;
+}
+
+[data-tg-theme="tavern"] .tg-table {
+  background:
+    linear-gradient(180deg, oklch(1 0 0 / 0.1), transparent 30%, oklch(0 0 0 / 0.28)),
+    var(--tg-grain) 0 0 / 600px 140px,
+    linear-gradient(180deg, var(--tg-rim-3), var(--tg-rim-1) 40%, var(--tg-rim-2));
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.12),
+    inset 0 -1px 0 oklch(0 0 0 / 0.4),
+    0 10px 24px -8px oklch(0 0 0 / 0.6);
+}
+
+[data-tg-theme="parchment"] .tg-table {
+  padding: 7px;
+  background: transparent;
+  box-shadow:
+    inset 0 0 0 1.5px var(--tg-ink-2),
+    inset 0 0 0 4px transparent,
+    inset 0 0 0 5px var(--tg-accent);
+}
+
+.tg-felt {
+  position: relative;
+  border-radius: calc(var(--tg-r-l) - 6px);
+  padding: var(--tg-s4);
+  color: var(--tg-felt-ink);
+  min-height: 120px;
+}
+
+[data-tg-theme="tavern"] .tg-felt {
+  background:
+    radial-gradient(90% 75% at 50% 45%, var(--tg-felt) 0%, var(--tg-felt-edge) 100%);
+  box-shadow:
+    inset 0 3px 10px oklch(0 0 0 / 0.55),
+    inset 0 0 0 1px oklch(0 0 0 / 0.35);
+}
+
+[data-tg-theme="tavern"] .tg-felt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--tg-noise);
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+[data-tg-theme="parchment"] .tg-felt {
+  background:
+    radial-gradient(100% 90% at 50% 40%, oklch(0.93 0.035 88), oklch(0.86 0.05 80)),
+    var(--tg-felt);
+  box-shadow: inset 0 0 18px oklch(0.55 0.08 62 / 0.28);
+}
+
+[data-tg-theme="parchment"] .tg-felt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--tg-fibers);
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* угловые позолоченные уголки пергаментного поля */
+[data-tg-theme="parchment"] .tg-table::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><g fill='none' stroke='%23a8812f'><path d='M2 22V8a6 6 0 0 1 6-6h14' stroke-width='1.6'/><path d='M6 22V10a4 4 0 0 1 4-4h12' stroke-width='.8'/></g><circle cx='5.5' cy='5.5' r='1.6' fill='%23a8812f'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><g transform='translate(24 0) scale(-1 1)'><g fill='none' stroke='%23a8812f'><path d='M2 22V8a6 6 0 0 1 6-6h14' stroke-width='1.6'/><path d='M6 22V10a4 4 0 0 1 4-4h12' stroke-width='.8'/></g><circle cx='5.5' cy='5.5' r='1.6' fill='%23a8812f'/></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><g transform='translate(0 24) scale(1 -1)'><g fill='none' stroke='%23a8812f'><path d='M2 22V8a6 6 0 0 1 6-6h14' stroke-width='1.6'/><path d='M6 22V10a4 4 0 0 1 4-4h12' stroke-width='.8'/></g><circle cx='5.5' cy='5.5' r='1.6' fill='%23a8812f'/></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><g transform='translate(24 24) scale(-1 -1)'><g fill='none' stroke='%23a8812f'><path d='M2 22V8a6 6 0 0 1 6-6h14' stroke-width='1.6'/><path d='M6 22V10a4 4 0 0 1 4-4h12' stroke-width='.8'/></g><circle cx='5.5' cy='5.5' r='1.6' fill='%23a8812f'/></g></svg>");
+  background-position: top left, top right, bottom left, bottom right;
+  background-size: 22px 22px;
+  background-repeat: no-repeat;
+}
+
+.tg-felt > * {
+  position: relative;
+}
+
+.tg-felt__label {
+  font-size: var(--tg-fs-12);
+  color: var(--tg-felt-ink-2);
+  font-weight: 500;
+}
+
+.tg-felt__big {
+  font-family: var(--tg-font-display);
+  font-weight: 700;
+  font-size: var(--tg-fs-32);
+  line-height: 1;
+  color: var(--tg-felt-ink);
+}
+
+.tg-felt__hint {
+  font-size: var(--tg-fs-12);
+  color: var(--tg-felt-ink-2);
+  text-align: center;
+}
+
+/* ---------- 9. Кость к6 ---------- */
+
+.tg-dice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tg-s3);
+  min-height: calc(var(--tg-die) + 16px);
+}
+
+.tg-dice--scatter .tg-die {
+  transform: translate(var(--dx, 0), var(--dy, 0)) rotate(var(--rot, 0deg));
+}
+
+.tg-die {
+  --size: var(--tg-die);
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  padding: calc(var(--size) * 0.16);
+  border: 0;
+  margin: 0;
+  border-radius: calc(var(--size) * 0.2);
+  display: grid;
+  grid-template-areas: "a . c" "d e f" "g . i";
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  place-items: center;
+  flex: none;
+  cursor: default;
+  background:
+    radial-gradient(120% 120% at 28% 22%, var(--tg-die-face) 40%, var(--tg-die-shade) 100%);
+  box-shadow:
+    inset 0 calc(var(--size) * -0.05) calc(var(--size) * 0.08) oklch(0 0 0 / 0.18),
+    inset 0 calc(var(--size) * 0.03) 0 oklch(1 0 0 / 0.8),
+    0 calc(var(--size) * 0.06) 0 var(--tg-die-edge),
+    0 calc(var(--size) * 0.12) calc(var(--size) * 0.16) oklch(0 0 0 / 0.35);
+  transition:
+    transform var(--tg-dur) var(--tg-ease),
+    box-shadow var(--tg-dur) var(--tg-ease),
+    opacity var(--tg-dur) var(--tg-ease),
+    filter var(--tg-dur) var(--tg-ease);
+}
+
+[data-tg-theme="parchment"] .tg-die {
+  box-shadow:
+    inset 0 0 0 1.25px var(--tg-die-edge),
+    inset 0 calc(var(--size) * -0.05) calc(var(--size) * 0.08) oklch(0.4 0.05 50 / 0.2),
+    0 calc(var(--size) * 0.05) 0 oklch(0.36 0.06 50 / 0.9),
+    0 calc(var(--size) * 0.1) calc(var(--size) * 0.14) oklch(0.35 0.06 50 / 0.3);
+}
+
+button.tg-die {
+  cursor: pointer;
+}
+
+button.tg-die:hover {
+  transform: translate(var(--dx, 0), calc(var(--dy, 0px) - 2px)) rotate(var(--rot, 0deg));
+}
+
+button.tg-die:focus-visible {
+  outline: 2px solid var(--tg-accent-strong);
+  outline-offset: 3px;
+}
+
+.tg-die > i {
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: calc(var(--size) * 0.19);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, color-mix(in oklch, var(--tg-pip) 70%, white), var(--tg-pip) 60%);
+  box-shadow: inset 0 1px 1px oklch(0 0 0 / 0.5);
+  display: none;
+}
+
+/* раскладка точек по граням */
+.tg-die[data-face="1"] > i:nth-child(1) { display: block; grid-area: e; max-width: calc(var(--size) * 0.24); background: radial-gradient(circle at 35% 30%, color-mix(in oklch, var(--tg-pip-one) 70%, white), var(--tg-pip-one) 60%); }
+.tg-die[data-face="2"] > i:nth-child(1) { display: block; grid-area: c; }
+.tg-die[data-face="2"] > i:nth-child(2) { display: block; grid-area: g; }
+.tg-die[data-face="3"] > i:nth-child(1) { display: block; grid-area: c; }
+.tg-die[data-face="3"] > i:nth-child(2) { display: block; grid-area: e; }
+.tg-die[data-face="3"] > i:nth-child(3) { display: block; grid-area: g; }
+.tg-die[data-face="4"] > i:nth-child(1) { display: block; grid-area: a; }
+.tg-die[data-face="4"] > i:nth-child(2) { display: block; grid-area: c; }
+.tg-die[data-face="4"] > i:nth-child(3) { display: block; grid-area: g; }
+.tg-die[data-face="4"] > i:nth-child(4) { display: block; grid-area: i; }
+.tg-die[data-face="5"] > i:nth-child(1) { display: block; grid-area: a; }
+.tg-die[data-face="5"] > i:nth-child(2) { display: block; grid-area: c; }
+.tg-die[data-face="5"] > i:nth-child(3) { display: block; grid-area: e; }
+.tg-die[data-face="5"] > i:nth-child(4) { display: block; grid-area: g; }
+.tg-die[data-face="5"] > i:nth-child(5) { display: block; grid-area: i; }
+.tg-die[data-face="6"] > i:nth-child(1) { display: block; grid-area: a; }
+.tg-die[data-face="6"] > i:nth-child(2) { display: block; grid-area: c; }
+.tg-die[data-face="6"] > i:nth-child(3) { display: block; grid-area: d; }
+.tg-die[data-face="6"] > i:nth-child(4) { display: block; grid-area: f; }
+.tg-die[data-face="6"] > i:nth-child(5) { display: block; grid-area: g; }
+.tg-die[data-face="6"] > i:nth-child(6) { display: block; grid-area: i; }
+
+.tg-die--sm { --size: 30px; }
+.tg-die--xs { --size: 20px; }
+.tg-die--lg { --size: 60px; }
+
+/* выбрана: поднята + латунное кольцо + галочка в углу */
+.tg-die.is-selected {
+  transform: translate(var(--dx, 0), calc(var(--dy, 0px) - 6px)) rotate(var(--rot, 0deg));
+  box-shadow:
+    0 0 0 2.5px var(--tg-accent-strong),
+    0 0 14px 2px var(--tg-accent-glow),
+    inset 0 calc(var(--size) * -0.05) calc(var(--size) * 0.08) oklch(0 0 0 / 0.18),
+    0 calc(var(--size) * 0.06) 0 var(--tg-die-edge),
+    0 calc(var(--size) * 0.2) calc(var(--size) * 0.2) oklch(0 0 0 / 0.35);
+}
+
+.tg-die.is-selected::after,
+.tg-die.is-reroll::after {
+  content: "\f00c";
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro";
+  font-weight: 900;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  background: var(--tg-accent-strong);
+  color: var(--tg-primary-ink);
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.4);
+}
+
+[data-tg-theme="parchment"] .tg-die.is-selected::after,
+[data-tg-theme="parchment"] .tg-die.is-reroll::after {
+  background: var(--tg-primary-top);
+  color: var(--tg-primary-ink);
+}
+
+.tg-die.is-reroll {
+  transform: translate(var(--dx, 0), calc(var(--dy, 0px) - 6px)) rotate(var(--rot, 0deg));
+  box-shadow:
+    0 0 0 2.5px var(--tg-accent-strong),
+    0 0 14px 2px var(--tg-accent-glow),
+    0 calc(var(--size) * 0.06) 0 var(--tg-die-edge);
+}
+
+.tg-die.is-reroll::after {
+  content: "\f2f9"; /* rotate-right */
+}
+
+.tg-die.is-spent {
+  opacity: 0.4;
+  filter: grayscale(0.7);
+}
+
+.tg-die.is-scoring {
+  box-shadow:
+    0 0 0 2px var(--tg-success),
+    inset 0 calc(var(--size) * -0.05) calc(var(--size) * 0.08) oklch(0 0 0 / 0.18),
+    0 calc(var(--size) * 0.06) 0 var(--tg-die-edge),
+    0 calc(var(--size) * 0.12) calc(var(--size) * 0.16) oklch(0 0 0 / 0.35);
+}
+
+.tg-die.is-ghost {
+  opacity: 0.42;
+  box-shadow: 0 0 0 1.5px var(--tg-felt-ink-2);
+  background: transparent;
+}
+
+.tg-die.is-rolling {
+  animation: tg-tumble 0.62s var(--tg-ease) both;
+}
+
+.tg-die.is-knocked {
+  animation: tg-knock 0.55s var(--tg-ease-in) forwards;
+  pointer-events: none;
+}
+
+.tg-die.is-landed {
+  animation: tg-land 0.34s var(--tg-ease);
+}
+
+/* лунка для кости (кнаклбоунс, слоты) */
+.tg-well {
+  width: calc(var(--tg-die) + 10px);
+  height: calc(var(--tg-die) + 10px);
+  border-radius: calc(var(--tg-die) * 0.28);
+  display: grid;
+  place-items: center;
+  background: var(--tg-felt-well);
+  box-shadow: inset 0 2px 5px oklch(0 0 0 / 0.35);
+}
+
+[data-tg-theme="parchment"] .tg-well {
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft), inset 0 2px 4px oklch(0.4 0.06 50 / 0.18);
+}
+
+/* ---------- 10. Многогранники (к4–к20) ---------- */
+
+.tg-poly {
+  --size: 56px;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  border: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  flex: none;
+  cursor: pointer;
+  color: var(--tg-pip);
+  transition: transform var(--tg-dur) var(--tg-ease), opacity var(--tg-dur) var(--tg-ease), filter var(--tg-dur) var(--tg-ease);
+}
+
+.tg-poly svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 3px 0 var(--tg-die-edge)) drop-shadow(0 6px 6px oklch(0 0 0 / 0.3));
+}
+
+.tg-poly .face {
+  fill: var(--tg-poly-fill, var(--tg-die-face));
+  stroke: var(--tg-die-edge);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.tg-poly .facet {
+  fill: none;
+  stroke: var(--tg-die-edge);
+  stroke-width: 0.8;
+  opacity: 0.55;
+}
+
+.tg-poly__num {
+  position: relative;
+  font-family: var(--tg-font-display);
+  font-weight: 700;
+  font-size: calc(var(--size) * 0.34);
+  line-height: 1;
+}
+
+.tg-poly__cap {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  translate: -50% 0;
+  font-size: var(--tg-fs-12);
+  font-weight: 700;
+  color: var(--tg-felt-ink-2);
+  white-space: nowrap;
+}
+
+.tg-poly:hover:not(:disabled) {
+  transform: translateY(-3px);
+}
+
+.tg-poly:focus-visible {
+  outline: 2px solid var(--tg-accent-strong);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.tg-poly:disabled,
+.tg-poly.is-spent {
+  cursor: default;
+  opacity: 0.35;
+  filter: grayscale(0.8);
+}
+
+/* не свой ход: кубик на месте, просто не нажимается */
+.tg-poly:disabled:not(.is-spent) {
+  opacity: 0.7;
+  filter: none;
+}
+
+.tg-poly.is-rolling {
+  animation: tg-tumble 0.62s var(--tg-ease) both;
+}
+
+.tg-poly--sm {
+  --size: 30px;
+}
+
+.tg-poly--sm .tg-poly__num {
+  font-size: 12px;
+}
+
+/* ---------- 11. Кнопки и поля ---------- */
+
+.tg-btn {
+  --btn-h: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tg-s2);
+  height: var(--btn-h);
+  padding: 0 var(--tg-s4);
+  margin: 0;
+  width: auto;
+  flex: 0 0 auto;
+  border-radius: var(--tg-r-s);
+  border: 1px solid var(--tg-line);
+  background: var(--tg-surface);
+  color: var(--tg-ink);
+  font-family: var(--tg-font-ui);
+  font-size: var(--tg-fs-15);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.05) inset, 0 1px 2px oklch(0 0 0 / 0.2);
+  transition: background-color var(--tg-dur-fast) var(--tg-ease), border-color var(--tg-dur-fast) var(--tg-ease), transform var(--tg-dur-fast) var(--tg-ease), box-shadow var(--tg-dur-fast) var(--tg-ease);
+}
+
+.tg-btn:hover:not(:disabled) {
+  background: var(--tg-surface-hover);
+  border-color: var(--tg-accent);
+}
+
+.tg-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.tg-btn:focus-visible {
+  outline: 2px solid var(--tg-accent-strong);
+  outline-offset: 2px;
+}
+
+.tg-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.tg-btn i {
+  font-size: 0.9em;
+}
+
+.tg-btn__sub {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.tg-btn--primary {
+  --btn-h: 42px;
+  padding: 0 var(--tg-s5);
+  border: 1px solid var(--tg-primary-edge);
+  background: linear-gradient(180deg, var(--tg-primary-top), var(--tg-primary-bottom));
+  color: var(--tg-primary-ink);
+  font-size: var(--tg-fs-17);
+  text-shadow: 0 1px 0 oklch(1 0 0 / 0.25);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.45),
+    inset 0 -2px 0 oklch(0 0 0 / 0.15),
+    0 2px 0 var(--tg-primary-edge),
+    0 5px 12px -3px oklch(0 0 0 / 0.45);
+}
+
+[data-tg-theme="parchment"] .tg-btn--primary {
+  text-shadow: 0 1px 0 oklch(0 0 0 / 0.3);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.25),
+    inset 0 0 0 2px oklch(0.62 0.12 76 / 0.55),
+    0 2px 0 var(--tg-primary-edge),
+    0 5px 12px -4px oklch(0.3 0.08 30 / 0.5);
+}
+
+.tg-btn--primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, var(--tg-primary-top), var(--tg-primary-top));
+  border-color: var(--tg-primary-edge);
+  filter: brightness(1.05);
+}
+
+.tg-btn--danger {
+  color: var(--tg-danger);
+  border-color: color-mix(in oklch, var(--tg-danger) 55%, transparent);
+}
+
+.tg-btn--danger:hover:not(:disabled) {
+  background: var(--tg-danger-soft);
+  border-color: var(--tg-danger);
+}
+
+.tg-btn--ghost {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  color: var(--tg-ink-2);
+}
+
+.tg-btn--ghost:hover:not(:disabled) {
+  background: var(--tg-line-soft);
+  border-color: transparent;
+  color: var(--tg-ink);
+}
+
+.tg-btn--sm {
+  --btn-h: 28px;
+  padding: 0 var(--tg-s3);
+  font-size: var(--tg-fs-12);
+}
+
+.tg-iconbtn {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  margin: 0;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--tg-line);
+  background: var(--tg-surface);
+  color: var(--tg-ink-2);
+  cursor: pointer;
+  transition: background-color var(--tg-dur-fast) var(--tg-ease), color var(--tg-dur-fast) var(--tg-ease);
+}
+
+.tg-iconbtn:hover {
+  background: var(--tg-surface-hover);
+  color: var(--tg-ink);
+}
+
+.tg-iconbtn:focus-visible {
+  outline: 2px solid var(--tg-accent-strong);
+  outline-offset: 2px;
+}
+
+/* Панель действий игрока */
+.tg-actionbar {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s3);
+  flex-wrap: wrap;
+}
+
+.tg-actionbar__me {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s3);
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.tg-actionbar__buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s2);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.tg-status {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.tg-status__main {
+  font-weight: 700;
+  font-size: var(--tg-fs-15);
+  color: var(--tg-ink);
+}
+
+.tg-status__sub {
+  font-size: var(--tg-fs-12);
+  color: var(--tg-ink-3);
+}
+
+/* Сегментный переключатель */
+.tg-seg {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: var(--tg-r-s);
+  background: var(--tg-bg-deep);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+}
+
+[data-tg-theme="parchment"] .tg-seg {
+  background: oklch(0.8 0.06 76 / 0.6);
+}
+
+.tg-seg button {
+  height: 26px;
+  padding: 0 10px;
+  margin: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--tg-ink-3);
+  font: 500 var(--tg-fs-12) / 1 var(--tg-font-ui);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  width: auto;
+  flex: none;
+}
+
+.tg-seg button[aria-pressed="true"] {
+  background: var(--tg-surface-2);
+  color: var(--tg-ink);
+  font-weight: 700;
+  box-shadow: 0 1px 2px oklch(0 0 0 / 0.3), inset 0 0 0 1px var(--tg-line-soft);
+}
+
+[data-tg-theme="parchment"] .tg-seg button[aria-pressed="true"] {
+  background: var(--tg-surface);
+}
+
+/* Счётчик (ставка, количество) */
+.tg-stepper {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--tg-r-s);
+  background: var(--tg-bg-deep);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+}
+
+[data-tg-theme="parchment"] .tg-stepper {
+  background: oklch(0.92 0.035 86);
+}
+
+.tg-stepper button {
+  width: 32px;
+  height: 36px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tg-ink-2);
+  cursor: pointer;
+  flex: none;
+}
+
+.tg-stepper button:hover {
+  color: var(--tg-ink);
+}
+
+.tg-stepper output {
+  min-width: 30px;
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--tg-fs-20);
+  color: var(--tg-ink);
+}
+
+/* Поля ввода */
+.tg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tg-field > .tg-seg {
+  align-self: flex-start;
+}
+
+.tg-field > span {
+  font-size: var(--tg-fs-12);
+  color: var(--tg-ink-3);
+  font-weight: 500;
+}
+
+.tg-input,
+.tg-select {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--tg-r-s);
+  border: 1px solid var(--tg-line);
+  background: var(--tg-bg-deep);
+  color: var(--tg-ink);
+  font: 500 var(--tg-fs-14) / 1 var(--tg-font-ui);
+  width: 100%;
+  min-width: 0;
+}
+
+[data-tg-theme="parchment"] .tg-input,
+[data-tg-theme="parchment"] .tg-select {
+  background: oklch(0.93 0.03 88);
+}
+
+.tg-input::placeholder {
+  color: var(--tg-ink-3);
+}
+
+.tg-input:focus-visible,
+.tg-select:focus-visible {
+  outline: 2px solid var(--tg-accent);
+  outline-offset: 0;
+}
+
+.tg-check {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s2);
+  font-size: var(--tg-fs-14);
+  color: var(--tg-ink-2);
+  cursor: pointer;
+}
+
+.tg-check input {
+  accent-color: var(--tg-accent-strong);
+  margin: 0;
+  flex: none;
+}
+
+/* ---------- 12. Журнал партии ---------- */
+
+.tg-log {
+  border-radius: var(--tg-r-m);
+  background: var(--tg-bg-deep);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+}
+
+[data-tg-theme="parchment"] .tg-log {
+  background: oklch(0.91 0.035 86 / 0.6);
+}
+
+.tg-log > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s2);
+  padding: var(--tg-s2) var(--tg-s3);
+  cursor: pointer;
+  color: var(--tg-ink-2);
+  font-size: var(--tg-fs-12);
+  min-width: 0;
+}
+
+.tg-log > summary::-webkit-details-marker {
+  display: none;
+}
+
+.tg-log > summary .tg-log__last {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--tg-ink);
+  font-size: var(--tg-fs-14);
+}
+
+.tg-log > summary .tg-log__count {
+  color: var(--tg-ink-3);
+  white-space: nowrap;
+}
+
+.tg-log > summary .fa-chevron-down {
+  transition: transform var(--tg-dur) var(--tg-ease);
+}
+
+.tg-log[open] > summary .fa-chevron-down {
+  transform: rotate(180deg);
+}
+
+.tg-log ol {
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--tg-s3) var(--tg-s2);
+  max-height: 150px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.tg-log li {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s2);
+  padding: 5px 0;
+  border-top: 1px solid var(--tg-line-soft);
+  font-size: var(--tg-fs-14);
+  color: var(--tg-ink-2);
+}
+
+[data-tg-theme="parchment"] .tg-log li {
+  font-family: var(--tg-font-prose);
+  font-size: var(--tg-fs-15);
+}
+
+.tg-log li b {
+  color: var(--tg-ink);
+}
+
+.tg-log .tg-die {
+  --size: 18px;
+  padding: 3px;
+  display: inline-grid;
+  vertical-align: middle;
+  margin: -2px 1px 0;
+}
+
+.tg-log li time {
+  margin-left: auto;
+  font-size: var(--tg-fs-11);
+  color: var(--tg-ink-3);
+}
+
+/* ---------- 13. Полоса ведущего ---------- */
+
+.tg-gm {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s2);
+  flex-wrap: wrap;
+  padding-top: var(--tg-s3);
+  border-top: 1px dashed var(--tg-line);
+}
+
+.tg-gm__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--tg-fs-12);
+  font-weight: 700;
+  color: var(--tg-ink-3);
+  margin-right: var(--tg-s1);
+}
+
+.tg-gm .tg-btn {
+  --btn-h: 28px;
+  padding: 0 10px;
+  font-size: var(--tg-fs-12);
+  font-weight: 500;
+}
+
+.tg-gm .tg-spacer {
+  flex: 1;
+}
+
+/* ---------- 14. Общие мелочи ---------- */
+
+.tavern-games [hidden] {
+  display: none !important;
+}
+
+.tg-row {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s2);
+}
+
+.tg-spacer {
+  flex: 1;
+}
+
+.tg-muted {
+  color: var(--tg-ink-3);
+}
+
+.tg-sep {
+  height: 1px;
+  background: var(--tg-line-soft);
+  border: 0;
+  margin: 0;
+}
+
+.tg-score-pop {
+  position: absolute;
+  font-family: var(--tg-font-display);
+  font-weight: 700;
+  font-size: var(--tg-fs-20);
+  color: var(--tg-accent-strong);
+  text-shadow: 0 2px 4px oklch(0 0 0 / 0.5);
+  pointer-events: none;
+  animation: tg-pop 0.9s var(--tg-ease) forwards;
+  z-index: var(--tg-z-pop);
+}
+
+[data-tg-theme="parchment"] .tg-score-pop {
+  color: var(--tg-primary-top);
+  text-shadow: none;
+}
+
+.tg-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* =========================================================================
+   ИГРЫ
+   ========================================================================= */
+
+/* ---------- Кости (Farkle) ---------- */
+
+.tg-farkle__field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--tg-s4);
+  align-items: stretch;
+}
+
+.tg-farkle__throw {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--tg-s3);
+  min-height: 150px;
+}
+
+.tg-tray {
+  width: 128px;
+  border-radius: var(--tg-r-m);
+  padding: var(--tg-s2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--tg-s2);
+}
+
+[data-tg-theme="tavern"] .tg-tray {
+  background:
+    linear-gradient(180deg, oklch(0 0 0 / 0.35), oklch(0 0 0 / 0.18)),
+    var(--tg-grain) 0 0 / 600px 140px,
+    var(--tg-rim-2);
+  box-shadow: inset 0 3px 8px oklch(0 0 0 / 0.55), 0 1px 0 oklch(1 0 0 / 0.08);
+}
+
+[data-tg-theme="parchment"] .tg-tray {
+  background: oklch(0.36 0.06 50 / 0.07);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+}
+
+.tg-tray__label {
+  font-size: var(--tg-fs-11);
+  color: var(--tg-felt-ink-2);
+  font-weight: 700;
+}
+
+[data-tg-theme="tavern"] .tg-tray__label {
+  color: var(--tg-ink-2);
+}
+
+.tg-tray__dice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 30px;
+}
+
+.tg-tray__sum {
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: var(--tg-fs-12);
+  color: var(--tg-ink-2);
+}
+
+[data-tg-theme="parchment"] .tg-tray__sum {
+  color: var(--tg-ink-2);
+}
+
+.tg-tray__sum b {
+  font-size: var(--tg-fs-24);
+  font-family: var(--tg-font-display);
+  color: var(--tg-ink);
+}
+
+.tg-selection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--tg-s2);
+  min-height: 24px;
+  font-size: var(--tg-fs-14);
+  color: var(--tg-felt-ink-2);
+}
+
+.tg-selection b {
+  color: var(--tg-felt-ink);
+  font-size: var(--tg-fs-17);
+}
+
+.tg-selection.is-invalid {
+  color: var(--tg-danger);
+}
+
+[data-tg-theme="tavern"] .tg-selection.is-invalid {
+  color: oklch(0.85 0.1 40);
+}
+
+/* ---------- Кости лжеца ---------- */
+
+.tg-liars__opps {
+  display: flex;
+  justify-content: space-around;
+  gap: var(--tg-s3);
+  flex-wrap: wrap;
+}
+
+.tg-cupseat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 100px;
+}
+
+.tg-cup {
+  position: relative;
+  width: 58px;
+  height: 52px;
+  transition: transform var(--tg-dur-slow) var(--tg-ease);
+}
+
+.tg-cup::before {
+  content: "";
+  position: absolute;
+  inset: 6px 0 0;
+  clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%);
+  border-radius: 4px;
+  background:
+    linear-gradient(90deg, oklch(0 0 0 / 0.35), transparent 30%, oklch(1 0 0 / 0.1) 55%, oklch(0 0 0 / 0.3)),
+    repeating-linear-gradient(0deg, transparent 0 9px, oklch(0 0 0 / 0.25) 9px 10px),
+    oklch(0.36 0.07 40);
+}
+
+.tg-cup::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  top: 0;
+  height: 12px;
+  border-radius: 50%;
+  background: oklch(0.44 0.075 45);
+  box-shadow: inset 0 -2px 3px oklch(0 0 0 / 0.4);
+}
+
+[data-tg-theme="parchment"] .tg-cup::before {
+  background:
+    linear-gradient(90deg, oklch(0 0 0 / 0.3), transparent 30%, oklch(1 0 0 / 0.12) 55%, oklch(0 0 0 / 0.25)),
+    oklch(0.34 0.08 30);
+}
+
+.tg-cup__count {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  translate: -50% 0;
+  z-index: var(--tg-z-raised);
+  font-weight: 700;
+  font-size: var(--tg-fs-14);
+  color: oklch(0.93 0.05 85);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.tg-cupseat .tg-portrait {
+  --tg-portrait: 34px;
+}
+
+.tg-cupseat__name {
+  font-family: var(--tg-font-display);
+  font-weight: 700;
+  font-size: var(--tg-fs-14);
+  color: var(--tg-felt-ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tg-cupseat__dice-left {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.tg-cupseat__dice-left i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--tg-die-face);
+  box-shadow: 0 1px 0 var(--tg-die-edge);
+}
+
+.tg-cupseat__dice-left i.lost {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--tg-felt-ink-2);
+  opacity: 0.6;
+}
+
+.tg-cupseat.is-turn .tg-cupseat__name::before {
+  content: "\f0da";
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro";
+  font-weight: 900;
+  color: var(--tg-accent-strong);
+}
+
+[data-tg-theme="parchment"] .tg-cupseat.is-turn .tg-cupseat__name::before {
+  color: var(--tg-primary-top);
+}
+
+/* ставка — пузырь речи над игроком */
+.tg-bid-bubble {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--tg-die-face);
+  color: var(--tg-pip);
+  font-weight: 700;
+  font-size: var(--tg-fs-14);
+  box-shadow: 0 2px 0 var(--tg-die-edge), 0 4px 8px oklch(0 0 0 / 0.3);
+  white-space: nowrap;
+}
+
+.tg-bid-bubble .tg-die {
+  --size: 18px;
+  padding: 3px;
+  box-shadow: inset 0 0 0 1px var(--tg-die-edge);
+}
+
+.tg-bid-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  translate: -50% 0;
+  border: 6px solid transparent;
+  border-bottom: 0;
+  border-top-color: var(--tg-die-face);
+}
+
+.tg-bid-bubble--old {
+  opacity: 0.55;
+  box-shadow: none;
+  font-weight: 500;
+}
+
+.tg-liars__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--tg-s3) 0;
+}
+
+.tg-liars__bid {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s3);
+  font-family: var(--tg-font-display);
+  font-weight: 700;
+  font-size: var(--tg-fs-32);
+  line-height: 1;
+}
+
+.tg-liars__bid .tg-die {
+  --size: 40px;
+}
+
+.tg-liars__mine {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--tg-s4);
+  padding-top: var(--tg-s2);
+}
+
+.tg-liars__mine .tg-cup {
+  transform: translateY(-18px) rotate(-14deg);
+  opacity: 0.9;
+}
+
+.tg-liars__mine-dice {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--tg-r-m);
+  background: var(--tg-felt-well);
+}
+
+.tg-private {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--tg-fs-11);
+  color: var(--tg-felt-ink-2);
+}
+
+.tg-facepick {
+  display: inline-flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: var(--tg-r-s);
+  background: var(--tg-bg-deep);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+}
+
+[data-tg-theme="parchment"] .tg-facepick {
+  background: oklch(0.92 0.035 86);
+}
+
+.tg-facepick .tg-die {
+  --size: 28px;
+  opacity: 0.6;
+}
+
+.tg-facepick .tg-die[aria-pressed="true"] {
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 2px var(--tg-accent-strong), 0 2px 0 var(--tg-die-edge);
+}
+
+.tg-facepick .tg-die:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.tg-liars__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tg-s2);
+}
+
+.tg-bidbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tg-s2) var(--tg-s3);
+}
+
+.tg-bidbar__label {
+  font-size: var(--tg-fs-12);
+  font-weight: 700;
+  color: var(--tg-ink-3);
+}
+
+.tg-bidbar__label.is-invalid {
+  color: var(--tg-danger);
+}
+
+.tg-bidbar > .tg-btn--primary {
+  margin-left: auto;
+}
+
+.tg-bidbar--answer {
+  justify-content: flex-end;
+}
+
+.tg-bidbar__hint {
+  font-size: var(--tg-fs-12);
+  color: var(--tg-ink-3);
+  margin-right: auto;
+}
+
+/* вскрытие */
+.tg-liars.is-reveal .tg-cupseat .tg-cup {
+  transform: translateY(-26px) rotate(-10deg);
+  opacity: 0.35;
+}
+
+.tg-reveal-dice {
+  display: none;
+  gap: 4px;
+  margin-top: -26px;
+}
+
+.tg-liars.is-reveal .tg-reveal-dice {
+  display: flex;
+}
+
+.tg-liars.is-reveal .tg-cup__count {
+  display: none;
+}
+
+.tg-reveal-dice .tg-die {
+  --size: 22px;
+  padding: 4px;
+}
+
+.tg-liars.is-reveal .tg-die.is-match {
+  box-shadow: 0 0 0 2px var(--tg-accent-strong), 0 0 10px var(--tg-accent-glow);
+}
+
+.tg-liars.is-reveal .tg-reveal-dice .tg-die:not(.is-match),
+.tg-liars.is-reveal .tg-liars__mine-dice .tg-die:not(.is-match) {
+  opacity: 0.45;
+}
+
+/* ведущий заглянул под стаканчик: кости видны, стаканчик на месте */
+.tg-cupseat.is-peek .tg-reveal-dice {
+  display: flex;
+  margin-top: 2px;
+}
+
+.tg-cupseat.is-out {
+  opacity: 0.5;
+}
+
+.tg-cupseat.is-out .tg-portrait img {
+  filter: grayscale(1);
+}
+
+.tg-verdict {
+  display: none;
+  align-items: center;
+  gap: var(--tg-s2);
+  font-size: var(--tg-fs-15);
+  font-weight: 700;
+}
+
+.tg-liars.is-reveal .tg-verdict {
+  display: flex;
+}
+
+.tg-liars.is-reveal .tg-liars__controls {
+  display: none;
+}
+
+/* ---------- Кнаклбоунс ---------- */
+
+.tg-kb {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--tg-s4);
+  align-items: center;
+}
+
+.tg-kb__boards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tg-s2);
+}
+
+.tg-kb__board {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 10px;
+}
+
+.tg-kb__col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+  border-radius: calc(var(--tg-die) * 0.3);
+  border: 0;
+  margin: 0;
+  background: transparent;
+  transition: background-color var(--tg-dur-fast) var(--tg-ease), box-shadow var(--tg-dur-fast) var(--tg-ease);
+}
+
+.tg-kb__board--opp .tg-kb__col {
+  flex-direction: column-reverse; /* кости растут к центру стола */
+}
+
+button.tg-kb__col {
+  cursor: pointer;
+}
+
+button.tg-kb__col:hover,
+button.tg-kb__col:focus-visible {
+  background: var(--tg-accent-soft);
+  box-shadow: inset 0 0 0 1.5px var(--tg-accent);
+  outline: none;
+}
+
+button.tg-kb__col:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.tg-kb__col .tg-well {
+  --tg-die: 44px;
+}
+
+.tg-kb__col .tg-die {
+  --size: 44px;
+}
+
+.tg-kb__col .tg-die.m2 {
+  box-shadow: 0 0 0 2px var(--tg-mult-2), 0 calc(var(--size) * 0.06) 0 var(--tg-die-edge);
+}
+
+.tg-kb__col .tg-die.m3 {
+  box-shadow: 0 0 0 2.5px var(--tg-mult-3), 0 0 10px var(--tg-mult-3), 0 calc(var(--size) * 0.06) 0 var(--tg-die-edge);
+}
+
+.tg-kb__col .tg-die.is-threat {
+  animation: tg-shake 0.5s var(--tg-ease) infinite;
+  box-shadow: 0 0 0 2.5px var(--tg-danger), 0 calc(var(--size) * 0.06) 0 var(--tg-die-edge);
+}
+
+.tg-kb__colscores {
+  display: grid;
+  grid-template-columns: repeat(3, 66px);
+  gap: 10px;
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--tg-fs-15);
+  color: var(--tg-felt-ink);
+}
+
+.tg-kb__colscores span {
+  display: inline-flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.tg-kb__colscores small {
+  font-size: var(--tg-fs-11);
+  font-weight: 700;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--tg-mult-2);
+  color: var(--tg-primary-ink);
+}
+
+.tg-kb__colscores small.x3 {
+  background: var(--tg-mult-3);
+  color: oklch(0.97 0.02 85);
+}
+
+.tg-kb__divider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s2);
+  color: var(--tg-felt-ink-2);
+  font-size: var(--tg-fs-12);
+  font-weight: 700;
+}
+
+.tg-kb__divider::before,
+.tg-kb__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+.tg-kb__side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  gap: var(--tg-s3);
+  min-width: 104px;
+}
+
+.tg-kb__total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.tg-kb__total .tg-felt__big {
+  font-size: 36px;
+}
+
+.tg-kb__total .tg-seat__name {
+  color: var(--tg-felt-ink);
+  font-size: var(--tg-fs-14);
+}
+
+.tg-kb__plate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  justify-content: center;
+  background:
+    radial-gradient(circle, oklch(0.5 0.05 60 / 0.25), oklch(0.2 0.03 60 / 0.4));
+  box-shadow: inset 0 2px 8px oklch(0 0 0 / 0.5), 0 0 0 1px oklch(1 0 0 / 0.08);
+}
+
+[data-tg-theme="parchment"] .tg-kb__plate {
+  background: radial-gradient(circle, oklch(0.94 0.03 88), oklch(0.84 0.05 78));
+  box-shadow: inset 0 0 0 1.5px var(--tg-ink-2), inset 0 0 0 4px transparent, inset 0 0 0 5px var(--tg-accent);
+}
+
+.tg-kb__plate .tg-felt__label {
+  font-size: var(--tg-fs-11);
+}
+
+/* ---------- Покер на костях ---------- */
+
+.tg-poker__opp-hand {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tg-poker__opp-hand .tg-die {
+  --size: 22px;
+  padding: 4px;
+}
+
+.tg-poker__hand-name {
+  font-family: var(--tg-font-display);
+  font-weight: 700;
+  font-size: var(--tg-fs-24);
+  text-align: center;
+  line-height: 1.1;
+}
+
+.tg-poker__hand-name small {
+  display: block;
+  font-family: var(--tg-font-ui);
+  font-weight: 500;
+  font-size: var(--tg-fs-12);
+  color: var(--tg-felt-ink-2);
+}
+
+.tg-ladder {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 10px;
+  font-size: var(--tg-fs-11);
+  color: var(--tg-felt-ink-2);
+}
+
+.tg-ladder span.on {
+  color: var(--tg-felt-ink);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tg-betline {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s3);
+  flex-wrap: wrap;
+  padding: var(--tg-s2) var(--tg-s3);
+  border-radius: var(--tg-r-m);
+  background: var(--tg-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+}
+
+.tg-betline__text {
+  flex: 1 1 180px;
+  font-size: var(--tg-fs-14);
+  color: var(--tg-ink-2);
+}
+
+.tg-betline__text b {
+  color: var(--tg-ink);
+}
+
+/* ---------- Двадцать одно ---------- */
+
+.tg-21__hand {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s4);
+}
+
+.tg-21__hand > :first-child {
+  flex: 1;
+}
+
+.tg-21__rolled {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+  min-height: 60px;
+  align-items: center;
+}
+
+.tg-21__rolled .tg-poly {
+  --size: 44px;
+  cursor: default;
+}
+
+.tg-21__total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 132px;
+}
+
+.tg-21__total .tg-felt__big {
+  font-size: 44px;
+}
+
+.tg-21__total .tg-felt__big small {
+  font-size: var(--tg-fs-17);
+  color: var(--tg-felt-ink-2);
+}
+
+.tg-track {
+  position: relative;
+  width: 132px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--tg-felt-well);
+  box-shadow: inset 0 1px 2px oklch(0 0 0 / 0.35);
+}
+
+.tg-track i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--p, 0) * 100%);
+  border-radius: inherit;
+  background: var(--tg-accent);
+  transition: width var(--tg-dur-slow) var(--tg-ease);
+}
+
+.tg-track.is-bust i {
+  background: var(--tg-danger);
+}
+
+.tg-21__pool {
+  display: flex;
+  justify-content: center;
+  gap: var(--tg-s4);
+  flex-wrap: wrap;
+  padding: var(--tg-s2) 0 var(--tg-s5);
+}
+
+.tg-21__opp-dice {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tg-bust-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border: 2px solid var(--tg-danger);
+  border-radius: 4px;
+  color: var(--tg-danger);
+  font-weight: 700;
+  font-size: var(--tg-fs-12);
+  transform: rotate(-4deg);
+}
+
+/* ---------- Корабль, капитан и команда ---------- */
+
+.tg-scc__slots {
+  display: flex;
+  justify-content: center;
+  gap: var(--tg-s4);
+  flex-wrap: wrap;
+}
+
+.tg-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.tg-slot .tg-well {
+  position: relative;
+}
+
+.tg-slot__need {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--tg-felt-ink-2);
+  opacity: 0.8;
+  font-size: 22px;
+}
+
+.tg-slot__name {
+  font-size: var(--tg-fs-12);
+  font-weight: 700;
+  color: var(--tg-felt-ink-2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tg-slot.is-filled .tg-slot__name {
+  color: var(--tg-felt-ink);
+}
+
+.tg-scc__cargo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tg-s3);
+  padding: 10px 16px;
+  border-radius: var(--tg-r-m);
+  border: 1.5px dashed color-mix(in oklch, var(--tg-felt-ink-2) 60%, transparent);
+}
+
+.tg-scc__cargo.is-locked {
+  border-style: solid;
+  opacity: 0.55;
+}
+
+.tg-rolls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--tg-fs-12);
+  color: var(--tg-felt-ink-2);
+}
+
+/* ---------- Лобби (панель ведущего) ---------- */
+
+.tg-lobby {
+  display: grid;
+  grid-template-columns: minmax(200px, 250px) 1fr;
+  gap: var(--tg-s4);
+  min-height: 360px;
+}
+
+.tg-gamelist {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tg-gamelist button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  column-gap: 10px;
+  text-align: left;
+  padding: 8px 10px;
+  margin: 0;
+  border: 0;
+  border-radius: var(--tg-r-s);
+  background: transparent;
+  color: var(--tg-ink);
+  cursor: pointer;
+  font-family: var(--tg-font-ui);
+  transition: background-color var(--tg-dur-fast) var(--tg-ease);
+}
+
+.tg-gamelist button:hover {
+  background: var(--tg-line-soft);
+}
+
+.tg-gamelist button[aria-selected="true"] {
+  background: var(--tg-surface-2);
+  box-shadow: inset 0 0 0 1px var(--tg-accent);
+}
+
+.tg-gamelist__icon {
+  grid-row: span 2;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  color: var(--tg-accent-strong);
+  background: var(--tg-bg-deep);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+}
+
+[data-tg-theme="parchment"] .tg-gamelist__icon {
+  color: var(--tg-primary-top);
+  background: oklch(0.92 0.035 86);
+}
+
+.tg-gamelist__name {
+  font-weight: 700;
+  font-size: var(--tg-fs-15);
+}
+
+.tg-gamelist__meta {
+  font-size: var(--tg-fs-11);
+  color: var(--tg-ink-3);
+}
+
+.tg-lobby__section-title {
+  font-family: var(--tg-font-display);
+  font-size: var(--tg-fs-17);
+  font-weight: 700;
+  margin: 0 0 var(--tg-s2);
+  color: var(--tg-ink);
+}
+
+.tg-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tg-s3);
+}
+
+.tg-detail .tg-felt {
+  min-height: 132px;
+  display: grid;
+  place-items: center;
+}
+
+.tg-detail__text {
+  font-family: var(--tg-font-prose);
+  font-size: var(--tg-fs-15);
+  line-height: 1.5;
+  color: var(--tg-ink-2);
+  max-width: 62ch;
+  text-wrap: pretty;
+  margin: 0;
+}
+
+.tg-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tg-s2);
+}
+
+.tg-live {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tg-live__row {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s3);
+  padding: 8px 10px;
+  border-radius: var(--tg-r-s);
+  background: var(--tg-surface);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+}
+
+.tg-live__faces {
+  display: flex;
+}
+
+.tg-live__faces .tg-portrait {
+  --tg-portrait: 24px;
+  margin-left: -6px;
+  box-shadow: 0 0 0 2px var(--tg-surface);
+}
+
+.tg-live__faces .tg-portrait:first-child {
+  margin-left: 0;
+}
+
+.tg-live__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.tg-live__info b {
+  font-size: var(--tg-fs-14);
+}
+
+.tg-live__info span {
+  font-size: var(--tg-fs-12);
+  color: var(--tg-ink-3);
+}
+
+/* ---------- Окно посадки ---------- */
+
+.tg-seating {
+  display: grid;
+  grid-template-columns: minmax(230px, 1fr) minmax(280px, 1.25fr);
+  gap: var(--tg-s4);
+}
+
+.tg-pane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tg-s2);
+  min-width: 0;
+}
+
+.tg-pane__title {
+  color: var(--tg-ink);
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s2);
+  font-family: var(--tg-font-display);
+  font-size: var(--tg-fs-17);
+  font-weight: 700;
+  margin: 0;
+}
+
+.tg-pane__title .tg-chip {
+  font-family: var(--tg-font-ui);
+}
+
+.tg-pick {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tg-pick__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: var(--tg-r-s);
+  cursor: pointer;
+  transition: background-color var(--tg-dur-fast) var(--tg-ease);
+}
+
+.tg-pick__item:hover {
+  background: var(--tg-line-soft);
+}
+
+.tg-pick__item .tg-portrait {
+  --tg-portrait: 30px;
+}
+
+.tg-pick__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.tg-pick__text b {
+  font-size: var(--tg-fs-14);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tg-pick__text span {
+  font-size: var(--tg-fs-11);
+  color: var(--tg-ink-3);
+}
+
+.tg-pick__add {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--tg-line);
+  color: var(--tg-ink-2);
+  font-size: 11px;
+  flex: none;
+}
+
+.tg-pick__item:hover .tg-pick__add {
+  background: var(--tg-accent);
+  border-color: var(--tg-accent);
+  color: var(--tg-primary-ink);
+}
+
+.tg-pick__item.is-seated {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.tg-pick__item.is-seated .tg-pick__add {
+  border-color: transparent;
+}
+
+.tg-pick__item.is-selected-token {
+  box-shadow: inset 0 0 0 1px var(--tg-accent);
+}
+
+.tg-searchrow {
+  display: flex;
+  gap: var(--tg-s2);
+}
+
+.tg-searchrow .tg-input {
+  flex: 1;
+}
+
+.tg-seatlist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: seat;
+}
+
+.tg-seatrow {
+  counter-increment: seat;
+  display: grid;
+  grid-template-columns: 16px 20px auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: var(--tg-r-s);
+  background: var(--tg-surface);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+  animation: tg-in var(--tg-dur) var(--tg-ease);
+}
+
+.tg-seatrow__grip {
+  color: var(--tg-ink-3);
+  cursor: grab;
+  font-size: 12px;
+}
+
+.tg-seatrow::before {
+  content: counter(seat);
+  grid-column: 2;
+  grid-row: 1;
+  font-weight: 700;
+  font-size: var(--tg-fs-12);
+  color: var(--tg-ink-3);
+  text-align: center;
+}
+
+.tg-seatrow__grip {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.tg-seatrow .tg-portrait {
+  --tg-portrait: 32px;
+}
+
+.tg-seatrow__main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tg-seatrow__name {
+  font-weight: 700;
+  font-size: var(--tg-fs-14);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.tg-seatrow__name span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tg-seatrow__controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tg-seatrow__controls .tg-select {
+  height: 26px;
+  width: auto;
+  font-size: var(--tg-fs-12);
+  padding: 0 6px;
+}
+
+.tg-seatrow__remove {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: var(--tg-ink-3);
+  cursor: pointer;
+  flex: none;
+}
+
+.tg-seatrow__remove:hover {
+  background: var(--tg-danger-soft);
+  color: var(--tg-danger);
+}
+
+.tg-empty {
+  padding: var(--tg-s4);
+  border-radius: var(--tg-r-m);
+  border: 1.5px dashed var(--tg-line);
+  color: var(--tg-ink-3);
+  font-size: var(--tg-fs-14);
+  text-align: center;
+}
+
+.tg-dropzone {
+  padding: 10px;
+  border-radius: var(--tg-r-s);
+  border: 1.5px dashed var(--tg-line);
+  color: var(--tg-ink-3);
+  font-size: var(--tg-fs-12);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tg-settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--tg-s3);
+  padding: var(--tg-s3);
+  border-radius: var(--tg-r-m);
+  background: var(--tg-bg-deep);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+}
+
+[data-tg-theme="parchment"] .tg-settings {
+  background: oklch(0.91 0.035 86 / 0.6);
+}
+
+.tg-settings .tg-check,
+.tg-settings .tg-field--wide {
+  grid-column: 1 / -1;
+}
+
+.tg-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s3);
+  flex-wrap: wrap;
+}
+
+/* ---------- Карточка итога в чате ---------- */
+
+.tg-chatcard {
+  border-radius: var(--tg-r-m);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--tg-line);
+}
+
+.tg-chatcard__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+[data-tg-theme="tavern"] .tg-chatcard__head {
+  background: radial-gradient(90% 90% at 50% 40%, var(--tg-felt), var(--tg-felt-edge));
+  color: var(--tg-felt-ink);
+}
+
+[data-tg-theme="parchment"] .tg-chatcard__head {
+  background: linear-gradient(180deg, oklch(0.36 0.07 35), oklch(0.27 0.06 32));
+  color: oklch(0.9 0.09 86);
+}
+
+.tg-chatcard__head b {
+  font-family: var(--tg-font-display);
+  font-size: var(--tg-fs-17);
+  display: block;
+  line-height: 1.1;
+}
+
+.tg-chatcard__head span {
+  font-size: var(--tg-fs-12);
+  opacity: 0.85;
+}
+
+.tg-chatcard__body {
+  padding: 8px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--tg-fs-14);
+  background: var(--tg-surface);
+}
+
+.tg-chatcard__body div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--tg-ink-2);
+}
+
+.tg-chatcard__body div b {
+  color: var(--tg-ink);
+}
+
+
+/* =========================================================================
+   Окна модуля в Foundry: то, чего не было в макете
+   ========================================================================= */
+
+.tg-board,
+.tg-lobby-body,
+.tg-seating-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tg-s3);
+}
+
+.tg-felt.tg-scc,
+.tg-felt.tg-21,
+.tg-felt.tg-poker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tg-s4);
+}
+
+.tg-felt.tg-poker {
+  align-items: center;
+  gap: var(--tg-s3);
+}
+
+.tg-poker.is-folded .tg-dice {
+  opacity: 0.45;
+}
+
+.tg-actionbar__me .tg-seat {
+  flex: 1 1 auto;
+  max-width: 270px;
+}
+
+.tg-seat__score.is-struck {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.tg-seat__extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding-top: 2px;
+}
+
+.tg-selection.is-bust {
+  color: var(--tg-felt-ink);
+  font-size: var(--tg-fs-15);
+}
+
+.tg-felt__hint:empty {
+  display: none;
+}
+
+/* итог партии */
+.tg-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--tg-s3);
+  padding: var(--tg-s3) var(--tg-s4);
+  border-radius: var(--tg-r-m);
+  background: var(--tg-success-soft);
+  box-shadow: inset 0 0 0 1.5px var(--tg-success);
+  color: var(--tg-ink);
+}
+
+.tg-banner > i {
+  font-size: 20px;
+  color: var(--tg-accent-strong);
+}
+
+.tg-banner__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.tg-banner__text b {
+  font-family: var(--tg-font-display);
+  font-size: var(--tg-fs-20);
+}
+
+.tg-banner__text span {
+  font-size: var(--tg-fs-12);
+  color: var(--tg-ink-2);
+}
+
+/* полоса ставок покера */
+.tg-betline .tg-seat {
+  flex: 0 1 220px;
+}
+
+.tg-betline__text small {
+  display: block;
+  font-size: var(--tg-fs-12);
+  color: var(--tg-ink-3);
+}
+
+.tg-gm .tg-btn[aria-pressed="true"] {
+  border-color: var(--tg-accent);
+  background: var(--tg-accent-soft);
+}
+
+/* кнаклбоунс: чей ход — пунктирное кольцо у портрета */
+.tg-kb__total.is-turn .tg-portrait::after {
+  opacity: 1;
+}
+
+.tg-kb__total .tg-thinking {
+  color: var(--tg-felt-ink-2);
+}
+
+/* посадка */
+.tg-seating__top {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(200px, 1.6fr);
+  gap: var(--tg-s3);
+}
+
+.tg-seatrow__input {
+  flex: 1 1 60px;
+  min-width: 0;
+  height: 24px;
+  padding: 0 4px;
+  margin: 0 0 0 -4px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--tg-ink);
+  font: 700 var(--tg-fs-14) / 1 var(--tg-font-ui);
+}
+
+.tg-seatrow__input:hover {
+  border-color: var(--tg-line-soft);
+}
+
+.tg-seatrow__input:focus-visible {
+  border-color: var(--tg-accent);
+  background: var(--tg-bg-deep);
+  outline: none;
+}
+
+[data-tg-theme="parchment"] .tg-seatrow__input:focus-visible {
+  background: oklch(0.93 0.03 88);
+}
+
+.tg-pick__item:focus-visible {
+  outline: 2px solid var(--tg-accent);
+  outline-offset: -2px;
+}
+
+.tg-footer .tg-chip {
+  font-size: var(--tg-fs-12);
+}
+
+/* памятка правил */
+.tg-rules {
+  font-family: var(--tg-font-prose);
+  font-size: var(--tg-fs-15);
+  line-height: 1.5;
+  color: var(--tg-ink-2);
+  max-width: 62ch;
+}
+
+.tg-rules p {
+  margin: 0 0 var(--tg-s3);
+  text-wrap: pretty;
+}
+
+.tg-rules b {
+  color: var(--tg-ink);
+}
+
+.tavern-games .tg-rules ol {
+  list-style: decimal;
+  margin: 0 0 var(--tg-s3);
+  padding-left: 22px;
+}
+
+.tg-rules li {
+  margin: 4px 0;
+}
+
+.tg-rules table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--tg-s3);
+  border: 0;
+  background: transparent;
+  font-family: var(--tg-font-ui);
+  font-size: var(--tg-fs-14);
+}
+
+.tg-rules tr {
+  background: none;
+}
+
+.tg-rules td {
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid var(--tg-line-soft);
+  color: var(--tg-ink-2);
+}
+
+.tg-rules td:last-child {
+  text-align: right;
+  font-weight: 700;
+  color: var(--tg-ink);
+}
+
+/* карточка итога в чате */
+.tavern-games.tg-chat {
+  padding: 2px 0;
+}
+
+/* =========================================================================
+   Анимации
+   ========================================================================= */
+
+@keyframes tg-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes tg-think {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-2px); }
+}
+
+@keyframes tg-tumble {
+  0% { transform: translate(calc(var(--dx, 0px) - 40px), calc(var(--dy, 0px) - 26px)) rotate(-220deg) scale(0.85); opacity: 0; filter: blur(1.5px); }
+  35% { opacity: 1; filter: blur(0.6px); }
+  70% { transform: translate(calc(var(--dx, 0px) + 4px), calc(var(--dy, 0px) + 2px)) rotate(calc(var(--rot, 0deg) + 12deg)) scale(1.03); filter: blur(0); }
+  100% { transform: translate(var(--dx, 0), var(--dy, 0)) rotate(var(--rot, 0deg)) scale(1); }
+}
+
+@keyframes tg-land {
+  0% { transform: scale(1.25); }
+  60% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+@keyframes tg-knock {
+  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  20% { transform: translate(-3px, 0) rotate(-6deg); }
+  35% { transform: translate(3px, 0) rotate(6deg); opacity: 1; }
+  100% { transform: translate(var(--kx, 60px), -40px) rotate(160deg) scale(0.6); opacity: 0; }
+}
+
+@keyframes tg-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-1.5px) rotate(-2deg); }
+  75% { transform: translateX(1.5px) rotate(2deg); }
+}
+
+@keyframes tg-pop {
+  0% { transform: translateY(0) scale(0.7); opacity: 0; }
+  20% { transform: translateY(-6px) scale(1.1); opacity: 1; }
+  100% { transform: translateY(-34px) scale(1); opacity: 0; }
+}
+
+@keyframes tg-bump {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+@keyframes tg-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tavern-games *,
+  .tavern-games *::before,
+  .tavern-games *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+.tavern-games.tg-no-motion *,
+.tavern-games.tg-no-motion *::before,
+.tavern-games.tg-no-motion *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* =========================================================================
+   Узкое окно
+   ========================================================================= */
+
+@container tg-window (max-width: 520px) {
+  .tg-farkle__field,
+  .tg-kb {
+    grid-template-columns: 1fr;
+  }
+
+  .tg-tray {
+    width: auto;
+  }
+
+  .tg-kb__side {
+    flex-direction: row;
+    min-width: 0;
+  }
+
+  .tg-lobby,
+  .tg-seating,
+  .tg-seating__top {
+    grid-template-columns: 1fr;
+  }
+
+  /* места — по одному в ряд, чтобы имя, метки и счёт не налезали друг на друга */
+  .tg-seats > .tg-seat {
+    flex: 1 1 100%;
+  }
+
+  .tg-actionbar__buttons {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .tg-actionbar__buttons .tg-btn {
+    flex: 1 1 auto;
+  }
+}
+
+.tavern-games .window-content {
+  container: tg-window / inline-size;
+}
