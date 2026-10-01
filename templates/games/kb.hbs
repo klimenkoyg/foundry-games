@@ -36,9 +36,17 @@
             <span class="tg-felt__big">{{top.total}}</span>
             {{#if top.thinking}}<span class="tg-thinking"><i></i><i></i><i></i></span>{{/if}}
           </div>
-          <div class="tg-kb__plate">
+          <div class="tg-kb__dice">
             <span class="tg-felt__label">{{plateLabel}}</span>
-            {{{die}}}
+            <div class="tg-kb__plate">
+              {{#if canRoll}}
+              <button type="button" class="tg-kb__roll" data-action="game" data-op="roll" data-tooltip="{{localize "TAVERN.Kb.rollTip"}}" aria-label="{{localize "TAVERN.Kb.rollTip"}}"><i class="fa-solid fa-dice"></i><span>{{localize "TAVERN.Kb.roll"}}</span></button>
+              {{else if waiting}}
+              <span class="tg-kb__slot"></span>
+              {{else}}
+              {{{die}}}
+              {{/if}}
+            </div>
           </div>
           <div class="tg-kb__total{{#if bottom.isTurn}} is-turn{{/if}}">
             {{#if bottom.thinking}}<span class="tg-thinking"><i></i><i></i><i></i></span>{{/if}}

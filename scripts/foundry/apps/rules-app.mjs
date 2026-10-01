@@ -1,4 +1,5 @@
-/* Памятка правил: текст из переводов с числами этого стола. */
+/* Памятка правил: текст из переводов и условия стола.
+   Открыта от стола — условия этого стола; из «Таверны» — те, что мы советуем (задаёт их ведущий). */
 
 import { SETTINGS, tpl } from "../constants.mjs";
 import { t } from "../i18n.mjs";
@@ -17,7 +18,7 @@ class RulesApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
     classes: ["tavern-games", "tg-rules-app"],
     window: { icon: "fa-solid fa-book-open", resizable: true },
-    position: { width: 460, height: "auto" },
+    position: { width: 480, height: "auto" },
   };
 
   static PARTS = { body: { template: tpl("rules.hbs") } };
@@ -40,8 +41,14 @@ class RulesApp extends HandlebarsApplicationMixin(ApplicationV2) {
   async _prepareContext() {
     const entry = getGame(this.gameId);
     const options = this.table?.options ?? entry.rules.normalizeOptions({});
-    const data = entry.ui.rulesData?.(options) ?? options;
-    return { html: t(`Rules.${this.gameId}`, data) };
+    const scope = { preset: !this.table, table: this.table };
+    const data = entry.ui.rulesData?.(options, scope) ?? options;
+    return {
+      html: t(`Rules.${this.gameId}`, data),
+      terms: entry.ui.rulesTerms?.(options, scope) ?? [],
+      termsTitle: t(scope.preset ? "Rules.termsPreset" : "Rules.termsTable"),
+      termsNote: scope.preset ? t("Rules.termsNote") : "",
+    };
   }
 }
 

@@ -26,7 +26,7 @@ https://github.com/klimenkoyg/foundry-games/releases/latest/download/module.json
 | **Liar's Dice** | 2–6 | Everyone has a hidden cup. Bids of “N dice of face X” and “Liar!”. |
 | **Dice Poker** | 2–4 | Five dice, one reroll, poker hands, betting rounds. |
 | **Knucklebones** | 2 | A duel on three-by-three boards: matching dice multiply and knock out the opponent's. |
-| **Twenty-One** | 2–6 | Dice from d4 to d20, each once per round. Don't go over the limit. |
+| **Twenty-One** | 2–6 | Dice from d4 to d20, each once per round. Players take turns until everyone stands. Don't go over the limit. |
 | **Ship, Captain and Crew** | 2–8 | Three rolls: collect 6, 5 and 4 in order; the rest is your cargo. |
 
 ## How to play

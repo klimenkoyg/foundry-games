@@ -18,7 +18,8 @@ export default {
   template: tpl("games/scc.hbs"),
   rollEvents: ["rolled"],
 
-  rulesData: (options) => ({ rolls: options.rolls }),
+  rulesData: () => ({}),
+  rulesTerms: (o) => [t("Scc.termRolls", { rolls: o.rolls })],
 
   subtitle: (ctx) => t("Scc.sub", { rolls: plural(ctx.view.maxRolls, "Scc.rollsCount") }),
 

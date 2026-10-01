@@ -46,8 +46,8 @@ export default {
   rollEvents: ["round"],
   noRail: true,
 
+  rulesTerms: (o) => [t("Liars.rules.termDice", { dice: o.dice })],
   rulesData: (o) => ({
-    dice: o.dice,
     wild: t(o.onesWild ? "Liars.rules.wildOn" : "Liars.rules.wildOff"),
     spot: t(o.spotOn ? "Liars.rules.spotOn" : "Liars.rules.spotOff"),
   }),

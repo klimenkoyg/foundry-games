@@ -8,6 +8,7 @@ import { simulate } from "./helpers/sim.mjs";
 
 const NO_DICE = makeScriptedCtx([]);
 const STAND = { type: "stand" };
+const PASS = { type: "pass" };
 const take = (sides) => ({ type: "take", sides });
 
 const setup = (seatIds = ["a", "b"], options = {}) =>
@@ -239,13 +240,80 @@ test("коды ошибок", async () => {
   assert.equal(tw.validate(state, "a", take(8)), null);
 });
 
-test("допустимые ходы: каждая невзятая кость и остановка", async () => {
+test("допустимые ходы: невзятые кости, пас и — взяв кость — передать ход", async () => {
   let state = await setup();
   assert.deepEqual(tw.legalActions(state, "a"), [...DICE.map(take), STAND]);
   assert.deepEqual(tw.legalActions(state, "b"), []);
   ({ state } = await play(state, makeScriptedCtx([[1], [1]]), "a", take(8), take(20)));
-  assert.deepEqual(tw.legalActions(state, "a"), [take(4), take(6), take(10), take(12), STAND]);
+  assert.deepEqual(tw.legalActions(state, "a"), [take(4), take(6), take(10), take(12), PASS, STAND]);
   for (const action of tw.legalActions(state, "a")) assert.equal(tw.validate(state, "a", action), null);
+});
+
+test("передать ход: берут по очереди, рука остаётся открытой", async () => {
+  const ctx = makeScriptedCtx([[5], [7], [3], [6]]);
+  let state = await setup();
+  assert.equal(tw.validate(state, "a", PASS), "mustRoll");
+
+  let events;
+  ({ state, events } = await play(state, ctx, "a", take(20), PASS));
+  assert.deepEqual(events.at(-1), { type: "passed", seat: "a", total: 5 });
+  assert.equal(state.current, "b");
+  assert.equal(state.took, 0);
+  assert.equal(state.hands.a.done, false);
+  assert.equal(state.round, 1);
+
+  // можно взять несколько костей за ход
+  assert.equal(tw.validate(state, "b", PASS), "mustRoll");
+  ({ state } = await play(state, ctx, "b", take(12), take(4), PASS));
+  assert.equal(state.hands.b.total, 10);
+  assert.equal(state.current, "a");
+
+  // ход вернулся: рука прежняя, взятые кости не вернулись
+  assert.equal(state.hands.a.total, 5);
+  assert.equal(tw.validate(state, "a", take(20)), "dieUsed");
+  ({ state } = await play(state, ctx, "a", take(8), PASS));
+  assert.equal(state.hands.a.total, 11);
+  assert.equal(state.current, "b");
+});
+
+test("пас закрывает руку; круг кончается, когда спасовали все", async () => {
+  const ctx = makeScriptedCtx([[5], [7], [9]]);
+  let state = await setup();
+  ({ state } = await play(state, ctx, "a", take(20), PASS));
+  ({ state } = await play(state, ctx, "b", take(20), PASS));
+  // a отказывается от хода — больше в этом круге не берёт
+  ({ state } = await play(state, ctx, "a", STAND));
+  assert.equal(state.hands.a.done, true);
+  assert.equal(state.round, 1);
+  assert.equal(state.current, "b");
+
+  // b остался один: передавать ход некому, только брать или пасовать
+  assert.equal(tw.validate(state, "b", PASS), "mustRoll");
+  ({ state } = await play(state, ctx, "b", take(12)));
+  assert.equal(tw.validate(state, "b", PASS), "badAction");
+  assert.deepEqual(tw.legalActions(state, "b"), [take(4), take(6), take(8), take(10), STAND]);
+  assert.equal(state.current, "b");
+
+  const res = await play(state, ctx, "b", STAND);
+  assert.deepEqual(res.events.at(-1), { type: "roundWon", seat: "b", totals: { a: 5, b: 16 }, busts: [], round: 1, byDice: false });
+  assert.equal(res.state.round, 2);
+  assert.equal(res.state.took, 0);
+});
+
+test("ход по кругу пропускает закрытые руки", async () => {
+  const ctx = makeScriptedCtx([[2], [3], [20], [4]]);
+  let state = await setup(["a", "b", "c"], { limit: 15 });
+  ({ state } = await play(state, ctx, "a", take(4), PASS));
+  ({ state } = await play(state, ctx, "b", STAND));
+  ({ state } = await play(state, ctx, "c", take(6), PASS));
+  assert.equal(state.current, "a");
+  // перебор тоже закрывает руку и передаёт ход
+  ({ state } = await play(state, ctx, "a", take(20)));
+  assert.equal(state.hands.a.bust, true);
+  assert.equal(state.current, "c");
+  assert.equal(state.took, 0);
+  ({ state } = await play(state, ctx, "c", take(4)));
+  assert.equal(tw.validate(state, "c", PASS), "badAction");
 });
 
 test("ушедший игрок: остался один — он и выиграл", async () => {
@@ -362,7 +430,7 @@ const hand = (rolled = [], extra = {}) => ({
   ...extra,
 });
 const closed = (rolled, extra = {}) => hand(rolled, { stood: true, done: true, ...extra });
-const view = (hands, limit = 21) => ({ order: Object.keys(hands), rules: { limit, wins: 3 }, hands });
+const view = (hands, limit = 21, took = 0) => ({ order: Object.keys(hands), rules: { limit, wins: 3 }, took, hands });
 const decide = (v, seatId, greed = 1) =>
   bot({ view: v, mine: null, seatId, options: {}, temperament: { greed, skill: 1, bluff: 0 }, rng: () => 0.5 });
 
@@ -390,6 +458,20 @@ test("бот: пока за ним ходят — берёт крупнейшу�
   assert.deepEqual(decide(view(chasing), "a"), take(8));
   const desperate = { b: closed([[20, 20], [4, 1]]), a: hand([[20, 20]]), c: hand() };
   assert.deepEqual(decide(view(desperate), "a", 0.7), take(4));
+});
+
+test("бот: взял кость — передаёт ход; вторую подряд берёт, только догоняя", () => {
+  // впереди или наравне — одна кость за ход
+  assert.deepEqual(decide(view({ a: hand([[20, 9]]), b: hand([[20, 4]]) }, 21, 1), "a"), PASS);
+  assert.deepEqual(decide(view({ a: hand([[20, 9]]), b: hand([[20, 9]]) }, 21, 1), "a"), PASS);
+  // позади и есть кость с терпимым риском — тянет ещё
+  assert.deepEqual(decide(view({ a: hand([[20, 9]]), b: hand([[20, 15]]) }, 21, 1), "a"), take(12));
+  // позади, но брать слишком опасно — передаёт ход, а не пасует
+  assert.deepEqual(decide(view({ a: hand([[20, 19]]), b: hand([[20, 20]]) }, 21, 1), "a"), PASS);
+  // тот же расклад в начале хода: передать нельзя, пас — проигрыш, приходится тянуть
+  assert.deepEqual(decide(view({ a: hand([[20, 19]]), b: hand([[20, 20]]) }, 21, 0), "a"), take(4));
+  // соперники закрылись — передавать некому: обогнал и пасует
+  assert.deepEqual(decide(view({ a: hand([[20, 17]]), b: closed([[20, 15]]) }, 21, 1), "a"), STAND);
 });
 
 test("боты доигрывают 2400 партий без недопустимых ходов", async () => {

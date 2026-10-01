@@ -160,3 +160,14 @@ if (new URLSearchParams(location.search).has("bare")) {
   $("#side").hidden = true;
   Object.assign($("#windows").style, { top: "0", right: "0" });
 }
+
+// ?do=<js> — сценарий для снимка окна: выполняется после загрузки стенда, tavern = window.__tavern.
+const scenario = new URLSearchParams(location.search).get("do");
+if (scenario) {
+  try {
+    await new Function("tavern", `return (async () => { ${scenario} })()`)(window.__tavern);
+  } catch (err) {
+    console.error(err);
+  }
+  document.documentElement.dataset.scenario = "done";
+}

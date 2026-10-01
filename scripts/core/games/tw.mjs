@@ -1,9 +1,11 @@
 /* «Двадцать одно» на многогранниках.
 
    Шесть костей: к4, к6, к8, к10, к12, к20 — каждую можно взять один раз за круг.
-   Бросок прибавляется к сумме; больше предела — перебор, рука сгорела. Остановиться
-   можно в любой момент. Место играет всю руку подряд (несколько взятий), и только
-   потом ход переходит дальше. Все шесть костей взяты без перебора — рука закрыта сама.
+   Бросок прибавляется к сумме; больше предела — перебор, рука сгорела.
+
+   Берут по очереди. За ход можно взять одну кость или несколько, потом передать ход:
+   он пойдёт по кругу и вернётся. Пас (stand) закрывает руку — в этом круге место больше
+   не берёт. Круг идёт, пока не закрыты все руки: пас, перебор или все шесть костей взяты.
 
    Круг берёт лучшая сумма без перебора. При равенстве наверху (настройка fewerDice)
    выигрывает тот, кто взял меньше костей; костей поровну или перебор у всех — круг ничей. Кто первым набрал rules.wins кругов — забирает партию.
@@ -16,6 +18,7 @@
      round: number,            // с 1
      firstSeat: seatId,        // кто открыл этот круг
      current: seatId | null,
+     took: number,             // сколько костей текущее место взяло за этот ход
      hands: { [seatId]: Hand },
      lastRound: { winner: seatId | null, totals: { [seatId]: number }, busts: seatId[], round } | null,
      winner: seatId | null,
@@ -23,10 +26,12 @@
    }
    Hand = { rolled: [{ sides, value }], total, stood, bust, done }
 
-   Ходы: { type: "take", sides } · { type: "stand" }
-   События: took {seat, sides, value, total, bust, done} · stood {seat, total}
+   Ходы: { type: "take", sides }
+         { type: "pass" }    // передать ход: только взяв хотя бы одну кость и пока есть кому передать
+         { type: "stand" }   // пас: рука закрыта до конца круга
+   События: took {seat, sides, value, total, bust, done} · passed {seat, total} · stood {seat, total}
             roundWon {seat | null, totals, busts, round} · won {seat} · left {seat}
-   Ошибки: finished · notYourTurn · badAction · badDie · dieUsed
+   Ошибки: finished · notYourTurn · badAction · mustRoll · badDie · dieUsed
 */
 
 import { clamp, clone, normalizeBySchema, nextInOrder } from "../util.mjs";
@@ -54,13 +59,14 @@ function startRound(state, firstSeat) {
   state.firstSeat = firstSeat;
   for (const id of state.order) state.hands[id] = emptyHand();
   state.current = firstSeat;
+  state.took = 0;
 }
 
-/** Первое по кругу от открывшего место, чья рука ещё не закрыта. */
-function nextToPlay(state) {
+/** Следующее по кругу после seatId место, чья рука ещё не закрыта; других нет — null. */
+function nextActive(state, seatId) {
   const n = state.order.length;
-  const start = Math.max(0, state.order.indexOf(state.firstSeat));
-  for (let k = 0; k < n; k++) {
+  const start = state.order.indexOf(seatId);
+  for (let k = 1; k < n; k++) {
     const id = state.order[(start + k) % n];
     if (!state.hands[id].done) return id;
   }
@@ -107,9 +113,9 @@ function resolveRound(state, events) {
   startRound(state, nextInOrder(state.order, state.firstSeat) ?? state.order[0]);
 }
 
-/** Ход переходит к следующей незакрытой руке; если закрыты все — итог круга. */
-function advance(state, events) {
-  const next = nextToPlay(state);
+/** Ход переходит к next — следующей незакрытой руке; таких нет — итог круга. */
+function advance(state, next, events) {
+  state.took = 0;
   if (next) state.current = next;
   else resolveRound(state, events);
 }
@@ -130,6 +136,7 @@ export default {
       round: 0,
       firstSeat: null,
       current: null,
+      took: 0,
       hands: {},
       lastRound: null,
       winner: null,
@@ -145,13 +152,20 @@ export default {
     if (state.finished || state.current !== seatId) return [];
     const h = state.hands[seatId];
     if (h.done) return [];
-    return [...DICE.filter((sides) => !isUsed(h, sides)).map((sides) => ({ type: "take", sides })), { type: "stand" }];
+    const out = DICE.filter((sides) => !isUsed(h, sides)).map((sides) => ({ type: "take", sides }));
+    if (state.took > 0 && nextActive(state, seatId)) out.push({ type: "pass" });
+    out.push({ type: "stand" });
+    return out;
   },
 
   validate(state, seatId, action) {
     if (state.finished) return "finished";
     if (state.current !== seatId) return "notYourTurn";
     if (action?.type === "stand") return null;
+    if (action?.type === "pass") {
+      if (state.took === 0) return "mustRoll";
+      return nextActive(state, seatId) ? null : "badAction";
+    }
     if (action?.type === "take") {
       if (!DICE.includes(action.sides)) return "badDie";
       return isUsed(state.hands[seatId], action.sides) ? "dieUsed" : null;
@@ -176,13 +190,17 @@ export default {
         h.stood = true;
         h.done = true;
       }
+      state.took += 1;
       events.push({ type: "took", seat: seatId, sides: action.sides, value, total: h.total, bust: h.bust, done: h.done });
-      if (h.done) advance(state, events);
+      if (h.done) advance(state, nextActive(state, seatId), events);
+    } else if (action.type === "pass") {
+      events.push({ type: "passed", seat: seatId, total: h.total });
+      advance(state, nextActive(state, seatId), events);
     } else if (action.type === "stand") {
       h.stood = true;
       h.done = true;
       events.push({ type: "stood", seat: seatId, total: h.total });
-      advance(state, events);
+      advance(state, nextActive(state, seatId), events);
     }
     return { state, events };
   },
@@ -192,6 +210,7 @@ export default {
     const events = [{ type: "left", seat: seatId }];
     if (state.finished || !state.order.includes(seatId)) return { state, events };
     const wasCurrent = state.current === seatId;
+    const next = nextActive(state, seatId);
     // ушёл открывший круг — его роль переходит следующему, очередь открывающих не сбивается
     if (state.firstSeat === seatId) state.firstSeat = nextInOrder(state.order, seatId, (id) => id !== seatId);
     state.order = state.order.filter((id) => id !== seatId);
@@ -202,7 +221,7 @@ export default {
       finishMatch(state, state.order[0], events);
       return { state, events };
     }
-    if (wasCurrent) advance(state, events);
+    if (wasCurrent) advance(state, next, events);
     return { state, events };
   },
 

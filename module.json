@@ -2,7 +2,7 @@
   "id": "ssl_tavern_games",
   "title": "Таверна · Tavern Games",
   "description": "<p>Настольные игры на костях, за которые садится весь стол: Кости (Farkle), Кости лжеца, Покер на костях, Кнаклбоунс, Двадцать одно на кубиках к4–к20 и «Корабль, капитан и команда». За стол сажают токены прямо с карты, NPC играют сами — у каждого свой нрав. Ставки с листов dnd5e, два оформления стола.</p><p>Dice games the whole table plays together: Farkle, Liar's Dice, Dice Poker, Knucklebones, Twenty-One on polyhedral dice and Ship, Captain and Crew. Seat tokens straight from the scene, let NPCs play as bots with temperaments, take stakes from dnd5e sheets. Russian and English.</p>",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authors": [
     {
       "name": "Yuriy Klimenko",
@@ -44,7 +44,7 @@
   },
   "url": "https://github.com/klimenkoyg/foundry-games",
   "manifest": "https://github.com/klimenkoyg/foundry-games/releases/latest/download/module.json",
-  "download": "https://github.com/klimenkoyg/foundry-games/releases/download/v0.1.0/module.zip",
+  "download": "https://github.com/klimenkoyg/foundry-games/releases/download/v0.1.1/module.zip",
   "readme": "https://github.com/klimenkoyg/foundry-games/blob/main/README.md",
   "bugs": "https://github.com/klimenkoyg/foundry-games/issues",
   "changelog": "https://github.com/klimenkoyg/foundry-games/blob/main/CHANGELOG.md",

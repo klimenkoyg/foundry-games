@@ -41,6 +41,7 @@ export class SeatingApp extends HandlebarsApplicationMixin(ApplicationV2) {
       setControl: SeatingApp.#onSetControl,
       setTheme: SeatingApp.#onSetTheme,
       setNpcPays: SeatingApp.#onSetNpcPays,
+      resetOption: SeatingApp.#onResetOption,
       start: SeatingApp.#onStart,
       cancel: SeatingApp.#onCancel,
     },
@@ -166,6 +167,8 @@ export class SeatingApp extends HandlebarsApplicationMixin(ApplicationV2) {
         ...o,
         label: t(`Game.${entry.id}.opt.${o.key}`),
         value: this.options_[o.key],
+        hint: t("Seating.recommended", { n: o.default }),
+        reset: this.options_[o.key] !== o.default ? t("Seating.resetTo", { n: o.default }) : null,
         isNumber: o.type === "number",
         isBool: o.type === "bool",
       }));
@@ -329,6 +332,13 @@ export class SeatingApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static #onSetTheme(event, target) {
     this.theme = target.dataset.value;
+    this.render();
+  }
+
+  static #onResetOption(event, target) {
+    const opt = this.entry.rules.options.find((o) => o.key === target.dataset.key);
+    if (!opt) return;
+    this.options_ = this.entry.rules.normalizeOptions({ ...this.options_, [opt.key]: opt.default });
     this.render();
   }
 

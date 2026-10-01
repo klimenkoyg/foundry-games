@@ -444,7 +444,8 @@ export const Host = {
     const seat = table.seats.find((s) => s.id === seatId);
     if (seat?.control !== "bot") return;
     const rev = table.rev;
-    const delay = setting(SETTINGS.botDelay) * (0.75 + Math.random() * 0.6);
+    // Игра может попросить паузу подольше, чтобы успели отыграть её анимации.
+    const delay = Math.max(setting(SETTINGS.botDelay) * (0.75 + Math.random() * 0.6), getGame(table.gameId).ui?.minBotDelay ?? 0);
     this.timers.set(
       tableId,
       setTimeout(() => {

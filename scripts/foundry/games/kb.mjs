@@ -1,5 +1,6 @@
-/* «Кнаклбоунс» — два поля три на три. Наведение на колонку показывает, куда ляжет кость
-   и какие кости соперника она собьёт. */
+/* «Кнаклбоунс» — два поля три на три. Ход в два шага: бросить кубик кнопкой на тарелке,
+   потом выбрать колонку. Наведение на колонку показывает, куда ляжет кость и какие кости
+   соперника она собьёт. */
 
 import { columnScore } from "../../core/games/kb.mjs";
 import { tpl } from "../constants.mjs";
@@ -21,6 +22,8 @@ export default {
   template: tpl("games/kb.hbs"),
   rollEvents: ["rolledDie"],
   noRail: true,
+  // Бот не бросает и не ставит раньше, чем отыграют постановка, сбитые кости и бросок.
+  minBotDelay: 1000,
 
   subtitle: () => t("Kb.sub"),
 
@@ -35,7 +38,7 @@ export default {
     const side = (seatId, isTop) => {
       const seat = ctx.seat(seatId);
       const board = view.boards[seatId] ?? [[], [], []];
-      const interactive = ctx.canAct && ctx.acting.id === seatId && view.current === seatId;
+      const interactive = ctx.canAct && view.die !== null && ctx.acting.id === seatId && view.current === seatId;
       const cols = board.map((col, ci) => {
         const counts = countOf(col);
         const wells = [0, 1, 2].map((r) => {
@@ -71,16 +74,23 @@ export default {
       divider = view.winner
         ? t("Kb.wins", { name: ctx.name(view.winner), a: Math.max(ta, tb), b: Math.min(ta, tb) })
         : t("Kb.draw", { a: ta, b: tb });
-    } else if (ctx.canAct) divider = t("Kb.yourTurn");
+    } else if (ctx.canAct) divider = t(view.die === null ? "Kb.yourRoll" : "Kb.yourPlace");
     else divider = t("Status.turnOf", { name: ctx.name(view.current) });
+
+    const canRoll = ctx.canAct && view.die === null;
+    let plateLabel = "";
+    if (view.die) plateLabel = ctx.canAct ? t("Kb.yourDie") : t("Kb.dieOf", { name: ctx.name(view.current) });
+    else if (!view.finished && !canRoll) plateLabel = t("Kb.rolling", { name: ctx.name(view.current) });
 
     return {
       top: side(topId, true),
       bottom: side(bottomId, false),
       divider,
-      die: view.die ? dieHtml(view.die, { cls: isFresh(ctx, "rolledDie") || isFresh(ctx, "start") ? "is-rolling" : "" }) : "",
+      canRoll,
+      die: view.die ? dieHtml(view.die, { cls: isFresh(ctx, "rolledDie") ? "is-rolling" : "" }) : "",
+      waiting: !view.die && !view.finished && !canRoll,
       dieValue: view.die,
-      plateLabel: view.die ? (ctx.canAct ? t("Kb.yourDie") : t("Kb.dieOf", { name: ctx.name(view.current) })) : "",
+      plateLabel,
     };
   },
 
@@ -106,7 +116,8 @@ export default {
   },
 
   onAction(ctx, op, arg) {
-    if (op === "place") ctx.send({ type: "place", col: Number(arg) });
+    if (op === "roll") ctx.send({ type: "roll" });
+    else if (op === "place") ctx.send({ type: "place", col: Number(arg) });
   },
 
   logLine(ctx, ev, name) {

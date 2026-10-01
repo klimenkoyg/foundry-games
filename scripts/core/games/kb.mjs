@@ -1,7 +1,7 @@
 /* «Кнаклбоунс» (Knucklebones) — дуэль на костях, как в Cult of the Lamb.
 
-   У каждого своя доска: три столбца по три места. В свой ход у игрока уже брошена
-   кость — её нужно поставить в любой свой незаполненный столбец. Все кости того же
+   У каждого своя доска: три столбца по три места. Ход — два действия: бросить кость
+   и поставить её в любой свой незаполненный столбец. Все кости того же
    значения в том же столбце соперника выбиваются. Очки столбца: каждое значение v,
    стоящее n раз, даёт v × n × n (две четвёрки — 16, три — 36). Очки доски — сумма столбцов.
 
@@ -12,7 +12,7 @@
      order: [seatId, seatId],
      current: seatId | null,
      boards: { [seatId]: [number[], number[], number[]] },   // столбец — значения в порядке постановки, до 3
-     die: number | null,       // брошенная кость, которую ставит текущий
+     die: number | null,       // брошенная кость, которую ставит текущий; null — ещё не бросал
      turnCount: number,        // сколько костей уже поставлено
      totals: { [seatId]: number },   // очки досок, верны после каждой постановки
      winner: seatId | null,
@@ -20,10 +20,11 @@
      finished: boolean,
    }
 
-   Ходы: { type: "place", col }   // col — 0..2, свой столбец с местом
-   События: placed {seat, col, value, knocked} · rolledDie {seat, value}
+   Ходы: { type: "roll" }         // бросить кость — пока не брошена
+         { type: "place", col }   // col — 0..2, свой столбец с местом; после броска
+   События: rolledDie {seat, value} · placed {seat, col, value, knocked}
             won {seat, totals} · draw {totals} · left {seat}
-   Ошибки: finished · notYourTurn · badAction · badCol · colFull
+   Ошибки: finished · notYourTurn · badAction · mustRoll · badCol · colFull
 */
 
 import { clone, counts, sum } from "../util.mjs";
@@ -75,7 +76,7 @@ export default {
 
   normalizeOptions: () => ({}),
 
-  async setup({ seatIds, ctx }) {
+  async setup({ seatIds }) {
     const order = [...seatIds];
     const state = {
       order,
@@ -88,7 +89,6 @@ export default {
       draw: false,
       finished: false,
     };
-    await rollDieFor(state, state.current, ctx);
     return state;
   },
 
@@ -96,6 +96,7 @@ export default {
 
   legalActions(state, seatId) {
     if (state.finished || state.current !== seatId) return [];
+    if (state.die === null) return [{ type: "roll" }];
     const out = [];
     state.boards[seatId].forEach((column, col) => {
       if (column.length < SLOTS) out.push({ type: "place", col });
@@ -106,7 +107,9 @@ export default {
   validate(state, seatId, action) {
     if (state.finished) return "finished";
     if (state.current !== seatId) return "notYourTurn";
+    if (action?.type === "roll") return state.die === null ? null : "badAction";
     if (action?.type !== "place") return "badAction";
+    if (state.die === null) return "mustRoll";
     if (!isCol(action.col)) return "badCol";
     return state.boards[seatId][action.col].length >= SLOTS ? "colFull" : null;
   },
@@ -114,6 +117,12 @@ export default {
   async apply(input, seatId, action, ctx) {
     const state = clone(input);
     const events = [];
+    if (action.type === "roll") {
+      const rolled = await rollDieFor(state, seatId, ctx);
+      events.push({ type: "rolledDie", seat: seatId, value: rolled });
+      return { state, events };
+    }
+
     const foe = otherSeat(state, seatId);
     const { col } = action;
     const value = state.die;
@@ -133,9 +142,9 @@ export default {
       return { state, events };
     }
 
+    // Соперник бросает сам: сначала все видят, куда легла кость и что она сбила.
     state.current = foe;
-    const next = await rollDieFor(state, foe, ctx);
-    events.push({ type: "rolledDie", seat: foe, value: next });
+    state.die = null;
     return { state, events };
   },
 

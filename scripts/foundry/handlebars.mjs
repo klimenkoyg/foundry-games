@@ -37,6 +37,12 @@ export function dieHtml(face, o = {}) {
 
 export const diceHtml = (values, o = {}) => values.map((v) => dieHtml(v, o)).join("");
 
+/** Комбинация в памятке: мелкие кости (groups — наборы, между ними зазор) и сколько за неё дают. */
+export function comboHtml(groups, score, o = {}) {
+  const dice = groups.map((g) => `<span>${diceHtml(g, { cls: "tg-die--xs" })}</span>`).join("");
+  return `<span class="${cls("tg-combo", o.off && "is-off")}"><span class="tg-combo__dice">${dice}</span><b>${esc(score)}</b></span>`;
+}
+
 const POLY = {
   4: { face: "28,4 54,50 2,50", facets: ["28,4 28,36", "2,50 28,36", "54,50 28,36"], ny: "5px" },
   6: { rect: true },

@@ -88,7 +88,15 @@
       <div class="tg-settings">
         {{#each options}}
         {{#if isNumber}}
-        <label class="tg-field"><span>{{label}}</span><input class="tg-input" type="number" name="opt.{{key}}" value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}"></label>
+        <div class="tg-field">
+          <label for="tg-opt-{{key}}">{{label}}</label>
+          <input class="tg-input" type="number" id="tg-opt-{{key}}" name="opt.{{key}}" value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}">
+          {{#if reset}}
+          <button type="button" class="tg-field__hint tg-field__hint--reset" data-action="resetOption" data-key="{{key}}"><i class="fa-solid fa-rotate-left"></i>{{reset}}</button>
+          {{else}}
+          <small class="tg-field__hint">{{hint}}</small>
+          {{/if}}
+        </div>
         {{/if}}
         {{/each}}
         <label class="tg-field">

@@ -1,4 +1,5 @@
-/* «Двадцать одно» — поле и действия. */
+/* «Двадцать одно» — поле и действия. Берут по очереди: взял кубик (или несколько) — «Передать ход»;
+   «Пас» закрывает руку до конца раунда. */
 
 import { DICE } from "../../core/games/tw.mjs";
 import { tpl } from "../constants.mjs";
@@ -14,7 +15,8 @@ export default {
   template: tpl("games/tw.hbs"),
   rollEvents: ["took"],
 
-  rulesData: (o) => ({ limit: o.limit, wins: o.wins, tie: t(o.fewerDice ? "Tw.rules.tieOn" : "Tw.rules.tieOff") }),
+  rulesData: (o) => ({ tie: t(o.fewerDice ? "Tw.rules.tieOn" : "Tw.rules.tieOff") }),
+  rulesTerms: (o) => [t("Tw.terms.limit", { limit: o.limit }), t("Tw.terms.wins", { wins: plural(o.wins, "Tw.winsCount") })],
 
   subtitle(ctx) {
     const { view } = ctx;
@@ -48,13 +50,23 @@ export default {
     const took = isFresh(ctx, "took", (e) => e.seat === mainId);
     const used = new Set(h.rolled.map((r) => r.sides));
 
+    // лучшая сумма соперников — закрытая или ещё нет
     const best = view.order
-      .filter((id) => id !== mainId && view.hands[id]?.done && !view.hands[id].bust)
+      .filter((id) => id !== mainId && view.hands[id]?.rolled.length && !view.hands[id].bust)
       .sort((a, b) => view.hands[b].total - view.hands[a].total)[0];
+
+    // Передать ход можно, взяв хотя бы один кубик и пока у кого-то ещё открыта рука.
+    const canPass = myTurn && !h.done && (view.took ?? 0) > 0 && view.order.some((id) => id !== mainId && !view.hands[id]?.done);
 
     let status = null;
     if (h.bust) status = t("Tw.youBust", { total: h.total });
-    else if (myTurn) status = h.rolled.length ? t("Tw.more", { total: h.total }) : t("Tw.first");
+    else if (myTurn) status = canPass ? t("Tw.more", { total: h.total }) : h.rolled.length ? t("Tw.again", { total: h.total }) : t("Tw.first");
+
+    const buttons = [];
+    if (myTurn && !h.done) {
+      buttons.push({ op: "stand", icon: "fa-hand", label: t("Tw.stand"), tip: t("Tw.standTip") });
+      if (canPass) buttons.push({ op: "pass", icon: "fa-arrow-right", cls: "tg-btn--primary", label: t("Tw.pass"), tip: t("Tw.passTip") });
+    }
 
     const last = view.lastRound;
     let statusSub = null;
@@ -87,12 +99,13 @@ export default {
       ).join(""),
       status: status ?? (!ctx.canAct && ctx.current ? t("Status.turnOf", { name: esc(ctx.current.name) }) : null),
       statusSub,
-      buttons: myTurn && !h.done ? [{ op: "stand", icon: "fa-hand", cls: "tg-btn--primary", label: t("Tw.stand") }] : [],
+      buttons,
     };
   },
 
   onAction(ctx, op, arg) {
     if (op === "take") ctx.send({ type: "take", sides: Number(arg) });
+    else if (op === "pass") ctx.send({ type: "pass" });
     else if (op === "stand") ctx.send({ type: "stand" });
   },
 
@@ -100,6 +113,8 @@ export default {
     switch (ev.type) {
       case "took":
         return t(ev.bust ? "Log.tw.bust" : "Log.tw.took", { name, die: t("Die.kind", { n: ev.sides }), value: ev.value, total: ev.total });
+      case "passed":
+        return t("Log.tw.passed", { name, total: ev.total });
       case "stood":
         return t("Log.tw.stood", { name, total: ev.total });
       case "roundWon":

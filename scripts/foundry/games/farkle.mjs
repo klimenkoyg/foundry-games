@@ -2,7 +2,7 @@
 
 import { scoreSelection } from "../../core/games/farkle.mjs";
 import { tpl } from "../constants.mjs";
-import { dieHtml } from "../handlebars.mjs";
+import { comboHtml, dieHtml } from "../handlebars.mjs";
 import { esc, plural, t } from "../i18n.mjs";
 import { cls, inlineDice, isFresh, lastEvent } from "./common.mjs";
 
@@ -17,18 +17,40 @@ function selection(ctx) {
   return ui.sel;
 }
 
+/* Памятка: комбинации нарисованы костями, очки считает то же правило, что и в игре. */
+const ALL_COMBOS = { threePairs: true, straights: true };
+const combo = (groups, off) => comboHtml(groups, scoreSelection(groups.flat(), ALL_COMBOS), { off });
+const comboGroup = (cap, combos, { wide, note } = {}) =>
+  `<p class="tg-combos__cap">${cap}${note ? ` <span>· ${note}</span>` : ""}</p>` +
+  `<div class="${cls("tg-combos", wide && "tg-combos--wide")}">${combos.join("")}</div>`;
+
+function scoringHtml(o, preset) {
+  // Необязательные комбинации: из «Таверны» — «по выбору ведущего», за столом — играют или нет.
+  const optional = (on) => (preset ? { note: t("Farkle.rules.optPreset") } : on ? {} : { note: t("Farkle.rules.optOff"), off: true });
+  const partial = optional(o.straights);
+  const pairs = optional(o.threePairs);
+  return [
+    `<h4>${t("Farkle.rules.scoring")}</h4>`,
+    comboGroup(t("Farkle.rules.capSingle"), [combo([[1]]), combo([[5]])]),
+    comboGroup(t("Farkle.rules.capTriple"), [1, 2, 3, 4, 5, 6].map((f) => combo([[f, f, f]]))),
+    comboGroup(t("Farkle.rules.capMore"), [4, 5, 6].map((n) => combo([new Array(n).fill(3)])), { wide: true }),
+    comboGroup(t("Farkle.rules.capStraight"), [combo([[1, 2, 3, 4, 5, 6]])], { wide: true }),
+    comboGroup(t("Farkle.rules.capPartial"), [combo([[1, 2, 3, 4, 5]], partial.off), combo([[2, 3, 4, 5, 6]], partial.off)], { wide: true, note: partial.note }),
+    comboGroup(t("Farkle.rules.capPairs"), [combo([[2, 2], [4, 4], [6, 6]], pairs.off)], { wide: true, note: pairs.note }),
+  ].join("");
+}
+
 export default {
   id: "farkle",
   icon: "fa-solid fa-dice-five",
   template: tpl("games/farkle.hbs"),
   rollEvents: ["rolled"],
 
-  rulesData: (o) => ({
-    target: o.target,
-    entry: o.entry,
-    pairs: t(o.threePairs ? "Farkle.rules.pairsOn" : "Farkle.rules.pairsOff"),
-    straights: t(o.straights ? "Farkle.rules.straightsOn" : "Farkle.rules.straightsOff"),
-  }),
+  rulesData: (o, { preset } = {}) => ({ scoring: scoringHtml(o, preset) }),
+  rulesTerms: (o) => [
+    t("Farkle.rules.termTarget", { target: o.target }),
+    o.entry > 0 ? t("Farkle.rules.termEntry", { entry: o.entry }) : t("Farkle.rules.termNoEntry"),
+  ],
 
   subtitle(ctx) {
     const { rules } = ctx.view;
@@ -104,7 +126,7 @@ export default {
           label: t("Farkle.bank"),
           sub: valid ? total : turn.points,
           disabled: !valid || belowEntry,
-          tip: valid && belowEntry ? t("Farkle.belowEntry", { entry: rules.entry }) : null,
+          tip: valid && belowEntry ? t("Farkle.belowEntry", { entry: rules.entry }) : t("Farkle.bankTip"),
         });
         buttons.push({
           op: "keepRoll",

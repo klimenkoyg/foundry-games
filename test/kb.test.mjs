@@ -9,8 +9,11 @@ import { simulate } from "./helpers/sim.mjs";
 
 const place = (col) => ({ type: "place", col });
 
-/** Разыгрывает ходы по очереди (a, b, a, …): moves = [[col, value], …].
-    Значения костей уходят в сценарий бросков; nextDie — бросок после последнего хода. */
+const roll = { type: "roll" };
+
+/** Разыгрывает ходы по очереди (a, b, a, …): moves = [[col, value], …] — бросок и постановка.
+    Значения костей уходят в сценарий бросков; nextDie — бросок следующего после последнего хода.
+    events — события последней постановки. */
 async function play(moves, nextDie) {
   const queue = moves.map(([, value]) => [value]);
   if (nextDie) queue.push([nextDie]);
@@ -18,8 +21,10 @@ async function play(moves, nextDie) {
   let state = await kb.setup({ seatIds: ["a", "b"], options: kb.normalizeOptions({}), ctx });
   let events = [];
   for (const [col] of moves) {
+    ({ state } = await kb.apply(state, state.current, roll, ctx));
     ({ state, events } = await kb.apply(state, state.current, place(col), ctx));
   }
+  if (nextDie) ({ state } = await kb.apply(state, state.current, roll, ctx));
   return { state, events, ctx };
 }
 
@@ -38,9 +43,18 @@ test("очки столбца: значение × количество в кв�
   assert.equal(boardScore([[], [], []]), 0);
 });
 
-test("начало: пустые доски, первый бросок уже сделан", async () => {
+test("начало: пустые доски, кость ещё не брошена", async () => {
   const ctx = makeScriptedCtx([[4]]);
-  const state = await kb.setup({ seatIds: ["a", "b"], options: {}, ctx });
+  const start = await kb.setup({ seatIds: ["a", "b"], options: {}, ctx });
+  assert.equal(ctx.remaining(), 1);
+  assert.equal(start.die, null);
+  assert.deepEqual(kb.legalActions(start, "a"), [roll]);
+  assert.deepEqual(kb.legalActions(start, "b"), []);
+  assert.equal(kb.validate(start, "a", place(0)), "mustRoll");
+
+  const { state, events } = await kb.apply(start, "a", roll, ctx);
+  assert.deepEqual(events, [{ type: "rolledDie", seat: "a", value: 4 }]);
+  assert.equal(start.die, null);
   assert.equal(ctx.remaining(), 0);
   assert.deepEqual(state.order, ["a", "b"]);
   assert.equal(state.current, "a");
@@ -55,22 +69,28 @@ test("начало: пустые доски, первый бросок уже с
   assert.deepEqual(kb.normalizeOptions({ any: 1 }), {});
 });
 
-test("постановка: кость встаёт в столбец, ход и новый бросок — сопернику", async () => {
+test("постановка: кость встаёт в столбец, ход — сопернику, бросает он сам", async () => {
   const ctx = makeScriptedCtx([[4], [2]]);
-  const start = await kb.setup({ seatIds: ["a", "b"], options: {}, ctx });
+  const setup = await kb.setup({ seatIds: ["a", "b"], options: {}, ctx });
+  const { state: start } = await kb.apply(setup, "a", roll, ctx);
   const { state, events } = await kb.apply(start, "a", place(1), ctx);
   assert.deepEqual(state.boards.a, [[], [4], []]);
   assert.deepEqual(state.totals, { a: 4, b: 0 });
   assert.equal(state.current, "b");
-  assert.equal(state.die, 2);
+  assert.equal(state.die, null);
   assert.equal(state.turnCount, 1);
-  assert.deepEqual(events, [
-    { type: "placed", seat: "a", col: 1, value: 4, knocked: 0 },
-    { type: "rolledDie", seat: "b", value: 2 },
-  ]);
+  assert.deepEqual(events, [{ type: "placed", seat: "a", col: 1, value: 4, knocked: 0 }]);
+  assert.equal(ctx.remaining(), 1);
   // вход не изменился
   assert.deepEqual(start.boards.a, [[], [], []]);
   assert.equal(start.current, "a");
+  assert.equal(start.die, 4);
+
+  assert.deepEqual(kb.legalActions(state, "b"), [roll]);
+  assert.equal(kb.validate(state, "a", roll), "notYourTurn");
+  const next = await kb.apply(state, "b", roll, ctx);
+  assert.deepEqual(next.events, [{ type: "rolledDie", seat: "b", value: 2 }]);
+  assert.equal(next.state.die, 2);
 });
 
 test("выбиваются кости того же значения только в том же столбце", async () => {
@@ -81,7 +101,7 @@ test("выбиваются кости того же значения тольк�
   assert.deepEqual(state.totals, { a: 16, b: 4 });
   assert.equal(events[0].knocked, 0);
 
-  ({ state, events } = await kb.apply(state, "b", place(0), makeScriptedCtx([[1]])));
+  ({ state, events } = await kb.apply(state, "b", place(0), makeScriptedCtx([])));
   assert.deepEqual(state.boards.a, [[], [], []]);
   assert.deepEqual(state.boards.b, [[4], [4], []]);
   assert.deepEqual(state.totals, { a: 0, b: 8 });
@@ -188,7 +208,8 @@ test("боты доигрывают 3000 партий без недопусти�
     assert.equal(state.finished, true);
     assert.equal(result.winners.length === 1 || result.draw === true, true);
     assert.equal(result.winners.length === 1, !result.draw);
-    assert.equal(steps, state.turnCount);
+    // каждый ход — бросок и постановка
+    assert.equal(steps, state.turnCount * 2);
     const [a, b] = seatIds;
     for (const id of seatIds) {
       assert.equal(state.totals[id], boardScore(state.boards[id]));
@@ -207,7 +228,7 @@ test("боты доигрывают 3000 партий без недопусти�
 
 test("бот чаще обыгрывает того, кто ставит наугад", async () => {
   const randomBot = ({ view, seatId, rng }) =>
-    place(pick(rng, [0, 1, 2].filter((col) => view.boards[seatId][col].length < 3)));
+    view.die === null ? roll : place(pick(rng, [0, 1, 2].filter((col) => view.boards[seatId][col].length < 3)));
   let wins = 0;
   let losses = 0;
   for (let seed = 1; seed <= 500; seed++) {

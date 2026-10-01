@@ -26,6 +26,7 @@ export default function decide({ view, seatId, temperament, rng }) {
   const own = view.boards[seatId];
   const opp = view.boards[foe];
   const die = view.die;
+  if (die === null) return { type: "roll" };
 
   const cols = COLS.filter((c) => own[c].length < SLOTS);
   if (cols.length <= 1) return { type: "place", col: cols[0] ?? 0 };

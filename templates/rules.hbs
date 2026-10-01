@@ -1,1 +1,12 @@
-<div class="tg-rules">{{{html}}}</div>
+<div class="tg-rules">
+  {{{html}}}
+  {{#if terms.length}}
+  <section class="tg-rules__terms">
+    <h4>{{termsTitle}}</h4>
+    {{#if termsNote}}<p>{{termsNote}}</p>{{/if}}
+    <ul>
+      {{#each terms}}<li>{{{this}}}</li>{{/each}}
+    </ul>
+  </section>
+  {{/if}}
+</div>

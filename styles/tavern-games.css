@@ -211,7 +211,7 @@
   line-height: 1.3;
 }
 
-.tavern-games :where(.window-content) :where(h1, h2, h3) {
+.tavern-games :where(.window-content) :where(h1, h2, h3, h4) {
   border: 0;
   padding: 0;
 }
@@ -265,7 +265,7 @@
   line-height: 1.4;
 }
 
-.tavern-games :where(.window-content) :where(h1, h2, h3, b, strong, label, li, span, p) {
+.tavern-games :where(.window-content) :where(h1, h2, h3, h4, b, strong, label, li, span, p, small) {
   color: inherit;
 }
 
@@ -1332,10 +1332,54 @@ button.tg-die:focus-visible {
   align-self: flex-start;
 }
 
-.tg-field > span {
+.tg-field > span,
+.tg-field > label {
   font-size: var(--tg-fs-12);
   color: var(--tg-ink-3);
   font-weight: 500;
+}
+
+/* под числом: что мы советуем, а если число поменяли — как вернуть */
+.tavern-games .tg-field__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  align-self: flex-start;
+  min-height: 18px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  font: inherit;
+  font-size: var(--tg-fs-12);
+  line-height: 1.2;
+  color: var(--tg-ink-3);
+  text-align: left;
+}
+
+.tavern-games button.tg-field__hint--reset {
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  color: var(--tg-accent-strong);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklch, currentColor 45%, transparent);
+  text-underline-offset: 3px;
+}
+
+.tavern-games button.tg-field__hint--reset:hover {
+  text-decoration-color: currentColor;
+}
+
+.tavern-games button.tg-field__hint--reset:focus-visible {
+  outline: 2px solid var(--tg-accent-strong);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.tg-field__hint--reset > i {
+  font-size: 10px;
 }
 
 .tg-input,
@@ -2146,15 +2190,30 @@ button.tg-kb__col:disabled {
   font-size: var(--tg-fs-14);
 }
 
-.tg-kb__plate {
+.tg-kb__dice {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding: 10px 12px;
+  max-width: 148px;
+  text-align: center;
+}
+
+.tg-kb__dice .tg-felt__label {
+  min-height: 1.3em;
+  font-size: var(--tg-fs-11);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+/* тарелка одного размера и с кубиком, и с кнопкой броска — поле не прыгает */
+.tg-kb__plate {
+  display: grid;
+  place-items: center;
+  width: 104px;
+  height: 104px;
+  flex: none;
   border-radius: 50%;
-  aspect-ratio: 1;
-  justify-content: center;
   background:
     radial-gradient(circle, oklch(0.5 0.05 60 / 0.25), oklch(0.2 0.03 60 / 0.4));
   box-shadow: inset 0 2px 8px oklch(0 0 0 / 0.5), 0 0 0 1px oklch(1 0 0 / 0.08);
@@ -2165,8 +2224,61 @@ button.tg-kb__col:disabled {
   box-shadow: inset 0 0 0 1.5px var(--tg-ink-2), inset 0 0 0 4px transparent, inset 0 0 0 5px var(--tg-accent);
 }
 
-.tg-kb__plate .tg-felt__label {
-  font-size: var(--tg-fs-11);
+/* пустое место под кубик: соперник ещё не бросил */
+.tg-kb__slot {
+  width: var(--tg-die);
+  height: var(--tg-die);
+  border-radius: calc(var(--tg-die) * 0.2);
+  border: 1.5px dashed var(--tg-felt-ink-2);
+  opacity: 0.45;
+}
+
+.tavern-games button.tg-kb__roll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 1px solid var(--tg-primary-edge);
+  background: linear-gradient(180deg, var(--tg-primary-top), var(--tg-primary-bottom));
+  color: var(--tg-primary-ink);
+  font-family: var(--tg-font-ui);
+  font-size: var(--tg-fs-15);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  text-shadow: 0 1px 0 oklch(1 0 0 / 0.25);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.45),
+    inset 0 -2px 0 oklch(0 0 0 / 0.15),
+    0 2px 0 var(--tg-primary-edge),
+    0 5px 12px -3px oklch(0 0 0 / 0.45);
+  transition: transform var(--tg-dur-fast) var(--tg-ease), filter var(--tg-dur-fast) var(--tg-ease);
+}
+
+[data-tg-theme="parchment"] button.tg-kb__roll {
+  text-shadow: 0 1px 0 oklch(0 0 0 / 0.3);
+}
+
+.tg-kb__roll > i {
+  font-size: 22px;
+}
+
+.tavern-games button.tg-kb__roll:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+.tavern-games button.tg-kb__roll:active {
+  transform: translateY(1px);
+}
+
+.tavern-games button.tg-kb__roll:focus-visible {
+  outline: 2px solid var(--tg-accent-strong);
+  outline-offset: 3px;
 }
 
 /* ---------- Покер на костях ---------- */
@@ -3085,6 +3197,113 @@ button.tg-kb__col:disabled {
   text-align: right;
   font-weight: 700;
   color: var(--tg-ink);
+}
+
+.tavern-games .tg-rules h4 {
+  margin: var(--tg-s4) 0 var(--tg-s2);
+  font-family: var(--tg-font-display);
+  font-size: var(--tg-fs-17);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--tg-ink);
+}
+
+/* комбинации костями: что выпало → сколько очков */
+.tavern-games .tg-rules .tg-combos__cap {
+  margin: var(--tg-s3) 0 6px;
+  font-family: var(--tg-font-ui);
+  font-size: var(--tg-fs-12);
+  font-weight: 500;
+  color: var(--tg-ink-3);
+}
+
+.tg-combos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--tg-combo-w, 124px), 1fr));
+  gap: 8px var(--tg-s4);
+  font-family: var(--tg-font-ui);
+}
+
+.tg-combos--wide {
+  --tg-combo-w: 200px;
+}
+
+.tg-combo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.tg-combo__dice {
+  display: inline-flex;
+  gap: 7px;
+  flex: none;
+}
+
+.tg-combo__dice > span {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.tg-rules .tg-die {
+  --size: 22px;
+}
+
+.tg-combo > b {
+  font-size: var(--tg-fs-15);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tg-combo.is-off .tg-combo__dice {
+  opacity: 0.45;
+  filter: saturate(0.4);
+}
+
+.tg-combo.is-off > b {
+  font-weight: 500;
+  color: var(--tg-ink-3);
+  text-decoration: line-through;
+}
+
+/* условия стола: то, что задаёт ведущий */
+.tg-rules__terms {
+  margin-top: var(--tg-s4);
+  padding: var(--tg-s3) var(--tg-s4);
+  border-radius: var(--tg-r-m);
+  background: var(--tg-bg-deep);
+  box-shadow: inset 0 0 0 1px var(--tg-line-soft);
+  font-family: var(--tg-font-ui);
+  font-size: var(--tg-fs-14);
+}
+
+[data-tg-theme="parchment"] .tg-rules__terms {
+  background: oklch(0.91 0.035 86 / 0.6);
+}
+
+.tavern-games .tg-rules__terms h4 {
+  margin: 0 0 4px;
+  font-size: var(--tg-fs-15);
+}
+
+.tavern-games .tg-rules__terms p {
+  margin: 0 0 var(--tg-s2);
+  font-size: var(--tg-fs-12);
+  color: var(--tg-ink-3);
+}
+
+.tavern-games .tg-rules__terms ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 4px;
+}
+
+.tg-rules__terms li {
+  margin: 0;
+  color: var(--tg-ink-2);
 }
 
 /* карточка итога в чате */

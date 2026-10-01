@@ -3,7 +3,7 @@
 import { HAND_RANKS, evaluateHand } from "../../core/games/poker.mjs";
 import { tpl } from "../constants.mjs";
 import { dieHtml } from "../handlebars.mjs";
-import { esc, plural, t } from "../i18n.mjs";
+import { esc, money, plural, t } from "../i18n.mjs";
 import { cls, inlineDice } from "./common.mjs";
 
 const handName = (values) => t(`Poker.hand.${evaluateHand(values).name}`);
@@ -24,7 +24,13 @@ export default {
   template: tpl("games/poker.hbs"),
   rollEvents: ["dealt", "rerolled"],
 
-  rulesData: (o) => ({ hands: o.handsToWin, raise: o.raise, maxRaises: o.maxRaises }),
+  rulesData: () => ({}),
+  rulesTerms(o, { preset, table } = {}) {
+    const hands = t("Poker.terms.hands", { wins: plural(o.handsToWin, "Poker.winsCount") });
+    if (!preset && !o.betting) return [t("Poker.terms.noBetting"), hands];
+    const raise = preset ? t("Poker.terms.raisePreset") : t("Poker.terms.raise", { raise: money(o.raise, table?.stake?.coin) });
+    return [raise, t("Poker.terms.maxRaises", { n: o.maxRaises }), hands];
+  },
 
   /** Размер повышения — ставка стола; без ставки круги ставок не играются. */
   hiddenOptions: ["raise"],
