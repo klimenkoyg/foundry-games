@@ -211,6 +211,8 @@
       "open": "Open",
       "summon": "Bring window back",
       "summonHint": "Reopen the window for everyone who closed it",
+      "idea": "Suggest an idea",
+      "ideaHint": "Opens a form in your browser",
       "seatsRange": "{min}–{max} seats",
       "seatsExact": {
         "one": "exactly {n} seat",
@@ -432,6 +434,9 @@
       "pick": "Pick the dice that score",
       "invalid": "<i class=\"fa-solid fa-circle-exclamation\"></i> These dice don't score together",
       "selected": "Selected for <b>{score}</b>",
+      "botRoll": "{name} sets aside <b>{score}</b> and rolls on",
+      "botRollAll": "{name} sets aside <b>{score}</b> and rolls all six again",
+      "botBank": "{name} sets aside <b>{score}</b> and banks <b>{total}</b>",
       "rollSix": "Roll 6 dice",
       "bank": "Bank",
       "bankTip": "Bank this turn's points and pass the dice on",

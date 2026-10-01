@@ -21,6 +21,9 @@ export const QUERY = {
   sync: `${MODULE_ID}.sync`,
 };
 
+/** Форма для идей (Google Форма): кнопка «Предложить идею» у ведущего в «Таверне». Пусто — кнопки нет. */
+export const IDEAS_URL = "https://forms.gle/FuMwJ2JzSn3DHCTc7";
+
 /** Сколько последних событий стола хранится для журнала. */
 export const EVENT_LIMIT = 60;
 

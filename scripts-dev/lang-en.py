@@ -145,6 +145,7 @@ EN = {
   "Lobby": {
     "seat": "Set up a table", "live": "On the table now", "empty": "No tables yet. Pick a game and set up a table.",
     "open": "Open", "summon": "Bring window back", "summonHint": "Reopen the window for everyone who closed it",
+    "idea": "Suggest an idea", "ideaHint": "Opens a form in your browser",
     "seatsRange": "{min}–{max} seats",
     "seatsExact": P("exactly {n} seat", "exactly {n} seats"),
     "bots": "bots with temperaments", "stakes": "stakes", "secrets": "hidden dice",
@@ -255,6 +256,9 @@ EN = {
     "yourRoll": "Your turn — roll the dice", "pick": "Pick the dice that score",
     "invalid": "<i class=\"fa-solid fa-circle-exclamation\"></i> These dice don't score together",
     "selected": "Selected for <b>{score}</b>",
+    "botRoll": "{name} sets aside <b>{score}</b> and rolls on",
+    "botRollAll": "{name} sets aside <b>{score}</b> and rolls all six again",
+    "botBank": "{name} sets aside <b>{score}</b> and banks <b>{total}</b>",
     "rollSix": "Roll 6 dice", "bank": "Bank", "bankTip": "Bank this turn's points and pass the dice on", "belowEntry": "Your first bank needs at least {entry}",
     "rollAll": "Set aside and roll all 6",
     "keepRoll": P("Set aside and roll {n}", "Set aside and roll {n}"),

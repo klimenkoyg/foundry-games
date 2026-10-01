@@ -46,6 +46,9 @@ export default {
   template: tpl("games/farkle.hbs"),
   rollEvents: ["rolled"],
 
+  /** Бот сначала показывает, какие кости откладывает, и только потом бросает или записывает. */
+  botPreview: (action, view) => (action.type === "keep" ? { indices: action.indices, then: action.then, rolls: view.turn.rolls } : null),
+
   rulesData: (o, { preset } = {}) => ({ scoring: scoringHtml(o, preset) }),
   rulesTerms: (o) => [
     t("Farkle.rules.termTarget", { target: o.target }),
@@ -74,7 +77,9 @@ export default {
     const { view, table } = ctx;
     const turn = view.turn;
     const rules = view.rules;
-    const sel = selection(ctx);
+    // Замысел бота (или хода «за него»): его выбор костей виден всем до самого хода.
+    const preview = table.preview?.seatId === view.current && table.preview.rolls === turn.rolls ? table.preview : null;
+    const sel = preview ? preview.indices : selection(ctx);
     const rolled = isFresh(ctx, "rolled");
     const values = sel.map((i) => turn.dice[i]);
     const score = values.length ? scoreSelection(values, rules) : 0;
@@ -94,7 +99,7 @@ export default {
       dice = turn.dice
         .map((v, i) =>
           dieHtml(v, {
-            button: ctx.canAct,
+            button: ctx.canAct && !preview,
             op: "toggle",
             arg: i,
             scatter: turn.rolls * 31 + table.seats.length * 7 + i + (view.current?.length ?? 0),
@@ -108,7 +113,11 @@ export default {
     let invalid = false;
     if (showFarkle) hint = t("Farkle.bust", { name: esc(ctx.name(farkle.seat)), lost: farkle.lost });
     else if (!turn.dice.length) hint = ctx.canAct ? t("Farkle.yourRoll") : "";
-    else if (!ctx.canAct) hint = "";
+    else if (preview) {
+      const key = preview.then === "bank" ? "Farkle.botBank" : remaining === 0 ? "Farkle.botRollAll" : "Farkle.botRoll";
+      // одним куском: длинная фраза переносится как обычный текст
+      hint = `<span>${t(key, { name: esc(ctx.name(seatId)), score, total })}</span>`;
+    } else if (!ctx.canAct) hint = "";
     else if (!values.length) hint = t("Farkle.pick");
     else if (!valid) {
       hint = t("Farkle.invalid");
@@ -116,7 +125,7 @@ export default {
     } else hint = t("Farkle.selected", { score });
 
     const buttons = [];
-    if (ctx.canAct) {
+    if (ctx.canAct && !preview) {
       if (!turn.dice.length) {
         buttons.push({ op: "roll", icon: "fa-dice", cls: "tg-btn--primary", label: t("Farkle.rollSix") });
       } else {

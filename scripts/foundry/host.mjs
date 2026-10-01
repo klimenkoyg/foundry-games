@@ -69,6 +69,8 @@ export const Host = {
     const secrets = setting(SETTINGS.secrets) ?? {};
     let dirty = false;
     for (const table of this.tables.values()) {
+      // замысел бота, не доведённый до хода до перезагрузки, — бот решит заново
+      delete table.preview;
       if (table.status !== "playing") continue;
       const entry = getGame(table.gameId);
       const state = entry?.rules.hasSecrets ? secrets[table.id] : table.view;
@@ -170,6 +172,7 @@ export const Host = {
   async commit(table, { state, events }) {
     const { rules } = getGame(table.gameId);
     this.states.set(table.id, state);
+    delete table.preview;
     table.view = clone(rules.publicView(state));
     table.rev += 1;
     for (const ev of events) table.events.push({ ...ev, seq: ++table.seq });
@@ -482,6 +485,16 @@ export const Host = {
     }
     if (!action || rules.validate(state, seatId, action)) action = rules.legalActions(state, seatId)[0];
     if (!action) throw new GameError("noMove");
+
+    // Игра может показать замысел бота до самого хода — например, какие кости он откладывает.
+    const preview = entry.ui?.botPreview?.(action, rules.publicView(state));
+    if (preview) {
+      table.preview = { seatId, ...preview };
+      table.rev += 1;
+      await this.persist();
+      await new Promise((resolve) => setTimeout(resolve, Math.max(1000, setting(SETTINGS.botDelay))));
+      if (this.tables.get(tableId) !== table || table.status !== "playing") throw new GameError("finished");
+    }
     await this.process({ tableId, seatId, action, asHost: true });
   },
 

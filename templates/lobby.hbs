@@ -52,4 +52,9 @@
     <div class="tg-empty">{{localize "TAVERN.Lobby.empty"}}</div>
     {{/if}}
   </div>
+  {{#if ideasUrl}}
+  <div class="tg-lobby__foot">
+    <a class="tg-btn tg-btn--ghost tg-btn--sm" href="{{ideasUrl}}" target="_blank" rel="noopener noreferrer" data-tooltip="{{localize "TAVERN.Lobby.ideaHint"}}"><i class="fa-solid fa-lightbulb"></i><span>{{localize "TAVERN.Lobby.idea"}}</span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+  </div>
+  {{/if}}
 </div>

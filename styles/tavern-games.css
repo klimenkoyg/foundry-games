@@ -1685,9 +1685,11 @@ button.tg-die:focus-visible {
 
 .tg-selection {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: var(--tg-s2);
+  gap: 2px var(--tg-s2);
+  text-align: center;
   min-height: 24px;
   font-size: var(--tg-fs-14);
   color: var(--tg-felt-ink-2);
@@ -2590,6 +2592,23 @@ button.tg-kb__col:disabled {
   display: flex;
   flex-direction: column;
   gap: var(--tg-s3);
+}
+
+/* низ «Таверны»: ссылка на форму для идей — только у ведущего */
+.tg-lobby__foot {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tavern-games a.tg-btn,
+.tavern-games a.tg-btn:hover {
+  text-decoration: none;
+  text-shadow: none;
+}
+
+.tg-lobby__foot .tg-btn > i:last-child {
+  font-size: 0.75em;
+  opacity: 0.7;
 }
 
 .tg-detail .tg-felt {

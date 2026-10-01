@@ -1,6 +1,6 @@
 /* Панель ведущего: список игр с описанием и идущие столы. */
 
-import { MODULE_ID, SETTINGS, tpl } from "../constants.mjs";
+import { IDEAS_URL, MODULE_ID, SETTINGS, tpl } from "../constants.mjs";
 import { diceHtml, polyHtml } from "../handlebars.mjs";
 import { Host } from "../host.mjs";
 import { money, plural, t } from "../i18n.mjs";
@@ -115,6 +115,7 @@ export class LobbyApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     return {
       isGM: game.user.isGM,
+      ideasUrl: game.user.isGM ? IDEAS_URL : "",
       games: listGames().map((g) => ({
         id: g.id,
         name: t(`Game.${g.id}.name`),
