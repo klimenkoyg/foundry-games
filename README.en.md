@@ -2,7 +2,7 @@
 
 [Русский](README.md) · **English**
 
-Dice games for Foundry VTT v14 that the whole table plays together. The GM seats tokens
+Dice games for Foundry VTT that the whole table plays together. The GM seats tokens
 straight from the scene, NPCs play on their own — each with a temperament — stakes come
 from character sheets, and everyone sees the same table.
 
@@ -18,7 +18,7 @@ In Foundry: **Add-on Modules → Install Module**, paste the manifest URL at the
 https://github.com/klimenkoyg/foundry-games/releases/latest/download/module.json
 ```
 
-- Foundry VTT **v14**.
+- Foundry VTT **v14** or **v13**. The module was checked on v14; it should work on v13 but hasn't been tested there yet — please report anything that's off.
 - Any game system. With **dnd5e**, stakes are taken as coins from the sheets.
 - Optional: [Dice So Nice](https://foundryvtt.com/packages/dice-so-nice) for 3D dice on everyone's screen.
 

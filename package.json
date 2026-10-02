@@ -2,9 +2,9 @@
   "name": "ssl_tavern_games",
   "private": true,
   "type": "module",
-  "description": "Таверна · Tavern Games — настольные игры на костях для Foundry VTT v14",
+  "description": "Таверна · Tavern Games — настольные игры на костях для Foundry VTT",
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test test/*.test.mjs",
     "check": "node scripts-dev/check.mjs",
     "build": "node scripts-dev/build.mjs"
   },
