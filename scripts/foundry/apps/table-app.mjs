@@ -175,7 +175,8 @@ export class TableApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const chips = [];
     if (seat.left) chips.push({ icon: "fa-person-walking-arrow-right", text: t("Seat.left"), cls: "tg-chip--danger" });
     else if (isMe) chips.push({ text: t("Seat.you"), cls: "tg-chip--accent" });
-    else if (seat.control === "bot") chips.push({ icon: TEMPERAMENTS[seat.temperament]?.icon ?? "fa-robot", text: t(`Temper.${seat.temperament}`) });
+    // Нрав бота — подсказка, как он сыграет: её видит только ведущий.
+    else if (seat.control === "bot" && ctx.isGM) chips.push({ icon: TEMPERAMENTS[seat.temperament]?.icon ?? "fa-robot", text: t(`Temper.${seat.temperament}`) });
     else if (seat.control === "gm") chips.push({ icon: "fa-crown", text: t("Seat.gm") });
     else if (seat.userId) chips.push({ icon: "fa-user", text: game.users.get(seat.userId)?.name ?? "" });
     chips.push(...(info.chips ?? []));

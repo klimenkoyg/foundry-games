@@ -141,6 +141,14 @@ SCENES = {
         await click('[data-op=roll]', 700);
         if (cur() === me && !T().view.hands[me].crew && T().view.maxRolls - T().view.hands[me].rolls > 1) await click('[data-op=roll]', 700);
     """),
+    "pig": dict(size=(780, 900), js="""
+        await tavern.make('pig', [seat('hale', 'bot', 'reckless'), seat('bram', 'bot', 'counter'), seat('mira', 'gm')], { stake: 5, title: TITLE, options: { grow: true } });
+        const me = mine(2);
+        await until(() => cur() === me);
+        for (let n = 0; n < 2 && cur() === me; n++) await click('[data-op=roll]', 700);
+        // выпала единица — ход ушёл, снимок переснимается
+        if (cur() !== me) throw new Error('единица');
+    """),
     "rules": dict(size=(640, 1040), js="""
         api.openRules('farkle'); await wait(800);
         show(document.querySelector('[id^=tavern-rules]'));

@@ -60,7 +60,7 @@ for (const [key, file] of used) {
 }
 
 // Семейства ключей, которые собираются на лету.
-const games = ["farkle", "liars", "poker", "kb", "tw", "scc"];
+const games = ["farkle", "liars", "poker", "kb", "tw", "scc", "pig"];
 const families = [
   ...games.flatMap((g) => [`Game.${g}.name`, `Game.${g}.meta`, `Game.${g}.text`, `Rules.${g}`]),
   ...["cautious", "reckless", "counter", "simple"].map((x) => `Temper.${x}`),

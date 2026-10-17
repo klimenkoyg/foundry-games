@@ -1,7 +1,7 @@
 /* Панель ведущего: список игр с описанием и идущие столы. */
 
 import { IDEAS_URL, MODULE_ID, SETTINGS, tpl } from "../constants.mjs";
-import { diceHtml, polyHtml } from "../handlebars.mjs";
+import { diceHtml, dieHtml, polyHtml } from "../handlebars.mjs";
 import { Host } from "../host.mjs";
 import { money, plural, t } from "../i18n.mjs";
 import { Manager } from "../manager.mjs";
@@ -23,6 +23,7 @@ const PREVIEW = {
   kb: () => diceHtml([3, 3, 5]),
   tw: () => [[4, 3], [8, 6], [12, 9], [20, 14]].map(([s, v]) => polyHtml(s, { value: v })).join(""),
   scc: () => diceHtml([6, 5, 4, 3, 6]),
+  pig: () => diceHtml([4, 6, 3]) + dieHtml(1, { cls: "is-spent" }),
 };
 
 export class LobbyApp extends HandlebarsApplicationMixin(ApplicationV2) {

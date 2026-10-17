@@ -1708,6 +1708,88 @@ button.tg-die:focus-visible {
   color: oklch(0.85 0.1 40);
 }
 
+/* ---------- Свинья ---------- */
+
+.tg-pig {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--tg-s4);
+  align-items: stretch;
+}
+
+.tg-pig__throw {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tg-s3);
+  min-height: 150px;
+}
+
+/* один кубик — крупнее обычного */
+.tg-pig__die {
+  display: grid;
+  place-items: center;
+  min-height: calc(var(--tg-die) * 1.5 + 20px);
+}
+
+.tg-pig__die .tg-die {
+  --size: calc(var(--tg-die) * 1.5);
+  transform: translate(var(--dx, 0), var(--dy, 0)) rotate(var(--rot, 0deg));
+}
+
+/* несколько кубиков — обычного размера, в ряд */
+.tg-pig__die.is-many {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: var(--tg-s3);
+}
+
+.tg-pig__die.is-many .tg-die {
+  --size: var(--tg-die);
+}
+
+.tg-pig__slot {
+  width: calc(var(--tg-die) * 1.5);
+  height: calc(var(--tg-die) * 1.5);
+  border-radius: calc(var(--tg-die) * 0.3);
+  border: 1.5px dashed var(--tg-felt-ink-2);
+  opacity: 0.45;
+}
+
+/* единица, на которой сгорел ход: кольцо цвета опасности, в лотке — тоже */
+.tg-pig .tg-die.is-bust {
+  box-shadow:
+    0 0 0 2.5px var(--tg-danger),
+    0 0 16px 2px var(--tg-danger-soft),
+    inset 0 calc(var(--size) * -0.05) calc(var(--size) * 0.08) oklch(0 0 0 / 0.18),
+    0 calc(var(--size) * 0.06) 0 var(--tg-die-edge);
+}
+
+.tg-pig .tg-tray {
+  width: 160px;
+}
+
+/* броски хода в лотке: каждый своей группой */
+.tg-pig .tg-tray__dice {
+  gap: 6px 10px;
+  align-content: flex-start;
+}
+
+.tg-pig__roll {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.tg-tray__sum.is-burned b {
+  text-decoration: line-through;
+  text-decoration-color: var(--tg-danger);
+  opacity: 0.7;
+}
+
 /* ---------- Кости лжеца ---------- */
 
 .tg-liars__opps {
@@ -2937,8 +3019,31 @@ button.tg-kb__col:disabled {
 }
 
 .tg-settings .tg-check,
-.tg-settings .tg-field--wide {
+.tg-settings .tg-field--wide,
+.tg-settings .tg-note {
   grid-column: 1 / -1;
+}
+
+/* заметка игры о выбранных настройках (сколько длится партия) */
+.tavern-games .tg-note {
+  display: flex;
+  align-items: baseline;
+  gap: var(--tg-s2);
+  margin: 0;
+  font-size: var(--tg-fs-12);
+  line-height: 1.45;
+  color: var(--tg-ink-2);
+}
+
+.tavern-games .tg-note.is-warn {
+  padding: var(--tg-s2) var(--tg-s3);
+  border-radius: var(--tg-r-s);
+  background: var(--tg-danger-soft);
+  color: var(--tg-ink);
+}
+
+.tg-note.is-warn > i {
+  color: var(--tg-danger);
 }
 
 .tg-footer {
@@ -3409,11 +3514,13 @@ button.tg-kb__col:disabled {
 
 @container tg-window (max-width: 520px) {
   .tg-farkle__field,
+  .tg-pig,
   .tg-kb {
     grid-template-columns: 1fr;
   }
 
-  .tg-tray {
+  .tg-tray,
+  .tg-pig .tg-tray {
     width: auto;
   }
 

@@ -164,6 +164,14 @@
         "banked": "{name} banks {points} — {total} in total",
         "won": "{name} reaches {total} and wins"
       },
+      "pig": {
+        "bust": "{name} rolls {dice} — {lost} lost",
+        "bustZero": "{name} rolls {dice} on the first throw",
+        "wipe": "{name} rolls {dice} — the whole score is lost, {lost}",
+        "held": "{name} banks {points} — {total} in total",
+        "wonLimit": "Out of turns: {name} wins with {total}",
+        "won": "{name} reaches {total} and wins"
+      },
       "tw": {
         "took": "{name}: {die} → {value}, total {total}",
         "bust": "{name}: {die} → {value}, bust ({total})",
@@ -355,6 +363,18 @@
         "opt": {
           "rolls": "Rolls per turn"
         }
+      },
+      "pig": {
+        "name": "Pig",
+        "meta": "2–6 · ~10 min · risk",
+        "text": "Roll as many times as you dare: every roll adds up, and you can bank it at any moment. Roll a one and the whole turn is lost, play passes on. One die or several — or one more die with every roll. The first to reach the target takes the pot.",
+        "opt": {
+          "target": "Play to",
+          "dice": "Dice per roll",
+          "grow": "Each roll of a turn adds a die (up to 6)",
+          "snakeEyes": "Two ones in a roll wipe the whole score",
+          "maxTurns": "Turn limit per player (0 — none)"
+        }
       }
     },
     "Rules": {
@@ -367,7 +387,8 @@
       "poker": "<p>Five dice, one reroll. Everyone's dice are open.</p><ol><li>Everyone rolls five dice.</li><li>Betting round: check, raise, call or fold.</li><li>Everyone rerolls any of their dice once.</li><li>A second betting round and the showdown: the best hand takes it.</li></ol><p>Hands, low to high: pair, two pairs, three of a kind, small straight (1–5), big straight (2–6), full house, four of a kind, five of a kind.</p><p>Folding gives up only that hand. The game and the whole pot go to the first to win the required number of hands.</p>",
       "kb": "<p>A duel. Each player has a three-by-three board.</p><ol><li>On your turn you roll a die and place it in one of your columns.</li><li>Matching dice in a column multiply: two fours are 16, three are 36.</li><li>In your opponent's <b>same column</b>, every die of that value is knocked out.</li></ol><p>As soon as either board is full the game ends. The higher total wins.</p>",
       "tw": "<p>Six dice: d4, d6, d8, d10, d12 and d20. Each can be taken <b>once per round</b>.</p><ol><li>On your turn take dice — one or several: each roll adds to your total.</li><li>Once you've taken at least one you can <b>pass the turn</b>: play goes round the table and comes back to you.</li><li>Go over the <b>limit</b> and you bust — the round is lost for you.</li><li><b>Stand</b> and you take no more dice this round. The round goes on until everyone has stood.</li></ol><p>The round goes to the highest total that isn't over the limit. {tie} The first seat rotates every round.</p>",
-      "scc": "<p>Five dice and a few rolls per turn.</p><ol><li>First you need a six — the <b>ship</b>, then a five — the <b>captain</b>, then a four — the <b>crew</b>. In that order only; anything found in one roll locks in at once.</li><li>The two remaining dice are your <b>cargo</b>; their sum is your score.</li><li>Once the crew is complete you can reroll the cargo with your remaining rolls or keep it.</li></ol><p>No crew — zero. The best cargo takes the pot; ties are replayed between the tied players only.</p>"
+      "scc": "<p>Five dice and a few rolls per turn.</p><ol><li>First you need a six — the <b>ship</b>, then a five — the <b>captain</b>, then a four — the <b>crew</b>. In that order only; anything found in one roll locks in at once.</li><li>The two remaining dice are your <b>cargo</b>; their sum is your score.</li><li>Once the crew is complete you can reroll the cargo with your remaining rolls or keep it.</li></ol><p>No crew — zero. The best cargo takes the pot; ties are replayed between the tied players only.</p>",
+      "pig": "<p>Dice and one dangerous face.</p><ol><li>On your turn, roll as many times as you like: all the dice add to your points for the turn.</li><li>After any roll you can <b>bank</b> — the points go to your score and the turn passes on.</li><li>Roll a <b>one</b>, even a single one, and the turn's points are lost, play passes on. What you banked before stays.</li></ol><p>Reach the target and you win at once — no need to bank. The winner takes the pot. How many dice you roll is in the table terms.</p>"
     },
     "Scc": {
       "sub": "{rolls} each · best cargo takes the pot",
@@ -448,6 +469,67 @@
       },
       "tray": "Set aside this turn",
       "turn": "this turn"
+    },
+    "Pig": {
+      "termTarget": "Playing to <b>{target}</b>",
+      "termOne": "You roll <b>one</b> die",
+      "termDice": {
+        "one": "You roll <b>{n}</b> die at once",
+        "other": "You roll <b>{n}</b> dice at once"
+      },
+      "termGrow": {
+        "one": "The first roll of a turn is <b>{n}</b> die, each next one adds a die, up to six",
+        "other": "The first roll of a turn is <b>{n}</b> dice, each next one adds a die, up to six"
+      },
+      "termWipe": "<b>Two ones</b> in a single roll wipe your whole banked score",
+      "termOnes": "However many ones come up, only the turn is lost",
+      "termLimit": {
+        "one": "No more than <b>{n}</b> turn each — then the highest score wins",
+        "other": "No more than <b>{n}</b> turns each — then the highest score wins"
+      },
+      "sub": "playing to <b>{target}</b>",
+      "subGrow": "dice from {n} to 6",
+      "subOne": "a one burns the turn",
+      "subWipe": "two ones wipe the score",
+      "subRound": "round {round} of {max}",
+      "diceN": {
+        "one": "{n} die",
+        "other": "{n} dice"
+      },
+      "of": "of {target}",
+      "bust": "<i class=\"fa-solid fa-skull\"></i> <b>A one!</b> {name} loses {lost}",
+      "bustZero": "<i class=\"fa-solid fa-skull\"></i> <b>A one!</b> {name} comes away with nothing",
+      "wipe": "<i class=\"fa-solid fa-skull\"></i> <b>Two ones!</b> {name} loses the whole score — {lost}",
+      "outOfTurns": "Out of turns — the highest score wins",
+      "yourRoll": "Your turn — roll the die",
+      "yourRollMany": "Your turn — roll the dice",
+      "held": "{name} banks <b>{points}</b> — {total} in total",
+      "more": "Rolled {value}, <b>{points}</b> this turn. Roll again — or bank?",
+      "rolled": "Rolled <b>{value}</b>",
+      "hold": "Bank",
+      "holdTip": "Bank this turn's points and pass the dice on",
+      "holdFirst": "Roll first",
+      "roll": "Roll the die",
+      "rollMany": "Roll",
+      "rollMore": "Roll again",
+      "tray": "Rolled this turn",
+      "turn": "this turn",
+      "turnsN": {
+        "one": "{n} turn",
+        "other": "{n} turns"
+      },
+      "turnsGen": {
+        "one": "{n} turn",
+        "other": "{n} turns"
+      },
+      "length": "A game takes about {turns} each, sometimes up to {long}",
+      "lengthLong": "A long game: about {turns} each, sometimes up to {long}.",
+      "lengthMaybeEndless": "A long game: about {turns} each, sometimes more than {limit}.",
+      "lengthEndless": "The game may never end: more than {limit} each.",
+      "lengthByLimit": "The game will most likely run to the limit — {max} each — and the highest score wins.",
+      "lengthCapped": "A game takes about {turns} each, no more than {max}.",
+      "whyWipe": "Two ones drag it out — they wipe the score. A turn limit helps.",
+      "whyTarget": "Consider a lower target or a turn limit."
     },
     "Tw": {
       "sub": "round {round} · first to <b>{wins}</b> · limit {limit}",

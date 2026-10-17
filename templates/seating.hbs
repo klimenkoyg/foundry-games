@@ -113,6 +113,9 @@
         <label class="tg-check"><input type="checkbox" name="opt.{{key}}" {{checked value}}> {{label}}</label>
         {{/if}}
         {{/each}}
+        {{#if note}}
+        <p class="tg-note{{#if note.warn}} is-warn{{/if}}" role="status"><i class="fa-solid {{note.icon}}"></i><span>{{{note.text}}}</span></p>
+        {{/if}}
         {{#if dnd5e}}
         <label class="tg-check"><input type="checkbox" name="stake.fromSheets" {{checked stake.fromSheets}}> {{localize "TAVERN.Seating.fromSheets"}}</label>
         {{#if stake.fromSheets}}

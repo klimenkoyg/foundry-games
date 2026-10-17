@@ -1,0 +1,18 @@
+<section class="tg-board">
+  <div class="tg-table">
+    <div class="tg-felt">
+      <div class="tg-pig">
+        <div class="tg-pig__throw">
+          <div class="tg-pig__die{{#if many}} is-many{{/if}}">{{#if die}}{{{die}}}{{else}}<span class="tg-pig__slot"></span>{{/if}}</div>
+          <div class="tg-selection{{#if isBust}} is-bust{{/if}}">{{{hint}}}</div>
+        </div>
+        <div class="tg-tray">
+          <span class="tg-tray__label">{{localize "TAVERN.Pig.tray"}}</span>
+          <div class="tg-tray__dice">{{{rolls}}}</div>
+          <div class="tg-tray__sum{{#if burned}} is-burned{{/if}}"><span>{{localize "TAVERN.Pig.turn"}}</span><b>{{points}}</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{> tavern-games.actionbar}}
+</section>

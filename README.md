@@ -32,6 +32,7 @@ https://github.com/klimenkoyg/foundry-games/releases/latest/download/module.json
 | **Кнаклбоунс** | 2 | Дуэль на полях три на три: одинаковые кости множатся и сбивают чужие. |
 | **Двадцать одно** | 2–6 | Кубики к4…к20, каждый раз за раунд. Берут по очереди, пока все не спасуют. Не перебрать предел. |
 | **Корабль, капитан и команда** | 2–8 | Три броска: собрать 6, 5 и 4 по порядку, остаток — груз. |
+| **Свинья** | 2–6 | Бросай сколько хочешь и записывай набранное. Единица — ход сгорел. Кубик один, несколько или с каждым броском на один больше. |
 
 ## Как это выглядит
 
@@ -50,7 +51,11 @@ https://github.com/klimenkoyg/foundry-games/releases/latest/download/module.json
   </tr>
   <tr>
     <td width="50%" valign="top"><img src="docs/screens/ru/scc.webp" alt="Стол «Корабль, капитан и команда»: найденные кости и груз"><br><sub><b>Корабль, капитан и команда</b> — собрать 6, 5 и 4, остаток — груз</sub></td>
+    <td width="50%" valign="top"><img src="docs/screens/ru/pig.webp" alt="Стол «Свинья»: кубик на сукне, броски за ход в лотке, кнопки «Записать» и «Бросить ещё»"><br><sub><b>Свинья</b> — бросать ещё или записать, пока не выпала единица</sub></td>
+  </tr>
+  <tr>
     <td width="50%" valign="top"><img src="docs/screens/ru/rules.webp" alt="Памятка правил «Костей» с комбинациями и очками"><br><sub><b>Памятка правил</b> — есть у каждой игры, комбинации нарисованы костями</sub></td>
+    <td width="50%" valign="top"></td>
   </tr>
 </table>
 
@@ -106,7 +111,7 @@ https://github.com/klimenkoyg/foundry-games/releases/latest/download/module.json
 ```js
 const tavern = game.modules.get("ssl_tavern_games").api;
 tavern.openLobby();            // панель ведущего
-tavern.openSeating("farkle");  // окно посадки: farkle, liars, poker, kb, tw, scc
+tavern.openSeating("farkle");  // окно посадки: farkle, liars, poker, kb, tw, scc, pig
 tavern.tables();               // столы, которые сейчас идут
 ```
 

@@ -3,18 +3,21 @@
 import farkleBot from "../core/bots/farkle.mjs";
 import kbBot from "../core/bots/kb.mjs";
 import liarsBot from "../core/bots/liars.mjs";
+import pigBot from "../core/bots/pig.mjs";
 import pokerBot from "../core/bots/poker.mjs";
 import sccBot from "../core/bots/scc.mjs";
 import twBot from "../core/bots/tw.mjs";
 import farkle from "../core/games/farkle.mjs";
 import kb from "../core/games/kb.mjs";
 import liars from "../core/games/liars.mjs";
+import pig from "../core/games/pig.mjs";
 import poker from "../core/games/poker.mjs";
 import scc from "../core/games/scc.mjs";
 import tw from "../core/games/tw.mjs";
 import farkleUi from "./games/farkle.mjs";
 import kbUi from "./games/kb.mjs";
 import liarsUi from "./games/liars.mjs";
+import pigUi from "./games/pig.mjs";
 import pokerUi from "./games/poker.mjs";
 import sccUi from "./games/scc.mjs";
 import twUi from "./games/tw.mjs";
@@ -32,6 +35,7 @@ register(poker, pokerBot, pokerUi);
 register(kb, kbBot, kbUi);
 register(tw, twBot, twUi);
 register(scc, sccBot, sccUi);
+register(pig, pigBot, pigUi);
 
 export const getGame = (id) => GAMES.get(id) ?? null;
 

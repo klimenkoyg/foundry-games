@@ -32,6 +32,7 @@ https://github.com/klimenkoyg/foundry-games/releases/latest/download/module.json
 | **Knucklebones** | 2 | A duel on three-by-three boards: matching dice multiply and knock out the opponent's. |
 | **Twenty-One** | 2–6 | Dice from d4 to d20, each once per round. Players take turns until everyone stands. Don't go over the limit. |
 | **Ship, Captain and Crew** | 2–8 | Three rolls: collect 6, 5 and 4 in order; the rest is your cargo. |
+| **Pig** | 2–6 | Roll as long as you dare and bank what you have. A one burns the turn. One die, several, or one more with every roll. |
 
 ## What it looks like
 
@@ -50,7 +51,11 @@ https://github.com/klimenkoyg/foundry-games/releases/latest/download/module.json
   </tr>
   <tr>
     <td width="50%" valign="top"><img src="docs/screens/en/scc.webp" alt="Ship, Captain and Crew table: dice found and the cargo"><br><sub><b>Ship, Captain and Crew</b> — find 6, 5 and 4, the rest is cargo</sub></td>
+    <td width="50%" valign="top"><img src="docs/screens/en/pig.webp" alt="Pig table: the die on the felt, this turn's rolls in the tray, Bank and Roll again buttons"><br><sub><b>Pig</b> — roll again or bank before a one comes up</sub></td>
+  </tr>
+  <tr>
     <td width="50%" valign="top"><img src="docs/screens/en/rules.webp" alt="The Dice rules sheet with scoring combinations"><br><sub><b>Rules sheet</b> — every game has one; combinations are drawn as dice</sub></td>
+    <td width="50%" valign="top"></td>
   </tr>
 </table>
 
@@ -103,7 +108,7 @@ their own cup. If the GM switches browsers mid-game, the table closes and stakes
 ```js
 const tavern = game.modules.get("ssl_tavern_games").api;
 tavern.openLobby();            // GM panel
-tavern.openSeating("farkle");  // seating window: farkle, liars, poker, kb, tw, scc
+tavern.openSeating("farkle");  // seating window: farkle, liars, poker, kb, tw, scc, pig
 tavern.tables();               // tables currently in play
 ```
 

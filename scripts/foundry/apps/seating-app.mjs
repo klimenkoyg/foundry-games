@@ -189,6 +189,8 @@ export class SeatingApp extends HandlebarsApplicationMixin(ApplicationV2) {
       seats,
       seatCount: plural(n, "Seats"),
       options,
+      // Игра может что-то сказать про выбранные настройки — например, сколько длится партия.
+      note: entry.ui.seatingNote?.(this.options_, n) ?? null,
       dnd5e,
       stake,
       coins: coinChoices().map((c) => ({ id: c, label: c === "chips" ? t("Coin.chipsShort") : t(`Coin.${c}`), selected: c === stake.coin })),
